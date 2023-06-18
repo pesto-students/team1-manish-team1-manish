@@ -4,6 +4,7 @@ import React from "react";
 import App from "./App";
 import CarStore from "./Store/CarStore";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
@@ -11,7 +12,9 @@ const root = createRoot(rootElement);
 root.render(
   <Provider store={CarStore}>
     <StrictMode>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </StrictMode>
   </Provider>
 );

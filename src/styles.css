@@ -20,5 +20,11 @@ html {
   display: flex;
   height: 100%;
   flex-direction: column;
-  align-items: center;
+  background: rgba(253, 254, 255, 1);
+}
+
+.home {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
