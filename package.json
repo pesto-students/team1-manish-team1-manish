@@ -12,6 +12,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.1.0",
+    "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1"
   },
   "scripts": {
@@ -24,9 +25,9 @@
   },
   "author": "Hritik Singh & Pranav Srisrimal",
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "^8.43.0",
     "eslint-plugin-react": "^7.32.2",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "husky": "^8.0.3"
   },
   "browserslist": {

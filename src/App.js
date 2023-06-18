@@ -1,11 +1,20 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import "./styles.css";
+import Home from "./Pages/Home";
+import Header from "./Components/Header";
 
-export default function App() {
+const App = () => {
   return (
     <div className="App">
-      <h1>Hello Pesto</h1>
-      <h2>This is auto deployed!</h2>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* <Route path="/login" element={<Login />} /> */}
+        {/* <Route path="/register" element={<Register />} /> */}
+      </Routes>
     </div>
   );
-}
+};
+
+export default App;

@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 12vh;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px rgba(0, 82, 224, 0.11);
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vh;
+  height: 100%;
+  padding: 5px;
+}
+
+.header-links {
+  display: flex;
+  margin-right: 5vh;
+  gap: 40px;
+}
+
+.brand-logo {
+  padding-left: 15px;
+  height: 6vh;
+}
+
+.brand-logo > img {
+  height: inherit;
+}
+
+.brand-name {
+  font-family: "Lato", sans-serif;
+  font-size: large;
+  font-weight: bold;
+  color: rgba(103, 110, 138, 1);
+}
+
+.header-links > button {
+  height: 30px;
+  font-family: "Lato", sans-serif;
+  width: 82px;
+  border-radius: 4px;
+}
+.login-btn {
+  background: transparent;
+  border: 1px solid gainsboro;
+  filter: drop-shadow(0px 0px 6px rgba(0, 82, 224, 0.1));
+}
+
+.signup-btn {
+  background-color: rgba(0, 82, 224, 0.16);
+  color: #0052e0;
+  border: none;
+}
