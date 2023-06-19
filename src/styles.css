@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -24,7 +25,15 @@ html {
 }
 
 .home {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
+  height: 75%;
+}
+
+.home > h1 {
+  margin-top: 20px;
+}
+
+div {
+  font-family: "Lato", sans-serif;
 }

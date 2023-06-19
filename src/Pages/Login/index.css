@@ -1,0 +1,55 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75%;
+}
+
+.form-container {
+  height: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #f4f4f4;
+  border-radius: 5px;
+}
+
+.form-container > p,
+h1 {
+  color: rgba(103, 110, 138, 1);
+}
+
+.input-container {
+  display: flex;
+}
+
+.input-container > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container > div > input {
+  height: 35px;
+  width: 150px;
+  margin: 5px;
+  border: 1px solid #c7cbd3;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.tnc-checkbox > input {
+  border: #00b5f0;
+  margin: 0 5px;
+}
+
+.signup-btn {
+  width: 186.44px;
+  height: 38px;
+  color: white;
+  background: #373737;
+  border-radius: 8px;
+  cursor: pointer;
+}
