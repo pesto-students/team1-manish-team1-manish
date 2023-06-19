@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./styles.css";
-import Home from "./Pages/Home";
+import LandingPage from "./Pages/LandingPage";
 import Header from "./Components/Header";
 
 const App = () => {
@@ -9,7 +9,7 @@ const App = () => {
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<LandingPage />} />
         {/* <Route path="/login" element={<Login />} /> */}
         {/* <Route path="/register" element={<Register />} /> */}
       </Routes>
