@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+.App {
+  font-family: sans-serif;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: rgba(253, 254, 255, 1);
+}
+
+.home {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
