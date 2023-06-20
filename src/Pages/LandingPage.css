@@ -45,8 +45,8 @@
   font-style: normal;
   font-weight: 700;
   font-size: 32px;
-  line-height: 22px;
   color: #676e8a;
+  margin: 1rem;
 }
 
 .landing-page-div2 {
@@ -55,6 +55,80 @@
   background: #fcfcfc;
   border: 1px solid #f4f4f4;
   border-radius: 19px;
+  margin: 3rem 2rem;
   display: flex;
-  margin: 2rem 1rem;
+  justify-content: space-between;
+}
+
+.dream-car-search {
+  box-sizing: border-box;
+  width: 364px;
+  height: 391px;
+
+  background: #ffffff;
+  border: 1px solid #d0c6c6;
+  border-radius: 12px;
+  margin: 1rem 1.5rem 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-your-car {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 22px;
+  color: #676e8a;
+}
+
+.search-car-drop-down {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 60%;
+}
+
+.search-car-drop-down > select {
+  width: 283px;
+  height: 45.42px;
+  box-sizing: border-box;
+  width: 283px;
+  height: 45.42px;
+  background: #eaf2ff;
+  border: 1px solid #d7e0f2;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  padding-left: 0.4rem;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #7b86b3;
+}
+
+.search-car-btn {
+  width: 283px;
+  height: 38px;
+  left: 127px;
+  top: 1217px;
+
+  background: #373737;
+  border-radius: 10px;
+  color: #ffffff;
+  border: none;
+}
+
+.landing-page-right-div {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+}
+
+.landing-page-right-div > img {
+  width: 100%;
+  margin: 1rem;
 }
