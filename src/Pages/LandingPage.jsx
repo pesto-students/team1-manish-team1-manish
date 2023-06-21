@@ -48,9 +48,41 @@ const LandingPage = () => {
         <div className="landing-page-div3">
           <p className="easy-steps">3 Easy Steps !</p>
           <div className="three-easy-step">
-            <div className="variety-of-options"></div>
-            <div className="choose-the-one"></div>
-            <div className="easy-pay"></div>
+            <div className="variety-of-options">
+              <div className="vop-img">
+                <img
+                  src="Assets/variety-of-options.png"
+                  alt="variety of options"
+                />
+              </div>
+              <div className="vop-details">
+                <p className="vop-p1">Variety of options!</p>
+                <p className="vop-p2">
+                  Search from a variety of options available.
+                </p>
+              </div>
+            </div>
+            <div className="choose-the-one">
+              <div className="cto-img">
+                <img src="Assets/choose-the-one.png" alt="choose the one" />
+              </div>
+              <div className="ctop-details">
+                <p className="cto-p1">Choose the one</p>
+                <p className="cto-p2">Choose the one which fits you the best</p>
+              </div>
+            </div>
+            <div className="easy-pay">
+              <div className="ep-img">
+                <img src="Assets/easy-pay.png" alt="easy pay" />
+              </div>
+              <div className="ep-details">
+                <p className="ep-p1">Easy Pay</p>
+                <p className="ep-p2">
+                  Simply pay the the most affordable price which we have decided
+                  for you.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
