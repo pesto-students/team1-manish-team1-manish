@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="footer">
           <div className="footer-brand">
             <div className="brand-logo-footer">
-              <img src="/Assets/Logo.svg" />
+              <img src="/assets/Logo.svg" />
             </div>
             <div className="brand-name dark-font">Car Bazaar</div>
           </div>

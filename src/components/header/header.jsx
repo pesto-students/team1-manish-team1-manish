@@ -8,7 +8,7 @@ const Header = () => {
       <div className="header">
         <div className="header-brand">
           <div className="brand-logo-header">
-            <img src="/Assets/Logo.svg" />
+            <img src="/assets/Logo.svg" />
           </div>
           <div className="brand-name dark-font">Car Bazaar</div>
         </div>
