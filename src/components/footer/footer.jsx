@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./footer.css";
 
 const Footer = () => {
   return (
@@ -10,13 +10,13 @@ const Footer = () => {
             <div className="brand-logo-footer">
               <img src="/Assets/Logo.svg" />
             </div>
-            <div className="brand-name">Car Bazaar</div>
+            <div className="brand-name dark-font">Car Bazaar</div>
           </div>
           <div className="footer-links">
-            <button className="">Home</button>
-            <button className="">Explore</button>
-            <button className="">About</button>
-            <button className="">Contact</button>
+            <button className="dark-font">Home</button>
+            <button className="dark-font">Explore</button>
+            <button className="dark-font">About</button>
+            <button className="dark-font">Contact</button>
           </div>
         </div>
         <div className="copyright-text">

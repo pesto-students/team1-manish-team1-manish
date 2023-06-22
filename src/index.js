@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import React from "react";
-import App from "./App";
-import CarStore from "./Store/CarStore";
+import App from "./app";
+import CarStore from "./store/carStore";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 

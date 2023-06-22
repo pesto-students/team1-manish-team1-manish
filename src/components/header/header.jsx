@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./header.css";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -10,13 +10,13 @@ const Header = () => {
           <div className="brand-logo-header">
             <img src="/Assets/Logo.svg" />
           </div>
-          <div className="brand-name">Car Bazaar</div>
+          <div className="brand-name dark-font">Car Bazaar</div>
         </div>
         <div className="header-links">
           <Link to="/login">
             <button className="header-login-btn">Log In</button>
           </Link>
-          <Link to="/">
+          <Link to="/register">
             <button className="header-signup-btn">Sign Up</button>
           </Link>
         </div>

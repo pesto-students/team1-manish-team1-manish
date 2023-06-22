@@ -1,30 +1,47 @@
 import React from "react";
-import "./index.css";
+import "./login.css";
+import Button from "@mui/material/Button";
+import DarkTheme from "../../themes/buttonThemes";
+import { ThemeProvider } from "@mui/material/styles";
+import { Icon } from "@iconify/react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
     <>
       <div className="login">
-        <div className="form-container">
-          <h1>Hello !</h1>
-          <p>Signup to create your account !</p>
-          <div className="input-container">
-            <div className="left-container">
-              <input type="text" placeholder=" Full Name" />
-              <input type="email" placeholder=" Email" />
-              <input type="password" placeholder=" Password" />
+        <div className="login-form-container">
+          <h1 className="dark-font">Welcome !</h1>
+          <p className="darker-font">Signin to stay connected</p>
+          <div className="login-input-container">
+            <input type="email" placeholder=" Email" />
+            <input type="password" placeholder=" Password" />
+          </div>
+          <div className="login-remember-forget">
+            <div className="login-remember-me">
+              <input type="checkbox" />
+              <label>Remember Me</label>
             </div>
-            <div className="right-container">
-              <input type="text" placeholder=" Last Name" />
-              <input type="tel" placeholder=" Phone No." />
-              <input type="password" placeholder=" Confirm Password" />
+            <div className="login-forgot-password">
+              <Link to="/forgot1">Forgot Password?</Link>
             </div>
           </div>
-          <div className="tnc-checkbox">
-            <input type="checkbox" />
-            <label>I agree with the terms of use</label>
+          <ThemeProvider theme={DarkTheme}>
+            <Button className="login-signup-btn" variant="contained">
+              Sign In
+            </Button>
+          </ThemeProvider>
+          <p className="dark-font">Sign In With</p>
+          <div className="login-o2 darkest-font">
+            <Icon icon="la:facebook" />
+            <Icon icon="uil:instagram" />
+            <Icon icon="iconoir:google" />
           </div>
-          <button className="signup-btn">Sign Up</button>
+          <div className="signup-already">
+            <p>
+              Don’t have an Account <Link to="/register">Sign Up</Link>
+            </p>
+          </div>
         </div>
       </div>
     </>

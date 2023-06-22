@@ -1,10 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./styles.css";
-import Home from "./Pages/Home";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import Login from "./Pages/Login/Login";
+import Home from "./pages/home";
+import Header from "./components/header/header";
+import Footer from "./components/footer/footer";
+import Register from "./pages/register/register";
+import Login from "./pages/login/login";
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/register" element={<Register />} /> */}
+        <Route path="/register" element={<Register />} />
       </Routes>
       <Footer />
     </div>
