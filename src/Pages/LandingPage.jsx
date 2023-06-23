@@ -85,6 +85,20 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
+        <div className="landing-page-div4">
+          <p className="reviews-heading">Reviews</p>
+          <div className="reviews-div">
+            <div className="customers-review">
+              <img src="/Assets/Component 1.png" alt="Customer Review" />
+            </div>
+            <div className="customers-review">
+              <img src="/Assets/Component 1.png" alt="Customer Review" />
+            </div>
+            <div className="customers-review">
+              <img src="/Assets/Component 1.png" alt="Customer Review" />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
