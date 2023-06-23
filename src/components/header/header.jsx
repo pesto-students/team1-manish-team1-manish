@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import "./header.css";
 import { Link } from "react-router-dom";
+// import { Icon } from "@iconify/react";
 
 const Header = () => {
+  const [toggleHeaderClass, setToggleHeaderClass] = useState("close");
+  const toggleHeader = () => {
+    if (toggleHeaderClass === "close") {
+      setToggleHeaderClass("open");
+    } else {
+      setToggleHeaderClass("close");
+    }
+  };
   return (
     <>
-      <div className="header">
+      <div className={`header header-${toggleHeaderClass}`}>
         <div className="header-brand">
           <div className="brand-logo-header">
             <img src="/assets/Logo.svg" />
@@ -19,6 +28,29 @@ const Header = () => {
           <Link to="/register">
             <button className="header-signup-btn">Sign Up</button>
           </Link>
+        </div>
+        <div className="hamburger-container">
+          <div
+            id="hamburger-icon"
+            className={toggleHeaderClass}
+            onClick={toggleHeader}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className={`hamburger-links-${toggleHeaderClass}`}>
+            <Link to="/login">
+              <p className="hamburger-login-btn" onClick={toggleHeader}>
+                Log In
+              </p>
+            </Link>
+            <Link to="/register">
+              <p className="hamburger-signup-btn" onClick={toggleHeader}>
+                Sign Up
+              </p>
+            </Link>
+          </div>
         </div>
       </div>
     </>

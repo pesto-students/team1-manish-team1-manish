@@ -30,7 +30,7 @@
 .login-input-container > input {
   height: 40px;
   width: 320px;
-  margin: 5px;
+  margin: 10px;
   border: 1px solid #c7cbd3;
   border-radius: 10px;
   padding-left: 10px;
@@ -65,4 +65,15 @@
 
 .signup-already > p > a {
   color: #00b5f0;
+}
+
+@media (max-width: 480px) {
+  .App {
+    background-color: white;
+  }
+
+  .login-form-container {
+    background-color: transparent;
+    border: none;
+  }
 }

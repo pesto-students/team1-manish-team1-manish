@@ -64,6 +64,21 @@
   font-size: x-small;
   position: relative;
   bottom: 5px;
+  margin-bottom: 50px;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    height: 120px;
+  }
+
+  .footer {
+    flex-direction: column;
+  }
+
+  .footer-links {
+    margin-bottom: 20px;
+  }
 }

@@ -14,14 +14,16 @@ const Register = () => {
           <h1 className="dark-font">Hello !</h1>
           <p className="darker-font">Signup to create your account !</p>
           <div className="input-container">
-            <div className="left-container">
+            <div className="input-container-1">
               <input type="text" placeholder=" Full Name" />
-              <input type="email" placeholder=" Email" />
-              <input type="password" placeholder=" Password" />
-            </div>
-            <div className="right-container">
               <input type="text" placeholder=" Last Name" />
+            </div>
+            <div className="input-container-2">
+              <input type="email" placeholder=" Email" />
               <input type="tel" placeholder=" Phone No." />
+            </div>
+            <div className="input-container-3">
+              <input type="password" placeholder=" Password" />
               <input type="password" placeholder=" Confirm Password" />
             </div>
           </div>
