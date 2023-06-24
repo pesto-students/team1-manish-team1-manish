@@ -1,1 +1,3 @@
-export const initialState = {};
+export const initialState = {
+  isDesktop: true,
+};
