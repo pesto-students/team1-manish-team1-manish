@@ -1,0 +1,235 @@
+.landing-page-div1 {
+  position: relative;
+  width: 100%;
+}
+
+.landing-page-img {
+  width: inherit;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+.text-inside-img {
+  position: absolute;
+  top: 40%;
+  left: 16%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 15%;
+}
+
+.img-text {
+  box-sizing: border-box;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 52px;
+  line-height: 29px;
+  color: #ffffff;
+  mix-blend-mode: hard-light;
+  text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+}
+
+.img-btn {
+  width: 112px;
+  height: 38px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: none;
+}
+
+.landing-page-heading {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  color: #676e8a;
+  margin: 1rem;
+}
+
+.landing-page-div2 {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  box-sizing: border-box;
+  background: #fcfcfc;
+  border: 1px solid #f4f4f4;
+  border-radius: 19px;
+  margin: 3rem 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dream-car-search {
+  box-sizing: border-box;
+  width: 364px;
+  height: 391px;
+
+  background: #ffffff;
+  border: 1px solid #d0c6c6;
+  border-radius: 12px;
+  margin: 1rem 1.5rem 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-your-car {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 22px;
+  color: #676e8a;
+}
+
+.search-car-drop-down {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 60%;
+}
+
+.search-car-drop-down > select {
+  width: 283px;
+  height: 45.42px;
+  box-sizing: border-box;
+  width: 283px;
+  height: 45.42px;
+  background: #eaf2ff;
+  border: 1px solid #d7e0f2;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  padding-left: 0.4rem;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #7b86b3;
+}
+
+.search-car-btn {
+  width: 283px;
+  height: 38px;
+  left: 127px;
+  top: 1217px;
+
+  background: #373737;
+  border-radius: 10px;
+  color: #ffffff;
+  border: none;
+}
+
+.landing-page-right-div {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+}
+
+.landing-page-right-div > img {
+  width: 100%;
+  margin: 1rem;
+}
+
+.landing-page-div3,
+.landing-page-div4 {
+  box-sizing: border-box;
+  /* width: 100%; */
+  height: 539px;
+  background: #fcfcfc;
+  border: 1px solid #f4f4f4;
+  border-radius: 19px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  margin: 3rem 2rem;
+}
+
+.easy-steps,
+.reviews-heading {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 69%;
+  color: #676e8a;
+  margin: 2rem;
+}
+
+.variety-of-options,
+.customers-review,
+.easy-pay,
+.choose-the-one {
+  box-sizing: border-box;
+  width: 30%;
+  height: 419px;
+  background: #ffffff;
+  border: 1px solid #c0bfbf;
+  border-radius: 12px;
+}
+
+.vop-p1,
+.cto-p1,
+.ep-p1 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 22px;
+  color: #535764;
+}
+
+.vop-p2,
+.cto-p2,
+.ep-p2 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #676e8a;
+}
+
+.three-easy-step,
+.reviews-div {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.vop-img,
+.cto-img,
+.ep-img {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.vop-img > img,
+.ep-img > img {
+  width: 80%;
+}
+
+.cto-img > img {
+  width: 65%;
+}
+
+.vop-details,
+.ctop-details {
+  margin: 1rem;
+}
+
+.ep-details {
+  margin: 1rem;
+  margin-top: 4.5rem;
+}
+
+.customers-review {
+  box-sizing: border-box;
+  width: 30%;
+  height: 419px;
+  background: #ffffff;
+  border: 1px solid #c0bfbf;
+  border-radius: 12px;
+  padding: 1rem;
+}
