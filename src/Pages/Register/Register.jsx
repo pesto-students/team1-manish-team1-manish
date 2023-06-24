@@ -1,7 +1,7 @@
 import React from "react";
 import "./Register.css";
 import Button from "@mui/material/Button";
-import DarkTheme from "../../themes/buttonThemes";
+import DarkTheme from "../../Themes/ButtonThemes";
 import { ThemeProvider } from "@mui/material/styles";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";

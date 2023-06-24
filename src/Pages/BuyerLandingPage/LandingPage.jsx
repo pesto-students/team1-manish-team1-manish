@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { SellCarLandingPage } from "./HomeSellCar";
-import "./Home.css";
+import { SellCarLandingPage } from "../SellCarLandingPage";
+import "./LandingPage.css";
 
 const LandingPage = () => {
   const [flagPage, setFlagPage] = useState(true);

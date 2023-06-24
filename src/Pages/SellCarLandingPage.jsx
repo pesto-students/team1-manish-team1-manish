@@ -1,5 +1,5 @@
 import React from "react";
-import "./Home.css";
+import "./BuyerLandingPage/LandingPage.css";
 
 export function SellCarLandingPage() {
   return (
@@ -67,10 +67,7 @@ export function SellCarLandingPage() {
         <div className="three-easy-step">
           <div className="variety-of-options">
             <div className="vop-img">
-              <img
-                src="Assets/variety-of-options.png"
-                alt="variety of options"
-              />
+              <img src="Assets/choose-the-one.png" alt="variety of options" />
             </div>
             <div className="vop-details">
               <p className="vop-p1">Register Car Details</p>
