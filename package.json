@@ -8,6 +8,10 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.5",
     "@reduxjs/toolkit": "^1.9.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -26,6 +30,7 @@
   "author": "Hritik Singh & Pranav Srisrimal",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@iconify/react": "^4.1.1",
     "eslint": "^8.43.0",
     "eslint-plugin-react": "^7.32.2",
     "husky": "^8.0.3"

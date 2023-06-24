@@ -1,0 +1,79 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.login-form-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #f4f4f4;
+  border-radius: 5px;
+}
+
+.login-remember-forget {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.login-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-input-container > input {
+  height: 40px;
+  width: 320px;
+  margin: 10px;
+  border: 1px solid #c7cbd3;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.login-remember-me > input {
+  border: #00b5f0;
+  margin: 0 5px;
+}
+
+.login-signup-btn {
+  width: 186.44px;
+  height: 38px;
+  border-radius: 8px !important;
+}
+
+.login-o2 {
+  display: flex;
+  gap: 20px;
+  padding: 5px;
+
+  .iconify {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+  }
+}
+
+.login-forgot-password > a {
+  color: rgba(103, 110, 138, 1);
+}
+
+.signup-already > p > a {
+  color: #00b5f0;
+}
+
+@media (max-width: 480px) {
+  .App {
+    background-color: white;
+  }
+
+  .login-form-container {
+    background-color: transparent;
+    border: none;
+  }
+}
