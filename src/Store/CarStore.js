@@ -1,5 +1,5 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
-import { initialState } from "./initialState";
+import { initialState } from "./InitialState";
 
 const CarSlice = createSlice({
   name: "CarDetails",

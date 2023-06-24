@@ -1,5 +1,5 @@
 import React from "react";
-import "./footer.css";
+import "./Footer.css";
 
 const Footer = () => {
   return (
@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="footer">
           <div className="footer-brand">
             <div className="brand-logo-footer">
-              <img src="/assets/Logo.svg" />
+              <img src="/Assets/Logo.svg" />
             </div>
             <div className="brand-name dark-font">Car Bazaar</div>
           </div>
@@ -20,7 +20,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="copyright-text">
-          © 2023 Car Bazaar – Car Marketplace.
+          © 2023 Car Bazaar - Car Marketplace.
         </div>
       </div>
     </>

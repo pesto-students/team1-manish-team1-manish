@@ -1,5 +1,5 @@
 import React from "react";
-import "./register.css";
+import "./Register.css";
 import Button from "@mui/material/Button";
 import DarkTheme from "../../themes/buttonThemes";
 import { ThemeProvider } from "@mui/material/styles";

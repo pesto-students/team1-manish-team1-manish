@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./header.css";
+import "./Header.css";
 import { Link } from "react-router-dom";
 // import { Icon } from "@iconify/react";
 
@@ -17,7 +17,7 @@ const Header = () => {
       <div className={`header header-${toggleHeaderClass}`}>
         <div className="header-brand">
           <div className="brand-logo-header">
-            <img src="/assets/Logo.svg" />
+            <img src="/Assets/Logo.svg" />
           </div>
           <div className="brand-name dark-font">Car Bazaar</div>
         </div>

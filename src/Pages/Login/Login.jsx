@@ -1,5 +1,5 @@
 import React from "react";
-import "./login.css";
+import "./Login.css";
 import Button from "@mui/material/Button";
 import DarkTheme from "../../themes/buttonThemes";
 import { ThemeProvider } from "@mui/material/styles";
