@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "./CarDetails.css";
 import CarDetailsData from "./DummyCarDetailsData";
 import Button from "@mui/material/Button";
-import DarkTheme from "../../Themes/ButtonThemes";
+import DarkTheme from "../../themes/buttonThemes";
 import { ThemeProvider } from "@mui/material/styles";
 import { Icon } from "@iconify/react";
 
