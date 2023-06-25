@@ -1,14 +1,13 @@
 .car-details {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
 }
 
 .car-preview {
   background-color: #fcfcfc;
   width: 100%;
   box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.03);
+  margin-bottom: 3vh;
 }
 
 .car-interactive-button {
@@ -35,9 +34,11 @@
 
 .bookmark {
   background-color: #373737;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   width: 6vw;
+  height: 7vh;
+  align-self: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,12 +62,13 @@
 
 .seller-details-button.MuiButton-contained {
   text-transform: none !important;
+  border-radius: 10px;
 }
 
 .shimmer {
   display: inline-flex;
   flex-direction: column;
-  margin: 15px 10vw;
+  margin: 15px 9vw;
   vertical-align: top;
 }
 
@@ -80,7 +82,8 @@ div.car-photos {
   display: block !important;
   width: 80vw;
   height: 85vh;
-  margin: 15px 10vw;
+  margin: 15px 9vw;
+  position: relative;
 }
 
 .easeload {
@@ -93,6 +96,41 @@ div.car-photos {
   height: inherit;
   width: inherit;
   border-radius: 5px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.car-photos > div {
+  background: rgba(36, 39, 44, 0.087);
+  height: 37px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.car-photos > div:hover {
+  background: rgba(30, 32, 36, 0.423);
+  cursor: pointer;
+}
+
+.car-photos > div > .iconify {
+  color: white;
+}
+
+.next-image {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  z-index: 99;
+}
+
+.prev-image {
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  z-index: 99;
 }
 
 .shimmering {
@@ -109,6 +147,87 @@ div.car-photos {
   display: inline-block;
   position: relative;
   border-radius: 10px;
+
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+}
+
+.car-overview {
+}
+
+.div-header {
+  padding-left: 5vw;
+  align-self: flex-start;
+  color: rgba(103, 110, 138, 1);
+}
+
+.shimmer-body,
+.info-body {
+  margin: 3vh 9vw;
+  border-radius: 50px;
+  width: 80vw;
+  height: max-content;
+  display: flex;
+  gap: 5vh;
+  flex-direction: column;
+  align-items: center;
+  padding: 5vh 0;
+  border: 1px solid #fcfcfc;
+  background: linear-gradient(0deg, #fff 0%, #fff 100%), #fcfcfc;
+  box-shadow: 0px 4px 23px 3px rgba(0, 0, 0, 0.1);
+}
+
+.info-body {
+  align-items: unset;
+}
+
+.info-content {
+  display: flex;
+}
+
+.overview-content {
+  display: flex;
+  padding-left: 5vw;
+  flex-direction: column;
+  width: 100%;
+  gap: 5vh;
+  align-self: self-end;
+}
+
+.content-key {
+  color: #a4a5a8;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.content-value {
+  color: #6b6d76;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.shimmering-effect {
+  height: 15px;
+  width: 70vw;
+}
+
+.shimmering-effect {
+  background: #f6f7f8;
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-repeat: no-repeat;
+  background-size: inherit;
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
 
   animation-duration: 1s;
   animation-fill-mode: forwards;
