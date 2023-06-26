@@ -6,6 +6,9 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
+import Home from "./pages/home";
+import Header from "./components/header";
+import ForgotPassword from "./pages/forgotPassword/forgotPassword"
 
 const App = () => {
   return (
@@ -15,6 +18,10 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
+        {/* <Route path="/login" element={<Login />} /> */}
+        {/* <Route path="/register" element={<Register />} /> */}
+        <Route path="/forgot-password" element={<ForgotPassword} />
       </Routes>
       <Footer />
     </div>
