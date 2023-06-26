@@ -6,7 +6,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
-import ForgotPassword from "./pages/forgotPassword/forgotPassword"
+import ForgotPassword from "./Pages/ForgotPassword/forgotPassword"
 
 const App = () => {
   return (
