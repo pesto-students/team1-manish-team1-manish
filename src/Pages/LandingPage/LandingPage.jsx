@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { SellCarLandingPage } from "../SellCarLandingPage";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { SellCarLandingPage } from "./SellCarLandingPage";
+import { togglePage } from "../../Store/CarStore";
 import "./LandingPage.css";
 
 const LandingPage = () => {
-  const [flagPage, setFlagPage] = useState(true);
+  const flagPage = useSelector((state) => state.flag);
+  const dispatch = useDispatch();
+
   return (
     <>
       <div className="landing-page">
@@ -15,7 +19,7 @@ const LandingPage = () => {
           />
           <div className="text-inside-img">
             <p className="img-text">Car to cash in a few hours!</p>
-            <button className="img-btn" onClick={() => setFlagPage(!flagPage)}>
+            <button className="img-btn" onClick={() => dispatch(togglePage())}>
               {flagPage ? "Sell Car" : "Buy Car"}
             </button>
           </div>

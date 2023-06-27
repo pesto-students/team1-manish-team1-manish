@@ -1,5 +1,5 @@
 import React from "react";
-import "./BuyerLandingPage/LandingPage.css";
+import "./LandingPage.css";
 
 export function SellCarLandingPage() {
   return (

@@ -19,12 +19,14 @@
   margin-left: 1%;
   height: 100%;
   padding: 5px;
+  width: 8%;
 }
 
 .header-links {
   display: flex;
   margin-right: 2%;
   gap: 40px;
+  width: 6%;
 }
 
 .brand-logo-header {
@@ -164,4 +166,89 @@
     flex-direction: column;
     margin-right: 20px;
   }
+}
+
+.auth-header {
+  width: 78%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-location {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: #f8f8fa;
+  width: 13%;
+}
+
+.location {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.location > img {
+  width: 70%;
+}
+
+#location-select {
+  border: none;
+  color: white;
+  background: #f8f8fa;
+  color: #676e8a;
+  font-family: "Poppins";
+  font-weight: 700;
+  width: 75%;
+}
+
+.header-search-bar {
+  display: flex;
+  width: 40%;
+  border-radius: 6px;
+  background: rgba(184, 210, 255, 0.16);
+  height: 2rem;
+}
+
+.header-search-bar > input {
+  width: 100%;
+  background: aliceblue;
+  border: none;
+  color: #676e8a;
+  font-family: Poppins;
+  padding-left: 1rem;
+  border-radius: 6px;
+}
+
+.header-action-btn {
+  display: flex;
+  align-items: center;
+  width: 15%;
+  justify-content: space-between;
+}
+
+.search {
+  display: flex;
+  width: 6%;
+  align-items: center;
+  justify-content: center;
+}
+
+.search > image {
+  width: 70%;
+}
+
+.header-action-btn {
+  display: flex;
+  align-items: center;
+  width: 12%;
+  justify-content: space-between;
+}
+
+.header-action-btn > img {
+  width: 20%;
 }
