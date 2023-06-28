@@ -4,6 +4,7 @@ import "./Header.css";
 
 const AuthenticatedHeader = () => {
   const [toggleHeaderClass, setToggleHeaderClass] = useState("close");
+
   const toggleHeader = () => {
     if (toggleHeaderClass === "close") {
       setToggleHeaderClass("open");
@@ -37,17 +38,13 @@ const AuthenticatedHeader = () => {
             </div>
           </div>
           <div className="header-action-btn">
-            <img src="/messageIcon.svg" alt="Message Icon" />
-            <img src="/bellIcon.svg" alt="Bell Icon" />
+            <img src="/messageIcon.svg" alt="Message Icon" id="message-icon" />
+            <img src="/bellIcon.svg" alt="Bell Icon" id="bell-icon" />
             <div className="user-profile-icon">
+              <img src="/userIcon.svg" alt="User Icon" id="user-icon" />
               <select name="user-profile" id="user-profile-select">
-                <option value=""></option>
-                <option value="profile">
-                  <img src="/userIcon.svg" alt="User Icon" />
-                </option>
-                <option value="log-out">
-                  <img src="/userIcon.svg" alt="User Icon" />
-                </option>
+                <option value="profile">Profile</option>
+                <option value="log-out">Log out</option>
               </select>
             </div>
           </div>
