@@ -12,6 +12,7 @@ const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [isImageFading, setIsImageFading] = useState([0, true]);
+  const [moreOverviewToggle, setMoreOverviewToggle] = useState(false);
   const [moreFeatureToggle, setMoreFeatureToggle] = useState(false);
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   let timeOutId = null;
@@ -85,23 +86,20 @@ const CarDetails = ({ carId }) => {
                     </ul>
                   </div>
                 </div>
-                <ThemeProvider theme={DarkTheme}>
-                  <div className="car-interactive-button">
-                    <button className="bookmark" onClick={bookmarkToggle}>
-                      {isBookMarked ? (
-                        <Icon icon="iconamoon:bookmark-fill" />
-                      ) : (
-                        <Icon icon="iconamoon:bookmark-bold" />
-                      )}
-                    </button>
-                    <Button
-                      className="seller-details-button"
-                      variant="contained"
-                    >
-                      View Seller Details
-                    </Button>
-                  </div>
-                </ThemeProvider>
+                <div className="car-interactive-button">
+                  <button className="darker-btn" onClick={bookmarkToggle}>
+                    {isBookMarked ? (
+                      <Icon icon="iconamoon:bookmark-fill" />
+                    ) : (
+                      <Icon icon="iconamoon:bookmark-bold" />
+                    )}
+                  </button>
+                  <button
+                    className="darker-btn"
+                  >
+                    <p>View Seller Details</p>
+                  </button>
+                </div>
               </div>
               <div className="car-photos">
                 <div className="next-image" onClick={manualNextImage}>
@@ -114,6 +112,20 @@ const CarDetails = ({ carId }) => {
                   className={isImageFading[1] ? "easeload" : ""}
                   src={carData.Images[isImageFading[0]]}
                 />
+              </div>
+              <div className="car-interactive-button-mobile">
+                <button className="darker-btn" onClick={bookmarkToggle}>
+                  {isBookMarked ? (
+                    <Icon icon="iconamoon:bookmark-fill" />
+                  ) : (
+                    <Icon icon="iconamoon:bookmark-bold" />
+                  )}
+                </button>
+                <button
+                  className="darker-btn"
+                >
+                  <p>View Seller Details</p>
+                </button>
               </div>
             </>
           )}
@@ -177,19 +189,56 @@ const CarDetails = ({ carId }) => {
                   <div className="content-value">{carData.Year}</div>
                 </div>
               </div>
+              <div className="info-content-mobile">
+                <div className="overview-content">
+                  <div className="content-key">Registration Yr.</div>
+                  <div className="content-key">Fuel Type</div>
+                  <div className="content-key">Kms Driven</div>
+                  <div className="content-key">Ownership</div>
+                  <div className="content-key">Transmission</div>
+                </div>
+                <div className="overview-content">
+                  <div className="content-value">
+                    {carData.RegistrationYear}
+                  </div>
+                  <div className="content-value">{carData.FualType}</div>
+                  <div className="content-value">{carData.KmDriven}</div>
+                  <div className="content-value">{carData.Ownership}</div>
+                  <div className="content-value">{carData.Transmission}</div>
+                </div>
+              </div>
+              {moreOverviewToggle ? (
+                <div className="info-content-mobile">
+                  <div className="overview-content">
+                    <div className="content-key">Insaurance</div>
+                    <div className="content-key">Variant</div>
+                    <div className="content-key">RTO</div>
+                    <div className="content-key">Engine</div>
+                    <div className="content-key">Yr. of Mfg</div>
+                  </div>
+                  <div className="overview-content">
+                    <div className="content-value">{carData.Insaurance}</div>
+                    <div className="content-value">{carData.Variant}</div>
+                    <div className="content-value">GJ14</div>
+                    <div className="content-value">{carData.Engine}</div>
+                    <div className="content-value">{carData.Year}</div>
+                  </div>
+                </div>
+              ) : (<></>)}
+              <h3 onClick={() => { setMoreOverviewToggle(value => !value) }} className="div-header mobile pointer">View More <Icon className={moreOverviewToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
             <div className="info-body">
               <h3 className="div-header">Features</h3>
               <div className="feature-content">
                 {Object.keys(CarFeatures[0]).map((key, index) => {
-                  return (index > 0 && index <= 9 ? (
+                  return (index > 0 && index <= 6 ? (
                     <div className="content-key" key={crypto.randomUUID()}>
                       {CarFeatures[0][key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
                     </div>
                   ) : <></>)
                 })}
                 {Object.keys(CarFeatures[0]).map((key, index) => {
-                  return (index > 9 && moreFeatureToggle ? (
+                  return (index > 6 && moreFeatureToggle ? (
                     <div className="content-key" key={crypto.randomUUID()}>
                       {CarFeatures[0][key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
                     </div>
@@ -253,6 +302,49 @@ const CarDetails = ({ carId }) => {
                     </>
                   ) : (<></>)}
                 </div>
+              </div>
+              <div className="info-content-mobile">
+                <div className="overview-content">
+                  <div className="content-key">Mileage</div>
+                  <div className="content-key">Torque</div>
+                  <div className="content-key">Brake(rear)</div>
+                  {moreSpecificationToggle ? (
+                    <>
+                      <div className="content-key">Brake(front)</div>
+                      <div className="content-key">Body Type</div>
+                      <div className="content-key">Power(rpm)</div>
+                      <div className="content-key">Emission Std.</div>
+                      <div className="content-key">Power(bhp)</div>
+                      <div className="content-key">Engine</div>
+                      <div className="content-key">Seats</div>
+                      <div className="content-key">Displacement(cc)</div>
+                      <div className="content-key">Cylinders</div>
+                      <div className="content-key">Fuel Tank CAP</div>
+                      <div className="content-key">Boot Space(L)</div>
+                    </>
+                  ) : (<></>)}
+                </div>
+                <div className="overview-content">
+                  <div className="content-value">{CarSpecifications["Mileage"]}</div>
+                  <div className="content-value">{CarSpecifications["Torque"]}</div>
+                  <div className="content-value">{CarSpecifications["Brake Type (rear)"]}</div>
+                  {moreSpecificationToggle ? (
+                    <>
+                      <div className="content-value">{CarSpecifications["Brake Type (front)"]}</div>
+                      <div className="content-value">{CarSpecifications["Body Type"]}</div>
+                      <div className="content-value">{CarSpecifications["Max Power (rpm)"]}</div>
+                      <div className="content-value">{CarSpecifications["Emission Standard"]}</div>
+                      <div className="content-value">{CarSpecifications["Max Power (bhp)"]}</div>
+                      <div className="content-value">{CarSpecifications["Engine"]}</div>
+                      <div className="content-value">{CarSpecifications["Seats"]}</div>
+                      <div className="content-value">{CarSpecifications["Displacement (cc)"]}</div>
+                      <div className="content-value">{CarSpecifications["Cylinders"]}</div>
+                      <div className="content-value">{CarSpecifications["Fuel Tank Capacity"]}</div>
+                      <div className="content-value">{CarSpecifications["Boot Space (Litres)"]}</div>
+                    </>
+                  ) : (<></>)}
+                </div>
+
               </div>
               <h3 onClick={() => { setMoreSpecificationToggle(value => !value) }} className="div-header pointer">View all Specifications <Icon className={moreSpecificationToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
