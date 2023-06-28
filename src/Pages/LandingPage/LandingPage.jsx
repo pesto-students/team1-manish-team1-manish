@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SellCarLandingPage } from "./SellCarLandingPage";
 import { togglePage } from "../../Store/CarStore";
+import { SellCarLandingPage } from "./SellCarLandingPage";
 import "./LandingPage.css";
 
 const LandingPage = () => {

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { togglePage } from "../../Store/CarStore";
+import UseMenu from "../UserProfileMenu/UserMenu";
 import "./Header.css";
 
 const AuthenticatedHeader = () => {
+  const flagPage = useSelector((state) => state.flag);
+  const dispatch = useDispatch();
+
   const [toggleHeaderClass, setToggleHeaderClass] = useState("close");
 
   const toggleHeader = () => {
@@ -41,17 +47,18 @@ const AuthenticatedHeader = () => {
             <img src="/messageIcon.svg" alt="Message Icon" id="message-icon" />
             <img src="/bellIcon.svg" alt="Bell Icon" id="bell-icon" />
             <div className="user-profile-icon">
-              <img src="/userIcon.svg" alt="User Icon" id="user-icon" />
-              <select name="user-profile" id="user-profile-select">
-                <option value="profile">Profile</option>
-                <option value="log-out">Log out</option>
-              </select>
+              <UseMenu />
             </div>
           </div>
         </div>
         <div className="header-links">
-          <Link to="/register">
-            <button className="header-signup-btn">Sell Car</button>
+          <Link to="/">
+            <button
+              className="header-signup-btn"
+              onClick={() => dispatch(togglePage())}
+            >
+              {flagPage ? "Buy Car" : "Sell Car"}
+            </button>
           </Link>
         </div>
         <div className="hamburger-container">

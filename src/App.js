@@ -11,7 +11,8 @@ import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 const App = () => {
   return (
     <div className="App">
-      <AuthenticatedHeader />
+      {/* <AuthenticatedHeader /> */}
+      <Header />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />

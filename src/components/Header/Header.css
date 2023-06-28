@@ -26,7 +26,6 @@
   display: flex;
   margin-right: 2%;
   gap: 40px;
-  width: 6%;
 }
 
 .brand-logo-header {
@@ -269,7 +268,6 @@
   position: relative;
   width: fit-content;
   border-radius: 6px;
-  background: #373737;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -277,6 +275,17 @@
   flex-shrink: 0;
 }
 
+.user-profile-icon > button {
+  background: black;
+  display: flex;
+  justify-content: center;
+  width: 3.5vw;
+  min-height: 5vh;
+  align-items: center;
+}
+.user-profile-icon > .button:hover {
+  background: black;
+}
 #user-icon {
   position: absolute;
 }
