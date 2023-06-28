@@ -30,7 +30,43 @@ const CarDetailsData = [
       "https://res.cloudinary.com/dlbeskesi/image/upload/v1687680022/honda-right-back.webp",
       "https://res.cloudinary.com/dlbeskesi/image/upload/v1687679932/honda-front.webp",
     ],
+    FeatureId: 5,
+    SpecificationId: 5,
   },
 ];
 
-export default CarDetailsData;
+const CarFeatures = [{
+  "id": 5,
+  "Power Steering": true,
+  "Heater": true,
+  "Anti lock Braking System": true,
+  "Power Window Front": true,
+  "Adjustable Head Lights": true,
+  "Central Locking": true,
+  "Air Conditioning": true,
+  "Fog Lights Front": true,
+  "Radio": true,
+  "Fog Lights - Rear": false,
+  "Cruise Control": true,
+  "Automatic Climate Control": false
+}];
+
+const CarSpecifications = {
+  "id": 6,
+  "Mileage": 20.05,
+  "Max Power (bhp)": 88.77,
+  "Engine": 1497,
+  "Torque": 200,
+  "Seats": 5,
+  "Displacement (cc)": 1498,
+  "Brake Type (rear)": "Drum",
+  "Brake Type (front)": "Disc",
+  "Cylinders": 4,
+  "Max Power (rpm)": 6600,
+  "Emission Standard": "BSVI",
+  "Fuel Tank Capacity": 42.0,
+  "Body Type": "Sedan",
+  "Boot Space (Litres)": 506
+};
+
+export { CarDetailsData, CarFeatures, CarSpecifications };

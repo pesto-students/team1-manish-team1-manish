@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./CarDetails.css";
-import CarDetailsData from "./DummyCarDetailsData";
+import { CarDetailsData, CarFeatures, CarSpecifications } from "./DummyCarDetailsData";
 import Button from "@mui/material/Button";
 import DarkTheme from "../../themes/buttonThemes";
 import { ThemeProvider } from "@mui/material/styles";
@@ -12,6 +12,8 @@ const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [isImageFading, setIsImageFading] = useState([0, true]);
+  const [moreFeatureToggle, setMoreFeatureToggle] = useState(false);
+  const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   let timeOutId = null;
   const bookmarkToggle = () => {
     setIsBookMarked((value) => !value);
@@ -66,7 +68,7 @@ const CarDetails = ({ carId }) => {
           ) : (
             <>
               <div className="car-info">
-                <div className="car-description">
+                <div className="car-description darker-font">
                   <div className="car-name">
                     <p className="">
                       {carData.Year} {carData.Brand} {carData.Model}{" "}
@@ -178,11 +180,81 @@ const CarDetails = ({ carId }) => {
             </div>
             <div className="info-body">
               <h3 className="div-header">Features</h3>
-              <div className="info-content"></div>
+              <div className="feature-content">
+                {Object.keys(CarFeatures[0]).map((key, index) => {
+                  return (index > 0 && index <= 9 ? (
+                    <div className="content-key" key={crypto.randomUUID()}>
+                      {CarFeatures[0][key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
+                    </div>
+                  ) : <></>)
+                })}
+                {Object.keys(CarFeatures[0]).map((key, index) => {
+                  return (index > 9 && moreFeatureToggle ? (
+                    <div className="content-key" key={crypto.randomUUID()}>
+                      {CarFeatures[0][key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
+                    </div>
+                  ) : <></>)
+                })}
+              </div>
+              <h3 onClick={() => { setMoreFeatureToggle(value => !value) }} className="div-header pointer">View all Features <Icon className={moreFeatureToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
             <div className="info-body">
               <h3 className="div-header">Specifications</h3>
-              <div className="info-content"></div>
+              <div className="info-content">
+                <div className="overview-content">
+                  <div className="content-key">Mileage</div>
+                  <div className="content-key">Torque</div>
+                  <div className="content-key">Brake Type (rear)</div>
+                  {moreSpecificationToggle ? (
+                    <>
+                      <div className="content-key">Brake Type (front)</div>
+                      <div className="content-key">Body Type</div>
+                      <div className="content-key">Max Power (rpm)</div>
+                      <div className="content-key">Emission Standard</div>
+                    </>
+                  ) : (<></>)}
+                </div>
+                <div className="overview-content">
+                  <div className="content-value">{CarSpecifications["Mileage"]}</div>
+                  <div className="content-value">{CarSpecifications["Torque"]}</div>
+                  <div className="content-value">{CarSpecifications["Brake Type (rear)"]}</div>
+                  {moreSpecificationToggle ? (
+                    <>
+                      <div className="content-value">{CarSpecifications["Brake Type (front)"]}</div>
+                      <div className="content-value">{CarSpecifications["Body Type"]}</div>
+                      <div className="content-value">{CarSpecifications["Max Power (rpm)"]}</div>
+                      <div className="content-value">{CarSpecifications["Emission Standard"]}</div>
+                    </>
+                  ) : (<></>)}
+                </div>
+                <div className="overview-content">
+                  <div className="content-key">Max Power (bhp)</div>
+                  <div className="content-key">Engine</div>
+                  <div className="content-key">Seats</div>
+                  {moreSpecificationToggle ? (
+                    <>
+                      <div className="content-key">Displacement (cc)</div>
+                      <div className="content-key">Cylinders</div>
+                      <div className="content-key">Fuel Tank Capacity</div>
+                      <div className="content-key">Boot Space (Litres)</div>
+                    </>
+                  ) : (<></>)}
+                </div>
+                <div className="overview-content">
+                  <div className="content-value">{CarSpecifications["Max Power (bhp)"]}</div>
+                  <div className="content-value">{CarSpecifications["Engine"]}</div>
+                  <div className="content-value">{CarSpecifications["Seats"]}</div>
+                  {moreSpecificationToggle ? (
+                    <>
+                      <div className="content-value">{CarSpecifications["Displacement (cc)"]}</div>
+                      <div className="content-value">{CarSpecifications["Cylinders"]}</div>
+                      <div className="content-value">{CarSpecifications["Fuel Tank Capacity"]}</div>
+                      <div className="content-value">{CarSpecifications["Boot Space (Litres)"]}</div>
+                    </>
+                  ) : (<></>)}
+                </div>
+              </div>
+              <h3 onClick={() => { setMoreSpecificationToggle(value => !value) }} className="div-header pointer">View all Specifications <Icon className={moreSpecificationToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
           </>
         )}

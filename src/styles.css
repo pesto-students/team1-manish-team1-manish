@@ -41,6 +41,10 @@ html {
   background: rgba(253, 254, 255, 1);
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .home {
   display: flex;
   justify-content: center;
