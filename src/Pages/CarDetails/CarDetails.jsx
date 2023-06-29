@@ -3,10 +3,8 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./CarDetails.css";
 import { CarDetailsData, CarFeatures, CarSpecifications } from "./DummyCarDetailsData";
-import Button from "@mui/material/Button";
-import DarkTheme from "../../themes/buttonThemes";
-import { ThemeProvider } from "@mui/material/styles";
 import { Icon } from "@iconify/react";
+import { useRef } from "react";
 
 const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);
@@ -15,28 +13,33 @@ const CarDetails = ({ carId }) => {
   const [moreOverviewToggle, setMoreOverviewToggle] = useState(false);
   const [moreFeatureToggle, setMoreFeatureToggle] = useState(false);
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
-  let timeOutId = null;
+  const [scrollDirection, setScrollDirection] = useState(null);
+  let timeOutId = useRef(false);
   const bookmarkToggle = () => {
     setIsBookMarked((value) => !value);
   };
   const manualNextImage = () => {
-    clearTimeout(timeOutId);
-    if (isImageFading[0] >= carData.Images.length - 1) {
+    clearTimeout(timeOutId.current);
+    if (isImageFading[0] > carData.Images.length - 2) {
       setIsImageFading([0, false]);
     } else {
       setIsImageFading((value) => [value[0] + 1, false]);
     }
   };
   const manualPrevImage = () => {
-    clearTimeout(timeOutId);
-    if (isImageFading[0] <= 0) {
+    clearTimeout(timeOutId.current);
+    if (isImageFading[0] < 1) {
       setIsImageFading([carData.Images.length - 1, false]);
     } else {
       setIsImageFading((value) => [value[0] - 1, false]);
     }
   };
+
   useEffect(() => {
-    clearTimeout(timeOutId);
+    if (timeOutId.current) {
+      clearTimeout(timeOutId.current);
+      timeOutId.current = null;
+    }
     if (!carData) {
       //Backend API call for fetching carDetails
       console.log(carId);
@@ -44,15 +47,31 @@ const CarDetails = ({ carId }) => {
         setCarData(CarDetailsData[carId]);
       }, 2000);
     } else {
-      timeOutId = setTimeout(() => {
-        if (isImageFading[0] >= carData.Images.length - 1) {
-          setIsImageFading([0, !isImageFading[1]]);
-        } else {
-          setIsImageFading((value) => [value[0] + 1, !value[1]]);
-        }
-      }, 6000);
+      if (!timeOutId.current) {
+        timeOutId.current = setTimeout(() => {
+          if (isImageFading[0] > carData.Images.length - 2) {
+            setIsImageFading([0, !isImageFading[1]]);
+          } else {
+            setIsImageFading((value) => [value[0] + 1, !value[1]]);
+          }
+        }, 6000);
+      }
     }
-  }, [carData, isImageFading]);
+    let lastScrollY = window.scrollY;
+
+    const updateScrollDirection = () => {
+      const scrollY = window.scrollY;
+      const direction = scrollY > lastScrollY ? "down" : "up";
+      if (direction !== scrollDirection && (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)) {
+        setScrollDirection(direction);
+      }
+      lastScrollY = scrollY > 0 ? scrollY : 0;
+    };
+    window.addEventListener("scroll", updateScrollDirection); // add event listener
+    return () => {
+      window.removeEventListener("scroll", updateScrollDirection); // clean up
+    }
+  }, [carData, isImageFading, scrollDirection]);
   return (
     <>
       <div id="style-1" className="car-details">
@@ -112,20 +131,6 @@ const CarDetails = ({ carId }) => {
                   className={isImageFading[1] ? "easeload" : ""}
                   src={carData.Images[isImageFading[0]]}
                 />
-              </div>
-              <div className="car-interactive-button-mobile">
-                <button className="darker-btn" onClick={bookmarkToggle}>
-                  {isBookMarked ? (
-                    <Icon icon="iconamoon:bookmark-fill" />
-                  ) : (
-                    <Icon icon="iconamoon:bookmark-bold" />
-                  )}
-                </button>
-                <button
-                  className="darker-btn"
-                >
-                  <p>View Seller Details</p>
-                </button>
               </div>
             </>
           )}
@@ -351,6 +356,29 @@ const CarDetails = ({ carId }) => {
           </>
         )}
       </div>
+      {carData ? (
+        <>
+          <div className={`mobile-buy-footer ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"} transition-all`}>
+            <div className={`mobile-price ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"} transition-all`}>
+              Rs. {carData.Price}
+            </div>
+            <div className={`car-interactive-button-mobile ${scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"} transition-all`}>
+              <button className="darker-btn" onClick={bookmarkToggle}>
+                {isBookMarked ? (
+                  <Icon icon="iconamoon:bookmark-fill" />
+                ) : (
+                  <Icon icon="iconamoon:bookmark-bold" />
+                )}
+              </button>
+              <button
+                className="darker-btn"
+              >
+                <p>View Seller Details</p>
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (<></>)}
     </>
   );
 };

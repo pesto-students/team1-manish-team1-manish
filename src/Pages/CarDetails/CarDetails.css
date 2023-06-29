@@ -317,6 +317,10 @@ div.car-photos {
   }
 }
 
+.mobile-buy-footer {
+  display: none;
+}
+
 @media (max-width: 550px) {
   .car-info {
     flex-direction: column;
@@ -343,6 +347,7 @@ div.car-photos {
     display: flex;
     justify-content: center;
     gap: 5vw;
+    padding: 3vh;
   }
 
   .div-header {
@@ -357,6 +362,19 @@ div.car-photos {
 
   .darker-btn {
     border-radius: 1vh;
+  }
+
+  .darker-btn>.iconify {
+    border-radius: 1vh;
+    margin: 2vh 3vw;
+  }
+
+  .darker-btn>p {
+    margin: 2vh 3vw;
+  }
+
+  .info-body {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   }
 
   .info-content {
@@ -375,5 +393,46 @@ div.car-photos {
   .feature-content>.content-key {
     flex: none;
     display: flex;
+  }
+
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    transition-duration: .5s;
+  }
+
+  .mobile-buy-footer {
+    bottom: 0;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(0deg, #fff 0%, #fff 100%), #fcfcfc;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .mobile-price {
+    font-size: 3vh;
+    display: flex;
+    margin-top: 2vh;
+    font-weight: bold;
+    justify-content: center;
+  }
+
+  .hide-buy-footer {
+    height: 0;
+  }
+
+  .show-buy-footer {
+    height: 18vh;
+  }
+
+  .hide-buy-div {
+    opacity: 0;
+    display: none;
+  }
+
+  .show-buy-div {
+    opacity: 1;
   }
 }
