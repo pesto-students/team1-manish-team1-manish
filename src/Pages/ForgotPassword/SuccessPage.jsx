@@ -1,14 +1,14 @@
 import React from "react";
 import "./styles.css";
 
-const successPage = () => {
+const SuccessPage = () => {
   return (
     <>
       <div className="forgot__password">
         <div className="forgot_password__close">X</div>
         <h1 className="forgot__password__header">Password Updated</h1>
         <img
-          src="./assets/pw_successful.png"
+          src="/Assets/pw_successful.png"
           alt="Password reset successful"
           className="forgot__password__image"
         />
@@ -20,4 +20,4 @@ const successPage = () => {
   );
 };
 
-export default successPage;
+export default SuccessPage;

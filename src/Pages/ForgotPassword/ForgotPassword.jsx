@@ -1,9 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import ForgotPasswordOTP from "./ForgotPasswordOTP";
 import "./styles.css";
 
 const forgotPassword = () => {
   const [IsEmailExist, setIsEmailExist] = React.useState(false);
+  if (IsEmailExist) {
+    return <ForgotPasswordOTP />;
+  }
   return (
     <>
       <div className="forgot__password">
@@ -17,7 +20,11 @@ const forgotPassword = () => {
           placeholder="Email address"
         ></input>
 
-        <button className="forgot__password__button" type="submit">
+        <button
+          className="forgot__password__button"
+          type="submit"
+          onClick={() => setIsEmailExist(true)}
+        >
           Continue
         </button>
       </div>

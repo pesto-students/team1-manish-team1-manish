@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import ConfirmPassword from "./ResetPassword";
 import "./styles.css";
 
-const forgotPasswordOTP = () => {
+const ForgotPasswordOTP = () => {
+  const limitSingleValue = (input) => {
+    input.target.value = input.target.value?.slice(0, 1);
+  };
+
+  const [isOtpValid, setIsOtpValid] = useState(false);
+
+  if (isOtpValid) {
+    return <ConfirmPassword />;
+  }
   return (
     <>
       <div className="forgot__password">
@@ -14,38 +24,48 @@ const forgotPasswordOTP = () => {
             name="box1"
             className="forgot__password__otp__box"
             type="text"
+            onInput={limitSingleValue}
           ></input>
           <input
             name="box2"
             className="forgot__password__otp__box"
             type="text"
+            onInput={limitSingleValue}
           ></input>
           <input
             name="box3"
             className="forgot__password__otp__box"
             type="text"
+            onInput={limitSingleValue}
           ></input>
           <input
             name="box4"
             className="forgot__password__otp__box"
             type="text"
+            onInput={limitSingleValue}
           ></input>
           <input
             name="box5"
             className="forgot__password__otp__box"
             type="text"
+            onInput={limitSingleValue}
           ></input>
           <input
             name="box6"
             className="forgot__password__otp__box"
             type="text"
+            onInput={limitSingleValue}
           ></input>
         </div>
-        <button className="forgot__password__button" type="submit">
+        <button
+          className="forgot__password__button"
+          type="submit"
+          onClick={() => setIsOtpValid(true)}
+        >
           Submit
         </button>
         <p className="forgot__password__footer">
-          Didn't receive?
+          Didn&#39;t receive?
           <a href="#">Resend OTP</a>
         </p>
       </div>
@@ -53,4 +73,4 @@ const forgotPasswordOTP = () => {
   );
 };
 
-export default forgotPasswordOTP;
+export default ForgotPasswordOTP;

@@ -80,6 +80,9 @@
   border: 2px solid rgba(188, 239, 255, 0.31);
   background: #eefbff;
   margin: 2px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 800;
 }
 
 .forgot__password__button--confirm {
