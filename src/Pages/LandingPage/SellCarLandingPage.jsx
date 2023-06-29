@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
   const [files, setFiles] = useState(null);
-  const handleSellCarSubmit = () => {};
+  const handleSellCarSubmit = () => { };
 
   return (
     <div>
