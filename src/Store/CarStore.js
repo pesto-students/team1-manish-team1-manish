@@ -1,13 +1,17 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
-import { initialState } from "./InitialState";
+import { globalInitialState } from "./InitialState";
 
 const CarSlice = createSlice({
   name: "CarDetails",
-  initialState: initialState,
-  reducers: {},
+  initialState: globalInitialState,
+  reducers: {
+    togglePage: (state) => {
+      state.flag = !state.flag;
+    },
+  },
 });
 
-export const {} = CarSlice.actions;
+export const { togglePage } = CarSlice.actions;
 
 const CarStore = configureStore({
   reducer: CarSlice.reducer,

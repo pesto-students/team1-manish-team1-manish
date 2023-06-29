@@ -1,16 +1,18 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./styles.css";
-import LandingPage from "./Pages/BuyerLandingPage/LandingPage";
+import LandingPage from "./Pages/LandingPage/LandingPage";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
+import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import CarDetails from "./Pages/CarDetails/CarDetails";
 
 const App = () => {
   return (
     <div className="App">
+      {/* <AuthenticatedHeader /> */}
       <Header />
       <Routes>
         <Route path="/" element={<LandingPage />} />

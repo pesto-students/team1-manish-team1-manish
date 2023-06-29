@@ -92,7 +92,11 @@
   height: 60%;
 }
 
-.search-car-drop-down > select {
+.search-car-drop-down > select,
+.car-drop-down-1 > select,
+.car-drop-down-2 > select,
+.car-drop-down-3 > select,
+.car-drop-down-4 > select {
   width: 283px;
   height: 45.42px;
   box-sizing: border-box;
@@ -136,8 +140,7 @@
 .landing-page-div3,
 .landing-page-div4 {
   box-sizing: border-box;
-  /* width: 100%; */
-  height: 539px;
+  height: fit-content;
   background: #fcfcfc;
   border: 1px solid #f4f4f4;
   border-radius: 19px;
@@ -162,7 +165,6 @@
 .choose-the-one {
   box-sizing: border-box;
   width: 30%;
-  height: 419px;
   background: #ffffff;
   border: 1px solid #c0bfbf;
   border-radius: 12px;
@@ -195,6 +197,8 @@
   display: flex;
   justify-content: space-evenly;
   width: 100%;
+  height: inherit;
+  margin-bottom: 2rem;
 }
 
 .vop-img,
@@ -206,12 +210,9 @@
 }
 
 .vop-img > img,
-.ep-img > img {
-  width: 80%;
-}
-
+.ep-img > img,
 .cto-img > img {
-  width: 65%;
+  width: 80%;
 }
 
 .vop-details,
@@ -221,7 +222,6 @@
 
 .ep-details {
   margin: 1rem;
-  margin-top: 4.5rem;
 }
 
 .customers-review {
@@ -232,4 +232,80 @@
   border: 1px solid #c0bfbf;
   border-radius: 12px;
   padding: 1rem;
+}
+
+.enter-sell-car-detail {
+  box-sizing: border-box;
+  width: 53%;
+  height: 391px;
+  background: #ffffff;
+  border: 1px solid #d0c6c6;
+  border-radius: 15px;
+  padding: 3rem;
+}
+
+.upload-img-div {
+  box-sizing: border-box;
+  width: 36%;
+  height: 391px;
+  background: #ffffff;
+  border: 1px solid #c7cbd3;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.upload-img-div:before {
+  position: absolute;
+  bottom: 120px;
+  content: " (or) Drag and Drop files here. ";
+}
+
+#file-upload {
+  padding: 183px 60px 184px 140px;
+}
+
+.sell-car-landing-page-div2 {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  box-sizing: border-box;
+  background: #fcfcfc;
+  border: 1px solid #f4f4f4;
+  border-radius: 19px;
+  margin: 3rem 2rem;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.sell-car-details {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.sell-car-header {
+  margin-bottom: 1rem;
+}
+
+.enter-sell-car-drop-down {
+  width: 100%;
+}
+
+.car-drop-down-1,
+.car-drop-down-2,
+.car-drop-down-3,
+.car-drop-down-4 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.submit-btn {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0;
+}
+
+.sell-car-div-heading {
+  margin-left: 2.5rem;
 }

@@ -20,6 +20,7 @@
   margin-left: 1%;
   height: 100%;
   padding: 5px;
+  width: 8%;
 }
 
 .header-links {
@@ -165,4 +166,136 @@
     flex-direction: column;
     margin-right: 20px;
   }
+}
+
+.auth-header {
+  width: 78%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-location {
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: #f8f8fa;
+  width: 13%;
+}
+
+.location {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.location > img {
+  width: 70%;
+}
+
+#location-select {
+  border: none;
+  color: white;
+  background: #f8f8fa;
+  color: #676e8a;
+  font-family: "Poppins";
+  font-weight: 700;
+  width: 75%;
+}
+
+.header-search-bar {
+  display: flex;
+  width: 40%;
+  border-radius: 6px;
+  background: rgba(184, 210, 255, 0.16);
+  height: 2rem;
+  position: relative;
+}
+
+.header-search-bar > input {
+  width: 100%;
+  background: aliceblue;
+  border: none;
+  color: #676e8a;
+  font-family: Poppins;
+  padding-left: 1rem;
+  border-radius: 6px;
+}
+
+.header-action-btn {
+  display: flex;
+  align-items: center;
+  width: 15%;
+  justify-content: space-between;
+}
+
+.search {
+  display: flex;
+  width: 5%;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 25%;
+}
+
+.search > img {
+  width: 50%;
+}
+
+.header-action-btn {
+  display: flex;
+  align-items: center;
+  width: 12%;
+  justify-content: space-between;
+}
+
+.header-action-btn > img {
+  width: 20%;
+}
+
+#message-icon {
+  width: 20%;
+}
+
+#bell-icon {
+  width: 17%;
+}
+
+.user-profile-icon {
+  position: relative;
+  width: fit-content;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  flex-shrink: 0;
+}
+
+.user-profile-icon > button {
+  background: black;
+  display: flex;
+  justify-content: center;
+  width: 3.5vw;
+  min-height: 5vh;
+  align-items: center;
+}
+.user-profile-icon > .button:hover {
+  background: black;
+}
+#user-icon {
+  position: absolute;
+}
+
+#user-profile-select {
+  border: none;
+  border-radius: 6px;
+  background: #373737;
+  width: fit-content;
+  height: 35px;
+  color: white;
 }
