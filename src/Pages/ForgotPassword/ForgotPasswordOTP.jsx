@@ -1,5 +1,5 @@
-import React from 'react';
-import './styles.css';
+import React from "react";
+import "./styles.css";
 
 const forgotPasswordOTP = () => {
   return (
@@ -51,6 +51,6 @@ const forgotPasswordOTP = () => {
       </div>
     </>
   );
-}
+};
 
 export default forgotPasswordOTP;

@@ -1,5 +1,5 @@
-import React from 'react';
-import './styles.css'
+import React from "react";
+import "./styles.css";
 
 const confirmPassword = () => {
   return (
@@ -15,7 +15,7 @@ const confirmPassword = () => {
         <input
           className="forgot__password__input--confirm"
           type="password"
-          placeholder="Enter password again"
+          placeholder="Confirm New password again"
         ></input>
         <button className="forgot__password__button--confirm" type="submit">
           Confirm
@@ -23,6 +23,6 @@ const confirmPassword = () => {
       </div>
     </>
   );
-}
+};
 
-  export default confirmPassword;
+export default confirmPassword;

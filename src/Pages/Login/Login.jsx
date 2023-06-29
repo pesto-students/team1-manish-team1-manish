@@ -23,7 +23,7 @@ const Login = () => {
               <label>Remember Me</label>
             </div>
             <div className="login-forgot-password">
-              <Link to="/forgot1">Forgot Password?</Link>
+              <Link to="/forgot-password">Forgot Password?</Link>
             </div>
           </div>
           <ThemeProvider theme={DarkTheme}>
