@@ -210,12 +210,8 @@
 }
 
 .vop-img > img,
-.ep-img > img {
+.ep-img > img,.cto-img > img {
   width: 80%;
-}
-
-.cto-img > img {
-  width: 65%;
 }
 
 .vop-details,
@@ -225,7 +221,6 @@
 
 .ep-details {
   margin: 1rem;
-  margin-top: 4.5rem;
 }
 
 .customers-review {
