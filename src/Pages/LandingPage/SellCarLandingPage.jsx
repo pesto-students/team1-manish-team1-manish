@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
+  const [files, setFiles] = useState(null);
+  const handleSellCarSubmit = () => {};
+
   return (
     <div>
       <div className="sell-car-landing-page-div2">
@@ -56,10 +60,21 @@ export function SellCarLandingPage() {
               </div>
             </div>
           </div>
-          <div className="upload-img-div">Click to upload or drag image </div>
+          <div className="upload-img-div">
+            <input
+              type="file"
+              id="file-upload"
+              multiple
+              onChange={(event) => {
+                setFiles(event.target.files);
+              }}
+            />
+          </div>
         </div>
         <div className="submit-btn">
-          <button className="search-car-btn">Search</button>
+          <button className="search-car-btn" onClick={handleSellCarSubmit}>
+            Submit
+          </button>
         </div>
       </div>
       <div className="landing-page-div3">
