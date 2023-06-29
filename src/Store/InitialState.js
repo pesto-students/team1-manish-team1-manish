@@ -1,3 +1,4 @@
-export const initialState = {
+export const globalInitialState = {
   isDesktop: true,
+  flag: true,
 };
