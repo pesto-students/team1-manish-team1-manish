@@ -168,6 +168,10 @@
   }
 }
 
+a:link {
+  text-decoration: none;
+}
+
 .auth-header {
   width: 78%;
   display: flex;

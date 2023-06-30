@@ -15,10 +15,12 @@ const Header = () => {
     <>
       <div className={`header header-${toggleHeaderClass}`}>
         <div className="header-brand">
-          <div className="brand-logo-header">
-            <img src="/Assets/Logo.svg" />
-          </div>
-          <div className="brand-name dark-font">Car Bazaar</div>
+          <Link to="/">
+            <div className="brand-logo-header">
+              <img src="/Assets/Logo.svg" />
+            </div>
+            <div className="brand-name dark-font">Car Bazaar</div>
+          </Link>
         </div>
         <div className="header-links">
           <Link to="/login">

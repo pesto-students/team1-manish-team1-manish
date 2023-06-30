@@ -1,10 +1,10 @@
 import React from "react";
-import "./Login.css";
 import Button from "@mui/material/Button";
-import DarkTheme from "../../Themes/ButtonThemes";
 import { ThemeProvider } from "@mui/material/styles";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
+import DarkTheme from "../../Themes/ButtonThemes";
+import "./Login.css";
 
 const Login = () => {
   return (
@@ -23,7 +23,7 @@ const Login = () => {
               <label>Remember Me</label>
             </div>
             <div className="login-forgot-password">
-              <Link to="/forgot1">Forgot Password?</Link>
+              <Link to="/forgot-password">Forgot Password?</Link>
             </div>
           </div>
           <ThemeProvider theme={DarkTheme}>
