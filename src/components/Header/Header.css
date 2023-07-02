@@ -34,7 +34,7 @@
   height: 50px;
 }
 
-.brand-logo-header > img {
+.brand-logo-header>img {
   height: inherit;
 }
 
@@ -43,12 +43,13 @@
   font-weight: bold;
 }
 
-.header-links > * > button {
+.header-links>*>button {
   height: 30px;
   width: 82px;
   border-radius: 4px;
   cursor: pointer;
 }
+
 .header-login-btn {
   background: transparent;
   border: 1px solid gainsboro;
@@ -136,6 +137,10 @@
     align-self: baseline;
   }
 
+  .header-brand {
+    width: 25%;
+  }
+
   .header-links {
     display: none;
   }
@@ -152,7 +157,7 @@
     gap: 3px;
   }
 
-  .hamburger-links-open > a {
+  .hamburger-links-open>a {
     text-decoration: none;
     color: rgba(103, 110, 138, 1);
   }
@@ -196,7 +201,7 @@ a:link {
   justify-content: center;
 }
 
-.location > img {
+.location>img {
   width: 70%;
 }
 
@@ -219,7 +224,7 @@ a:link {
   position: relative;
 }
 
-.header-search-bar > input {
+.header-search-bar>input {
   width: 100%;
   background: aliceblue;
   border: none;
@@ -246,7 +251,7 @@ a:link {
   top: 25%;
 }
 
-.search > img {
+.search>img {
   width: 50%;
 }
 
@@ -257,7 +262,7 @@ a:link {
   justify-content: space-between;
 }
 
-.header-action-btn > img {
+.header-action-btn>img {
   width: 20%;
 }
 
@@ -280,7 +285,7 @@ a:link {
   flex-shrink: 0;
 }
 
-.user-profile-icon > button {
+.user-profile-icon>button {
   background: black;
   display: flex;
   justify-content: center;
@@ -288,9 +293,11 @@ a:link {
   min-height: 5vh;
   align-items: center;
 }
-.user-profile-icon > .button:hover {
+
+.user-profile-icon>.button:hover {
   background: black;
 }
+
 #user-icon {
   position: absolute;
 }

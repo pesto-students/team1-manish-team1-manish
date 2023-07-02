@@ -1,12 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Register.css";
 import Button from "@mui/material/Button";
 import DarkTheme from "../../Themes/ButtonThemes";
+import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import { Icon } from "@iconify/react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { authorizeUser, setUserDetails } from "../../Store/CarStore";
 
 const Register = () => {
+  console.log(process.env);
+  const isAuthorized = useSelector((state) => state.isAuthUser);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const googleLogin = () => {
+    const popup = window.open(process.env.REACT_APP_CALLBACK_URL, "popup", `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX},top=${screen.height / 2 - 600 / 2 + window.screenY}`);
+    const checkPopup = setInterval(async () => {
+      if (!popup.closed) return;
+      clearInterval(checkPopup);
+      await axios({
+        method: 'get',
+        url: process.env.REACT_APP_REGISTER_URL,
+        withCredentials: true,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+        },
+      })
+        .then((response) => {
+          if (response.status == 200) {
+            dispatch(authorizeUser());
+            dispatch(setUserDetails(response.data))
+            navigate('/')
+          }
+        })
+        // Catching and returning error message if the specified place is invalid.
+        .catch((error) => {
+
+          console.log(error);
+        });
+    }, 1000);
+  }
+  useEffect(() => {
+    if (isAuthorized) {
+      navigate('/')
+    }
+  }, []);
   return (
     <>
       <div className="register">
@@ -40,7 +79,7 @@ const Register = () => {
           <div className="o2 darkest-font">
             <Icon icon="la:facebook" />
             <Icon icon="uil:instagram" />
-            <Icon icon="iconoir:google" />
+            <Icon onClick={googleLogin} icon="iconoir:google" />
           </div>
           <div className="signup-already">
             <p>
