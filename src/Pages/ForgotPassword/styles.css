@@ -9,6 +9,7 @@
   align-items: center;
   height: 30rem;
   width: 36rem;
+  background-color: white;
   flex-direction: column;
   margin: auto;
   gap: 40px;
@@ -106,7 +107,7 @@
   background: white;
 }
 
-.forgot__password__footer > a {
+.forgot__password__footer>a {
   padding-left: 10px;
 }
 

@@ -92,11 +92,11 @@
   height: 60%;
 }
 
-.search-car-drop-down > select,
-.car-drop-down-1 > select,
-.car-drop-down-2 > select,
-.car-drop-down-3 > select,
-.car-drop-down-4 > select {
+.search-car-drop-down>select,
+.car-drop-down-1>select,
+.car-drop-down-2>select,
+.car-drop-down-3>select,
+.car-drop-down-4>select {
   width: 283px;
   height: 45.42px;
   box-sizing: border-box;
@@ -132,7 +132,7 @@
   justify-content: center;
 }
 
-.landing-page-right-div > img {
+.landing-page-right-div>img {
   width: 100%;
   margin: 1rem;
 }
@@ -209,9 +209,9 @@
   margin-top: 1rem;
 }
 
-.vop-img > img,
-.ep-img > img,
-.cto-img > img {
+.vop-img>img,
+.ep-img>img,
+.cto-img>img {
   width: 80%;
 }
 
@@ -308,4 +308,10 @@
 
 .sell-car-div-heading {
   margin-left: 2.5rem;
+}
+
+@media (max-width: 480px) {
+  .App {
+    height: fit-content !important;
+  }
 }
