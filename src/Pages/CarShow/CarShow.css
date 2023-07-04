@@ -1,0 +1,50 @@
+.main-car-show{
+    height: 100%;
+    display: flex;
+}
+
+.side-bar{
+    width: 22vw;
+    max-height: calc(100vh - 11.7vh - 13vh);
+    background: #FDFEFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    overflow-y: auto;
+}
+
+.car-show{
+    width: 78vw;
+    height: inherit;
+    border: 1px solid #F4F4F4;
+background: #F4F4F4;
+}
+
+.full-car-page{
+    width: 100vw;
+    border: 1px solid #F4F4F4;
+background: #F4F4F4;
+}
+
+.hide-side-bar{
+    display: none;
+}
+
+.car-brand{
+    height: 32vh;
+    width: 16vw;
+    background: cadetblue;
+}
+
+.car-budget{
+    height: 12vh;
+    width: 16vw;
+    background: blue;
+}
+
+.car-type{
+    height: 27vh;
+    width: 16vw;
+    background: chartreuse;
+}
