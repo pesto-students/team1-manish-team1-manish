@@ -9,7 +9,7 @@ import Login from "./Pages/Login/Login";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import CarDetails from "./Pages/CarDetails/CarDetails";
-import CarShow from "./Pages/CarShow/CarShow";
+import ShowCar from "./Pages/ShowCarPage/ShowCar";
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* Temp route for testing */}
         <Route path="/cars/details" element={<CarDetails carId={0} />} />
-        <Route path="/" element={<CarShow/>}/>
+        <Route path="/" element={<ShowCar />} />
       </Routes>
       <Footer />
     </div>
