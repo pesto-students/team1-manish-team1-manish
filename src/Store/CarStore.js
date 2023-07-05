@@ -8,10 +8,13 @@ const CarSlice = createSlice({
     togglePage: (state) => {
       state.flag = !state.flag;
     },
+    toggleBookmark: (state) => {
+      state.bookmarkFlag = !state.bookmarkFlag;
+    },
   },
 });
 
-export const { togglePage } = CarSlice.actions;
+export const { togglePage, toggleBookmark } = CarSlice.actions;
 
 const CarStore = configureStore({
   reducer: CarSlice.reducer,

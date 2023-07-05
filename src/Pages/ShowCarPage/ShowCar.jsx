@@ -1,21 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Icon } from "@iconify/react";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { toggleBookmark } from "../../Store/CarStore";
 import RangeSlider from "../../components/BudgetSlider";
 import "./ShowCar.css";
 
 export default function ShowCar() {
-  const [toggle, setToggle] = useState(false);
-  const [isBookMarked, setIsBookMarked] = useState(false);
+  const isBookMarked = useSelector((state) => state.bookmarkFlag);
+  const dispatch = useDispatch();
+  const [toggleFilter, setToggleFilter] = useState(false);
+  const [carsData, setCarsData] = useState(null);
+
   const bookmarkToggle = () => {
-    setIsBookMarked((value) => !value);
+    dispatch(toggleBookmark());
   };
+
+  useEffect(() => {
+    const fetchCarsData = async () => {
+      const url =
+        "https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getTrims&[params]";
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "access-control-allow-origin": "*",
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setCarsData(data);
+
+      // const response = await axios.get(url, {
+      //   params: {
+      //     /* Whatever data you want to send */
+      //   },
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      console.log(response);
+    };
+
+    fetchCarsData();
+  }, []);
 
   return (
     <div className="main-car-show">
-      <div className={toggle ? "hide-side-bar" : "side-bar"}>
+      <div className={toggleFilter ? "hide-side-bar" : "side-bar"}>
         <div className="car-brand">
           <div className="brand-header">
             <p className="brand-title">Brand</p>
@@ -120,7 +155,7 @@ export default function ShowCar() {
           </div>
         </div>
       </div>
-      <div className={toggle ? "full-car-page" : "car-show"}>
+      <div className={toggleFilter ? "full-car-page" : "car-show"}>
         <div className="dashboard-bar">
           <div className="search-car">
             <input type="text" placeholder="Search Cars" />
@@ -128,7 +163,7 @@ export default function ShowCar() {
           </div>
           <button
             className="filter-btn"
-            onClick={() => setToggle((prevState) => !prevState)}
+            onClick={() => setToggleFilter((prevState) => !prevState)}
           >
             <FilterAltOutlinedIcon sx={{ color: "#676E8A" }} />
             <p>Filter</p>
@@ -182,13 +217,6 @@ export default function ShowCar() {
               <p className="car-card-price">RS 10,00,000</p>
             </div>
           </div>
-          {/* <div className="show-car-card"></div>
-          <div className="show-car-card"></div>
-          <div className="show-car-card"></div>
-          <div className="show-car-card"></div>
-          <div className="show-car-card"></div>
-          <div className="show-car-card"></div>
-          <div className="show-car-card"></div> */}
         </div>
       </div>
     </div>
