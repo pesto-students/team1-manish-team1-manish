@@ -13,39 +13,42 @@ export default function ShowCar() {
   const isBookMarked = useSelector((state) => state.bookmarkFlag);
   const dispatch = useDispatch();
   const [toggleFilter, setToggleFilter] = useState(false);
-  const [carsData, setCarsData] = useState(null);
+  const [carModels, setCarModles] = useState(null);
+  const carBodys = [
+    "Sedan/Compact Sedan",
+    "SUV/Compact SUV (Sports Utility Vehicle)",
+    "Hatchback",
+    "Crossovers",
+    "MPV (Multi-Purpose Vehicle)",
+    "Station Wagon/ Estate Cars",
+    "Coupe",
+    "Convertibles/ Cabriolet/ Spyder",
+    "Microcars",
+    "Limousines",
+    "Pick-up trucks",
+  ];
 
   const bookmarkToggle = () => {
     dispatch(toggleBookmark());
   };
 
   useEffect(() => {
-    const fetchCarsData = async () => {
-      const url =
-        "https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getTrims&[params]";
+    const fetchCarsModel = async () => {
+      const url = "http://localhost:3000/carapi/models";
       const response = await fetch(url, {
         method: "GET",
-        headers: {
-          "access-control-allow-origin": "*",
-          "Content-type": "application/json; charset=UTF-8",
-        },
       });
-      const data = await response.json();
-      console.log(data);
-      setCarsData(data);
-
-      // const response = await axios.get(url, {
-      //   params: {
-      //     /* Whatever data you want to send */
-      //   },
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-      console.log(response);
+      const unfilteredData = await response.text();
+      const filteredData = unfilteredData.substring(
+        2,
+        unfilteredData.length - 2
+      );
+      const data = JSON.parse(filteredData);
+      setCarModles(data.Makes);
+      // console.log(carModels);
     };
 
-    fetchCarsData();
+    fetchCarsModel();
   }, []);
 
   return (
@@ -63,38 +66,20 @@ export default function ShowCar() {
             <img src="/searchIcon.svg" alt="Search Brand" />
           </div>
           <div className="brand-filters">
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
+            {!carModels
+              ? ""
+              : carModels.map((el) => {
+                  return (
+                    <div className="brand-f1" key={el.make_id}>
+                      <p className="b-filter-title">{el.make_display}</p>
+                      <input
+                        type="checkbox"
+                        name="brand-filter-1"
+                        id="brand-filter-1"
+                      />
+                    </div>
+                  );
+                })}
           </div>
         </div>
         <div className="car-budget">
@@ -120,38 +105,18 @@ export default function ShowCar() {
             <img src="/searchIcon.svg" alt="Search Brand" />
           </div>
           <div className="brand-filters">
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
-            <div className="brand-f1">
-              <p className="b-filter-title">All Brand</p>
-              <input
-                type="checkbox"
-                name="brand-filter-1"
-                id="brand-filter-1"
-              />
-            </div>
+            {carBodys.map((el) => {
+              return (
+                <div className="brand-f1" key={el + Math.random(0, 1)}>
+                  <p className="b-filter-title">{el}</p>
+                  <input
+                    type="checkbox"
+                    name="brand-filter-1"
+                    id="brand-filter-1"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
