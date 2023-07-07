@@ -1,0 +1,14 @@
+.payment__page {
+  text-align: center;
+}
+
+.payment__button--pay {
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  background: #f78f1e;
+  text-align: center;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 400;
+}

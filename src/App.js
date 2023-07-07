@@ -4,6 +4,7 @@ import "./styles.css";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import PaymentButton from "./components/PaymentButton";
 import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
