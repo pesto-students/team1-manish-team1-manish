@@ -6,6 +6,7 @@ import { CarDetailsData, CarFeatures, CarSpecifications } from "./DummyCarDetail
 import { Icon } from "@iconify/react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);

@@ -42,12 +42,6 @@
   margin: 0 5px;
 }
 
-.login-signup-btn {
-  width: 186.44px;
-  height: 38px;
-  border-radius: 8px !important;
-}
-
 .login-o2 {
   display: flex;
   gap: 20px;
@@ -85,6 +79,37 @@
   top: 49%;
   left: 49%;
 }
+
+/* .wrong-login-submit {
+  animation-name: shake, glow-red;
+  animation-duration: 0.7s, 0.35s;
+  animation-iteration-count: 1, 2;
+}
+
+@keyframes shake {
+
+  0%,
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(8px);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes glow-red {
+  50% {
+    border-color: indianred;
+  }
+} */
 
 @media (max-width: 480px) {
   .App {

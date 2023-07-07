@@ -15,6 +15,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [missingLoginParams, setMissingLoginParams] = useState(false);
   const [showToast, setShowToast] = useState({ type: 0, message: '' });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,6 +23,11 @@ const Login = () => {
     setShowToast({ type: 0, message: '' });
   }
   const idPassLogin = async () => {
+    if (!email || !password) {
+      setMissingLoginParams(true);
+      setTimeout(() => setMissingLoginParams(false), 1000);
+      return;
+    }
     await axios({
       method: 'post',
       url: process.env.REACT_APP_LOGIN_URL,
@@ -111,8 +117,8 @@ const Login = () => {
           <h1 className="dark-font">Welcome !</h1>
           <p className="darker-font">Signin to stay connected</p>
           <div className="login-input-container">
-            <input type="email" placeholder=" Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder=" Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input className={missingLoginParams ? 'wrong-submit' : ''} type="email" placeholder=" Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input className={missingLoginParams ? 'wrong-submit' : ''} type="password" placeholder=" Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="login-remember-forget">
             <div className="login-remember-me">
@@ -124,7 +130,7 @@ const Login = () => {
             </div>
           </div>
           <ThemeProvider theme={DarkTheme}>
-            <Button onClick={idPassLogin} className="login-signup-btn" variant="contained">
+            <Button onClick={idPassLogin} className="mui-dark-btn" variant="contained">
               Sign In
             </Button>
           </ThemeProvider>

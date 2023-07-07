@@ -140,7 +140,7 @@ const Register = () => {
               <input className={(password !== cpassword) && cpassword.length > 0 ? "wrong-password-border" : ""} type="password" placeholder=" Confirm Password" value={cpassword} onChange={(e) => setCPassword(e.target.value)} />
             </div>
             {(password !== cpassword) && cpassword.length > 0 ? (
-              <div className={`wrong-password-message ${passMissMatch ? 'wrong-password-submit' : ''}`}>
+              <div className={`wrong-password-message ${passMissMatch ? 'wrong-submit' : ''}`}>
                 <span>Passwords does not match</span>
               </div>
             ) : (
