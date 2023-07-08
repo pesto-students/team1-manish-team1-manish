@@ -1,4 +1,5 @@
 export const globalInitialState = {
-  isDesktop: true,
+  isAuthUser: false,
   flag: true,
+  userDetails: null
 };

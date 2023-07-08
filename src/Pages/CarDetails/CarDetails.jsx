@@ -5,6 +5,8 @@ import "./CarDetails.css";
 import { CarDetailsData, CarFeatures, CarSpecifications } from "./DummyCarDetailsData";
 import { Icon } from "@iconify/react";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);
@@ -14,6 +16,8 @@ const CarDetails = ({ carId }) => {
   const [moreFeatureToggle, setMoreFeatureToggle] = useState(false);
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(null);
+  const isAuthorized = useSelector((state) => state.isAuthUser);
+  console.log(isAuthorized);
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
     setIsBookMarked((value) => !value);
