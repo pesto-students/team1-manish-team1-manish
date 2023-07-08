@@ -4,51 +4,27 @@ import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { toggleBookmark } from "../../Store/CarStore";
 import RangeSlider from "../../components/BudgetSlider";
+import { toggleBookmark, getCarModelsData } from "../../Store/CarStore";
 import "./ShowCar.css";
 
 export default function ShowCar() {
-  const isBookMarked = useSelector((state) => state.bookmarkFlag);
   const dispatch = useDispatch();
+  const carModels = useSelector((state) => {
+    return state.carModelsData.carModels;
+  });
+
+  const isBookMarked = useSelector((state) => state.bookmarkFlag);
+  const carBodys = useSelector((state) => state.carBodysData);
+
   const [toggleFilter, setToggleFilter] = useState(false);
-  const [carModels, setCarModles] = useState(null);
-  const carBodys = [
-    "Sedan/Compact Sedan",
-    "SUV/Compact SUV (Sports Utility Vehicle)",
-    "Hatchback",
-    "Crossovers",
-    "MPV (Multi-Purpose Vehicle)",
-    "Station Wagon/ Estate Cars",
-    "Coupe",
-    "Convertibles/ Cabriolet/ Spyder",
-    "Microcars",
-    "Limousines",
-    "Pick-up trucks",
-  ];
 
   const bookmarkToggle = () => {
     dispatch(toggleBookmark());
   };
 
   useEffect(() => {
-    const fetchCarsModel = async () => {
-      const url = "http://localhost:3000/carapi/models";
-      const response = await fetch(url, {
-        method: "GET",
-      });
-      const unfilteredData = await response.text();
-      const filteredData = unfilteredData.substring(
-        2,
-        unfilteredData.length - 2
-      );
-      const data = JSON.parse(filteredData);
-      setCarModles(data.Makes);
-      // console.log(carModels);
-    };
-
-    fetchCarsModel();
+    dispatch(getCarModelsData());
   }, []);
 
   return (

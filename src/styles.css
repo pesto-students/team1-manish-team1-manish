@@ -39,6 +39,7 @@ html {
   width: 100%;
   flex-direction: column;
   background: rgba(253, 254, 255, 1);
+  overflow: auto;
 }
 
 .pointer {

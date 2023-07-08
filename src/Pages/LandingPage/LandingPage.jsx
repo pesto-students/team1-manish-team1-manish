@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
-import { togglePage } from "../../Store/CarStore";
+import {
+  carBudgetRange,
+  getCarModelsData,
+  togglePage,
+} from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import "./LandingPage.css";
 
 const LandingPage = () => {
-  const flagPage = useSelector((state) => state.flag);
   const dispatch = useDispatch();
+  const flagPage = useSelector((state) => state.flag);
+  const carPriceRange = useSelector((state) => state.carBudgetRange);
+  const carModels = useSelector((state) => {
+    return state.carModelsData.carModels;
+  });
+
+  useEffect(() => {
+    dispatch(carBudgetRange());
+    dispatch(getCarModelsData());
+  }, []);
 
   return (
     <>
@@ -32,18 +49,18 @@ const LandingPage = () => {
                 <div className="dream-car-search">
                   <p className="search-your-car">Search you dream car !</p>
                   <div className="search-car-drop-down">
-                    <select name="pets" id="pet-select">
-                      <option value="">Select Budget</option>
-                      <option value="dog">Dog</option>
-                    </select>
-                    <select name="pets" id="pet-select">
-                      <option value="">Select Brand</option>
-                      <option value="dog">Dog</option>
-                    </select>
-                    <select name="pets" id="pet-select">
-                      <option value="">Select Vehicle</option>
-                      <option value="dog">Dog</option>
-                    </select>
+                    <DropDown
+                      selectName="Select Budget"
+                      dataToShow={carPriceRange}
+                    />
+                    <DropDown
+                      selectName="Select Brand"
+                      dataToShow={["Audi", "BMW"]}
+                    />
+                    <DropDown
+                      selectName="Select Vehicle"
+                      dataToShow={["Audi", "BMW"]}
+                    />
                   </div>
                   <button className="search-car-btn">Search</button>
                 </div>
@@ -119,5 +136,49 @@ const LandingPage = () => {
     </>
   );
 };
+
+function DropDown(props) {
+  const { selectName, dataToShow } = props;
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  return (
+    <FormControl
+      sx={{
+        minWidth: 120,
+        width: 283,
+        "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
+          {
+            background: "#eaf2ff",
+            border: "1px solid #d7e0f2",
+            color: "#7b86b3",
+          },
+      }}
+      size="small"
+    >
+      <InputLabel id="demo-select-small-label">{selectName}</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        value={age}
+        label={selectName}
+        onChange={handleChange}
+      >
+        {/* <MenuItem value={30}>Thirty</MenuItem> */}
+        {dataToShow.map((el) => {
+          // console.log(el.length);
+          return (
+            <MenuItem value={10} key={el + Math.random(1, 9)}>
+              {el}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
+  );
+}
 
 export default LandingPage;

@@ -1,10 +1,21 @@
-import React, { useState } from "react";
-// import axios from "axios";
+import React, { useEffect, useState } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { useSelector, useDispatch } from "react-redux";
+import { getCarModelsData } from "../../Store/CarStore";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
+  const dispatch = useDispatch();
+  const carModels = useSelector((state) => state.carModelsData.carModels);
   const [files, setFiles] = useState(null);
-  const handleSellCarSubmit = () => { };
+  const handleSellCarSubmit = () => {};
+
+  useEffect(() => {
+    dispatch(getCarModelsData());
+  }, []);
 
   return (
     <div>
@@ -19,16 +30,14 @@ export function SellCarLandingPage() {
             </p>
             <div className="enter-sell-car-drop-down">
               <div className="car-drop-down-1">
-                <select name="pets" id="pet-select">
-                  <option value="">Select Brand</option>
-                  <option value="dog">Dog</option>
-                </select>
+                <DropDown selectName="Select Brand" dataToShow={carModels} />
                 <select name="pets" id="pet-select">
                   <option value="">Select Reg. State</option>
                   <option value="dog">Dog</option>
                 </select>
               </div>
               <div className="car-drop-down-2">
+                <DropDown selectName="Select Model" dataToShow={carModels} />
                 <select name="pets" id="pet-select">
                   <option value="">Select Year & Model</option>
                   <option value="dog">Dog</option>
@@ -118,5 +127,49 @@ export function SellCarLandingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function DropDown(props) {
+  const { selectName, dataToShow } = props;
+  const [selectedInput, setSelectedInput] = React.useState("");
+
+  const handleChange = (event) => {
+    setSelectedInput(event.target.value);
+  };
+
+  return (
+    <FormControl
+      sx={{
+        minWidth: 120,
+        width: 283,
+        "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
+          {
+            background: "#eaf2ff",
+            border: "1px solid #d7e0f2",
+            color: "#7b86b3",
+          },
+      }}
+      size="small"
+    >
+      <InputLabel id="demo-select-small-label">{selectName}</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        value={selectedInput}
+        label={selectName}
+        onChange={handleChange}
+      >
+        {/* <MenuItem value={30}>Thirty</MenuItem> */}
+        {dataToShow.map((el) => {
+          // console.log(el.length);
+          return (
+            <MenuItem value={10} key={el.make_id}>
+              {el.make_display}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
   );
 }
