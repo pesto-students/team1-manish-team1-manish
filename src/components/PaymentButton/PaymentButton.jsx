@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
+import logo from "/Assets/Logo.svg"
 require("dotenv").config();
 
 const { KEY_ID, SERVER_URL } = process.env;
@@ -19,7 +20,6 @@ function loadScript(src) {
 }
 
 function paymentButton() {
-  const [name, setName] = useState("Pranav");
 
   async function displayRazorpay() {
     const res = await loadScript(
@@ -40,19 +40,18 @@ function paymentButton() {
       key: KEY_ID,
       currency: data.currency,
       amount: data.amount.toString(),
-      order_id: data.id,
-      name: "Car",
+      order_id: data.orderId,
+      name: "Car Bazaar",
       description: "Thank you for shopping!",
-      // image: '',
+      image: logo,
       handler: function (response) {
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
         alert(response.razorpay_signature);
       },
       prefill: {
-        name,
-        email: "pranav@carbazaar.com",
-        phone_number: "9999999999",
+        name: data.name,
+        email: data.email,
       },
       theme: {
         color: "#FF9F37",
