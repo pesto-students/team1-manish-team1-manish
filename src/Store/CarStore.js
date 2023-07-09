@@ -8,10 +8,20 @@ const CarSlice = createSlice({
     togglePage: (state) => {
       state.flag = !state.flag;
     },
+    authorizeUser: (state) => {
+      state.isAuthUser = true
+    },
+    unAuthorizeUser: (state) => {
+      state.isAuthUser = false
+    },
+    setUserDetails: (state, action) => {
+      console.log(action.payload);
+      state.userDetails = action.payload
+    }
   },
 });
 
-export const { togglePage } = CarSlice.actions;
+export const { togglePage, authorizeUser, setUserDetails, unAuthorizeUser } = CarSlice.actions;
 
 const CarStore = configureStore({
   reducer: CarSlice.reducer,
