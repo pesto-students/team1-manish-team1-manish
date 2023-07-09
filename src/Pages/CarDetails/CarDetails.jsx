@@ -11,6 +11,8 @@ import { Icon } from "@iconify/react";
 import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleBookmark } from "../../Store/CarStore";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);
@@ -23,6 +25,8 @@ const CarDetails = ({ carId }) => {
   const isBookMarked = useSelector((state) => state.bookmarkFlag);
   const dispatch = useDispatch();
 
+  const isAuthorized = useSelector((state) => state.isAuthUser);
+  console.log(isAuthorized);
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
     dispatch(toggleBookmark());

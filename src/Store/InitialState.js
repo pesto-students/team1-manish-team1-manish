@@ -1,5 +1,5 @@
 export const globalInitialState = {
-  isDesktop: true,
+  isAuthUser: false,
   flag: true,
   bookmarkFlag: false,
   carBodysData: [
@@ -26,4 +26,5 @@ export const globalInitialState = {
     "20L to 50L",
     "Above 50L",
   ],
+  userDetails: null,
 };

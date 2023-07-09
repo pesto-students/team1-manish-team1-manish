@@ -5,7 +5,10 @@ import useMenu, { MenuProvider } from "@mui/base/useMenu";
 import useMenuItem from "@mui/base/useMenuItem";
 import Popper from "@mui/base/Popper";
 import { GlobalStyles } from "@mui/system";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { unAuthorizeUser, setUserDetails } from "../../Store/CarStore";
 
 const Menu = React.forwardRef(function Menu(props, ref) {
   const { children, onOpenChange, open, ...other } = props;
@@ -46,7 +49,7 @@ const MenuItem = React.forwardRef(function MenuItem(props, ref) {
     <li
       className={clsx(classes)}
       {...other}
-      {...getRootProps({ onClick: onClick ?? (() => {}) })}
+      {...getRootProps({ onClick: onClick ?? (() => { }) })}
     >
       {children}
     </li>
@@ -59,6 +62,8 @@ MenuItem.propTypes = {
 };
 
 export default function UseMenu() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [buttonElement, setButtonElement] = React.useState(null);
   const [isOpen, setOpen] = React.useState(false);
   const preventReopen = React.useRef(false);
@@ -93,8 +98,31 @@ export default function UseMenu() {
   };
 
   const createHandleMenuClick = (menuItem) => {
-    return () => {
-      console.log(`Clicked on ${menuItem}`);
+    return async () => {
+      if (menuItem === 'Logout') {
+        await axios({
+          method: 'get',
+          url: process.env.REACT_APP_LOGOUT_URL,
+          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+          },
+        })
+          .then((response) => {
+            if (response.status == 200) {
+              // setShowToast({ type: 1, message: 'Successfully Logged out!' })
+              setTimeout(() => {
+                dispatch(unAuthorizeUser());
+                dispatch(setUserDetails(null))
+                navigate('/')
+              }, 3000);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            // setShowToast({ type: 2, message: error.response.data.message });
+          });
+      }
       setOpen(false);
       buttonElement?.focus();
     };
@@ -128,7 +156,7 @@ export default function UseMenu() {
             <Link to="/login">Profile</Link>
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("Logout")}>
-            <Link to="/register">Logout</Link>
+            <Link>Logout</Link>
           </MenuItem>
         </Menu>
       </Popper>

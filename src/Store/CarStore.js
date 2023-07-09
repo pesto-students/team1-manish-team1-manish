@@ -34,6 +34,16 @@ const CarSlice = createSlice({
     carBudgetRange: (state) => {
       state.carBudgetRange;
     },
+    authorizeUser: (state) => {
+      state.isAuthUser = true;
+    },
+    unAuthorizeUser: (state) => {
+      state.isAuthUser = false;
+    },
+    setUserDetails: (state, action) => {
+      console.log(action.payload);
+      state.userDetails = action.payload;
+    },
   },
   extraReducers: {
     [getCarModelsData.pending]: (state, actions) => {
@@ -55,6 +65,9 @@ export const {
   carBodyData,
   carModelsData,
   carBudgetRange,
+  authorizeUser,
+  setUserDetails,
+  unAuthorizeUser,
 } = CarSlice.actions;
 
 const CarStore = configureStore({

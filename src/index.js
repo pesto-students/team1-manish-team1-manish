@@ -11,10 +11,10 @@ const root = createRoot(rootElement);
 
 root.render(
   <Provider store={CarStore}>
-    <StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </StrictMode>
+    {/* <StrictMode> */}
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+    {/* </StrictMode> */}
   </Provider>
 );

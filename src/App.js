@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import Header from "./components/Header/Header";
@@ -9,13 +9,39 @@ import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import CarDetails from "./Pages/CarDetails/CarDetails";
 import ShowCar from "./Pages/ShowCarPage/ShowCar";
+import { authorizeUser, setUserDetails } from "./Store/CarStore";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import "./styles.css";
 
 const App = () => {
+  const isAuthorized = useSelector((state) => state.isAuthUser);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const autoLogin = async () => {
+      await axios({
+        method: "get",
+        url: process.env.REACT_APP_GOOGLE_LOGIN_URL,
+        withCredentials: true,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        },
+      })
+        .then((response) => {
+          if (response.status == 200) {
+            dispatch(authorizeUser());
+            dispatch(setUserDetails(response.data));
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    autoLogin();
+  }, []);
   return (
     <div className="App">
-      {/* <AuthenticatedHeader /> */}
-      <Header />
+      {isAuthorized ? <AuthenticatedHeader /> : <Header />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />

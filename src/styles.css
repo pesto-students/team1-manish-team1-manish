@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -52,6 +53,43 @@ html {
   height: 100%;
 }
 
-.home > h1 {
+.home>h1 {
   margin-top: 20px;
+}
+
+.mui-dark-btn {
+  width: 186.44px;
+  height: 38px;
+  border-radius: 8px !important;
+}
+
+.wrong-submit {
+  animation-name: shake, glow-red;
+  animation-duration: 0.7s, 0.35s;
+  animation-iteration-count: 1, 2;
+}
+
+@keyframes shake {
+
+  0%,
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(8px);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes glow-red {
+  50% {
+    border-color: indianred;
+  }
 }
