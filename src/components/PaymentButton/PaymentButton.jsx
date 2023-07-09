@@ -19,7 +19,7 @@ function loadScript(src) {
   });
 }
 
-function paymentButton() {
+function PaymentButton() {
 
   async function displayRazorpay() {
     const res = await loadScript(
@@ -72,4 +72,4 @@ function paymentButton() {
   );
 }
 
-export default paymentButton;
+export default PaymentButton;
