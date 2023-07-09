@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
-import logo from "/Assets/Logo.svg"
+import logo from "../../Assets/favicon.ico"
 require("dotenv").config();
 
 const { KEY_ID, SERVER_URL } = process.env;
