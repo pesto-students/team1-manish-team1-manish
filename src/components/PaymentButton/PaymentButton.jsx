@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
-import logo from "../../Assets/favicon.ico"
+// import logo from "../../Assets/favicon.ico"
 require("dotenv").config();
 
 const { KEY_ID, SERVER_URL } = process.env;
@@ -43,7 +43,7 @@ function PaymentButton() {
       order_id: data.orderId,
       name: "Car Bazaar",
       description: "Thank you for shopping!",
-      image: logo,
+      // image: logo,
       handler: function (response) {
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
