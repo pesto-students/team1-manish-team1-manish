@@ -49,7 +49,7 @@ const MenuItem = React.forwardRef(function MenuItem(props, ref) {
     <li
       className={clsx(classes)}
       {...other}
-      {...getRootProps({ onClick: onClick ?? (() => { }) })}
+      {...getRootProps({ onClick: onClick ?? (() => {}) })}
     >
       {children}
     </li>
@@ -99,13 +99,13 @@ export default function UseMenu() {
 
   const createHandleMenuClick = (menuItem) => {
     return async () => {
-      if (menuItem === 'Logout') {
+      if (menuItem === "Logout") {
         await axios({
-          method: 'get',
+          method: "get",
           url: process.env.REACT_APP_LOGOUT_URL,
           withCredentials: true,
           headers: {
-            "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+            "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
           },
         })
           .then((response) => {
@@ -113,8 +113,8 @@ export default function UseMenu() {
               // setShowToast({ type: 1, message: 'Successfully Logged out!' })
               setTimeout(() => {
                 dispatch(unAuthorizeUser());
-                dispatch(setUserDetails(null))
-                navigate('/')
+                dispatch(setUserDetails(null));
+                navigate("/");
               }, 3000);
             }
           })
@@ -153,7 +153,7 @@ export default function UseMenu() {
           id="hooks-menu"
         >
           <MenuItem onClick={createHandleMenuClick("Profile")}>
-            <Link to="/login">Profile</Link>
+            <Link to="/me">Profile</Link>
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("Logout")}>
             <Link>Logout</Link>
