@@ -21,6 +21,12 @@ const LandingPage = () => {
   });
 
   useEffect(() => {
+    const dataFetch = async () => {
+      await fetch("http://localhost:3000/cars")
+        .then((res) => res.json())
+        .then((res) => console.log(res));
+    };
+    dataFetch();
     dispatch(carBudgetRange());
     dispatch(getCarModelsData());
   }, []);

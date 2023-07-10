@@ -10,7 +10,12 @@ export const getCarModelsData = createAsyncThunk(
   async () => {
     const url =
       "https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getMakes&year=2000";
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      },
+    });
     const unfilteredData = await response.text();
     const filteredData = unfilteredData.substring(2, unfilteredData.length - 2);
     const data = JSON.parse(filteredData);

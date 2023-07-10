@@ -11,7 +11,6 @@ import { Icon } from "@iconify/react";
 import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleBookmark } from "../../Store/CarStore";
-import { useSelector } from "react-redux";
 import axios from "axios";
 
 const CarDetails = ({ carId }) => {
