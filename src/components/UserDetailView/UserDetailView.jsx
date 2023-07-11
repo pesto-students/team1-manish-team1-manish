@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import UserActivity from "../UserActivity/UserActivity";
 import UserActivityCard from "../UserActivityCard/UserActivityCard";
-import activityData from "../../Pages/Profile/UserActivityData.json";
 import { setUserDetails, unAuthorizeUser } from "../../Store/CarStore";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,25 @@ import axios from "axios";
 import "./UserDetailView.css";
 
 function UserDetailView() {
+  const activityData = Object.freeze([
+    {
+      name: "My Orders",
+      icon: "box",
+    },
+    {
+      name: "Shortlisted Vehicles",
+      icon: "bookmark",
+    },
+    {
+      name: "My Vehicles",
+      icon: "car",
+    },
+    {
+      name: "Profile Settings",
+      icon: "gear",
+    },
+  ]);
+
   const [activeTab, setActiveTab] = useState(null);
   const userDetail = useSelector((state) => {
     return state.userDetails;
