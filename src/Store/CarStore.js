@@ -5,21 +5,17 @@ import {
 } from "@reduxjs/toolkit";
 import { globalInitialState } from "./InitialState";
 
-export const getCarModelsData = createAsyncThunk(
-  "carModels/getCarModelsData",
+export const getCarBrandsData = createAsyncThunk(
+  "carBrands/getCarBrandsData",
   async () => {
-    const url =
-      "https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getMakes&year=2000";
+    const url = "http://localhost:3000/cars-api/make_id";
     const response = await fetch(url, {
-      withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
       },
     });
-    const unfilteredData = await response.text();
-    const filteredData = unfilteredData.substring(2, unfilteredData.length - 2);
-    const data = JSON.parse(filteredData);
-    return data.Makes;
+    const data = await response.json();
+    return data;
   }
 );
 
@@ -46,19 +42,21 @@ const CarSlice = createSlice({
       state.isAuthUser = false;
     },
     setUserDetails: (state, action) => {
-      console.log(action.payload);
       state.userDetails = action.payload;
+    },
+    setCarModelData: (state, action) => {
+      state.carModelData.carModel = action.payload;
     },
   },
   extraReducers: {
-    [getCarModelsData.pending]: (state, actions) => {
+    [getCarBrandsData.pending]: (state, actions) => {
       state.loading = true;
     },
-    [getCarModelsData.fulfilled]: (state, actions) => {
-      state.carModelsData.loading = false;
-      state.carModelsData.carModels = actions.payload;
+    [getCarBrandsData.fulfilled]: (state, actions) => {
+      state.carBrandData.loading = false;
+      state.carBrandData.carBrand = actions.payload;
     },
-    [getCarModelsData.rejected]: (state, actions) => {
+    [getCarBrandsData.rejected]: (state, actions) => {
       state.loading = true;
     },
   },
@@ -68,11 +66,11 @@ export const {
   togglePage,
   toggleBookmark,
   carBodyData,
-  carModelsData,
   carBudgetRange,
   authorizeUser,
   setUserDetails,
   unAuthorizeUser,
+  setCarModelData,
 } = CarSlice.actions;
 
 const CarStore = configureStore({

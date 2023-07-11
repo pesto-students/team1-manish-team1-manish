@@ -15,8 +15,12 @@ export const globalInitialState = {
     "Limousines",
     "Pick-up trucks",
   ],
-  carModelsData: {
-    carModels: [],
+  carBrandData: {
+    carBrand: [],
+    loading: false,
+  },
+  carModelData: {
+    carModel: [],
     loading: false,
   },
   carBudgetRange: [

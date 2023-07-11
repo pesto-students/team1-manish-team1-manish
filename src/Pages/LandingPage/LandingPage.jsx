@@ -6,29 +6,29 @@ import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import {
   carBudgetRange,
-  getCarModelsData,
+  getCarBrandsData,
   togglePage,
+  setCarModelData,
 } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
+import axios from "axios";
 import "./LandingPage.css";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
   const flagPage = useSelector((state) => state.flag);
   const carPriceRange = useSelector((state) => state.carBudgetRange);
-  const carModels = useSelector((state) => {
-    return state.carModelsData.carModels;
+  const carBrands = useSelector((state) => {
+    return state.carBrandData.carBrand;
   });
+  const carModels = useSelector((state) => {
+    return state.carModelData.carModel;
+  });
+  const handleCarSearch = () => {};
 
   useEffect(() => {
-    const dataFetch = async () => {
-      await fetch("http://localhost:3000/cars")
-        .then((res) => res.json())
-        .then((res) => console.log(res));
-    };
-    dataFetch();
     dispatch(carBudgetRange());
-    dispatch(getCarModelsData());
+    dispatch(getCarBrandsData());
   }, []);
 
   return (
@@ -61,14 +61,16 @@ const LandingPage = () => {
                     />
                     <DropDown
                       selectName="Select Brand"
-                      dataToShow={["Audi", "BMW"]}
+                      dataToShow={carBrands}
                     />
                     <DropDown
-                      selectName="Select Vehicle"
-                      dataToShow={["Audi", "BMW"]}
+                      selectName="Select Model"
+                      dataToShow={carModels}
                     />
                   </div>
-                  <button className="search-car-btn">Search</button>
+                  <button className="search-car-btn" onClick={handleCarSearch}>
+                    Search
+                  </button>
                 </div>
               </div>
               <div className="landing-page-right-div">
@@ -145,11 +147,37 @@ const LandingPage = () => {
 
 function DropDown(props) {
   const { selectName, dataToShow } = props;
-  const [age, setAge] = React.useState("");
+  const [selectOption, setSelectOption] = React.useState("");
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setSelectOption(event.target.value);
   };
+
+  // console.log(selectOption);
+  useEffect(() => {
+    const getCarModelData = async () => {
+      const url = "http://localhost:3000/cars-api/brand/models";
+      await axios({
+        method: "post",
+        url: url,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        },
+        data: {
+          makeId: `${selectOption}`,
+        },
+      })
+        .then((res) => res.data)
+        .then((res) => {
+          console.log(res);
+          dispatch(setCarModelData(res));
+        });
+    };
+    if (selectName === "Select Budget" || selectName === "Select Brand") {
+      getCarModelData();
+    }
+  }, [selectOption]);
 
   return (
     <FormControl
@@ -169,19 +197,33 @@ function DropDown(props) {
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={age}
+        value={selectOption}
         label={selectName}
         onChange={handleChange}
       >
-        {/* <MenuItem value={30}>Thirty</MenuItem> */}
-        {dataToShow.map((el) => {
-          // console.log(el.length);
-          return (
-            <MenuItem value={10} key={el + Math.random(1, 9)}>
-              {el}
-            </MenuItem>
-          );
-        })}
+        {!dataToShow
+          ? ""
+          : dataToShow.map((el) => {
+              if (selectName === "Select Budget") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Brand") {
+                return (
+                  <MenuItem value={el.make_id} key={el + Math.random(1, 9)}>
+                    {el.make_id}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Model") {
+                return (
+                  <MenuItem value={el.name} key={el + Math.random(1, 9)}>
+                    {el.name}
+                  </MenuItem>
+                );
+              }
+            })}
       </Select>
     </FormControl>
   );

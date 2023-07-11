@@ -4,17 +4,17 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
-import { getCarModelsData } from "../../Store/CarStore";
+import { getCarBrandsData } from "../../Store/CarStore";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
-  const carModels = useSelector((state) => state.carModelsData.carModels);
+  const carBrands = useSelector((state) => state.carBrandData.carBrands);
   const [files, setFiles] = useState(null);
   const handleSellCarSubmit = () => {};
 
   useEffect(() => {
-    dispatch(getCarModelsData());
+    dispatch(getCarBrandsData());
   }, []);
 
   return (
@@ -30,14 +30,14 @@ export function SellCarLandingPage() {
             </p>
             <div className="enter-sell-car-drop-down">
               <div className="car-drop-down-1">
-                <DropDown selectName="Select Brand" dataToShow={carModels} />
+                <DropDown selectName="Select Brand" dataToShow={carBrands} />
                 <select name="pets" id="pet-select">
                   <option value="">Select Reg. State</option>
                   <option value="dog">Dog</option>
                 </select>
               </div>
               <div className="car-drop-down-2">
-                <DropDown selectName="Select Model" dataToShow={carModels} />
+                <DropDown selectName="Select Model" dataToShow={carBrands} />
                 <select name="pets" id="pet-select">
                   <option value="">Select Year & Model</option>
                   <option value="dog">Dog</option>

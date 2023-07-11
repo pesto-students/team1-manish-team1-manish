@@ -5,13 +5,13 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
 import RangeSlider from "../../components/BudgetSlider";
-import { toggleBookmark, getCarModelsData } from "../../Store/CarStore";
+import { toggleBookmark, getCarBrandsData } from "../../Store/CarStore";
 import "./ShowCar.css";
 
 export default function ShowCar() {
   const dispatch = useDispatch();
-  const carModels = useSelector((state) => {
-    return state.carModelsData.carModels;
+  const carBrands = useSelector((state) => {
+    return state.carBrandData.carBrands;
   });
 
   const isBookMarked = useSelector((state) => state.bookmarkFlag);
@@ -24,7 +24,7 @@ export default function ShowCar() {
   };
 
   useEffect(() => {
-    dispatch(getCarModelsData());
+    dispatch(getCarBrandsData());
   }, []);
 
   return (
@@ -42,9 +42,9 @@ export default function ShowCar() {
             <img src="/searchIcon.svg" alt="Search Brand" />
           </div>
           <div className="brand-filters">
-            {!carModels
+            {!carBrands
               ? ""
-              : carModels.map((el) => {
+              : carBrands.map((el) => {
                   return (
                     <div className="brand-f1" key={el.make_id}>
                       <p className="b-filter-title">{el.make_display}</p>
