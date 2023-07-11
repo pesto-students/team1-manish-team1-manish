@@ -12,16 +12,16 @@ import { Alert, CircularProgress, Snackbar } from "@mui/material";
 
 const Login = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [missingLoginParams, setMissingLoginParams] = useState(false);
-  const [showToast, setShowToast] = useState({ type: 0, message: '' });
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const resetToast = () => {
-    setShowToast({ type: 0, message: '' });
-  }
+    setShowToast({ type: 0, message: "" });
+  };
   const idPassLogin = async () => {
     if (!email || !password) {
       setMissingLoginParams(true);
@@ -29,24 +29,24 @@ const Login = () => {
       return;
     }
     await axios({
-      method: 'post',
+      method: "post",
       url: process.env.REACT_APP_LOGIN_URL,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
       },
       data: {
         email: email,
-        password: password
-      }
+        password: password,
+      },
     })
       .then((response) => {
         if (response.status == 200) {
-          setShowToast({ type: 1, message: 'Authentication Successfull!' })
+          setShowToast({ type: 1, message: "Authentication Successfull!" });
           setTimeout(() => {
             dispatch(authorizeUser());
-            dispatch(setUserDetails(response.data))
-            navigate('/')
+            dispatch(setUserDetails(response.data));
+            navigate("/");
           }, 3000);
         }
       })
@@ -55,9 +55,15 @@ const Login = () => {
         console.log(error);
         setShowToast({ type: 2, message: error.response.data.message });
       });
-  }
+  };
   const googleLogin = () => {
-    const popup = window.open(process.env.REACT_APP_CALLBACK_URL, "popup", `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX},top=${screen.height / 2 - 600 / 2 + window.screenY}`);
+    const popup = window.open(
+      process.env.REACT_APP_CALLBACK_URL,
+      "popup",
+      `popup = true,width=400,height=600,left=${
+        screen.width / 2 - 400 / 2 + window.screenX
+      },top=${screen.height / 2 - 600 / 2 + window.screenY}`
+    );
     const checkPopup = setInterval(async () => {
       if (!popup.closed) {
         if (!isLoading) setIsLoading(true);
@@ -65,20 +71,20 @@ const Login = () => {
       }
       clearInterval(checkPopup);
       await axios({
-        method: 'get',
+        method: "get",
         url: process.env.REACT_APP_GOOGLE_LOGIN_URL,
         withCredentials: true,
         headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
         },
       })
         .then((response) => {
           if (response.status == 200) {
-            setShowToast({ type: 1, message: 'Authentication Successfull!' })
+            setShowToast({ type: 1, message: "Authentication Successfull!" });
             setTimeout(() => {
               dispatch(authorizeUser());
-              dispatch(setUserDetails(response.data))
-              navigate('/')
+              dispatch(setUserDetails(response.data));
+              navigate("/");
             }, 3000);
           }
         })
@@ -89,10 +95,10 @@ const Login = () => {
         });
       setIsLoading(false);
     }, 1000);
-  }
+  };
   useEffect(() => {
     if (isAuthorized) {
-      navigate('/')
+      navigate("/");
     }
   }, []);
   return (
@@ -101,14 +107,28 @@ const Login = () => {
         <div className="circular-loader">
           <CircularProgress />
         </div>
-      ) : (<></>)}
-      <Snackbar className="toastify-class" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showToast.type == 2} autoHideDuration={5000} onClose={resetToast}>
-        <Alert onClose={resetToast} severity="error" sx={{ width: '100%' }}>
+      ) : (
+        <></>
+      )}
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
           {showToast.message}
         </Alert>
       </Snackbar>
-      <Snackbar className="toastify-class" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showToast.type == 1} autoHideDuration={2500} onClose={resetToast}>
-        <Alert onClose={resetToast} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
           {showToast.message}
         </Alert>
       </Snackbar>
@@ -117,8 +137,20 @@ const Login = () => {
           <h1 className="dark-font">Welcome !</h1>
           <p className="darker-font">Signin to stay connected</p>
           <div className="login-input-container">
-            <input className={missingLoginParams ? 'wrong-submit' : ''} type="email" placeholder=" Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input className={missingLoginParams ? 'wrong-submit' : ''} type="password" placeholder=" Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              className={missingLoginParams ? "wrong-submit" : ""}
+              type="email"
+              placeholder=" Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              className={missingLoginParams ? "wrong-submit" : ""}
+              type="password"
+              placeholder=" Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
           <div className="login-remember-forget">
             <div className="login-remember-me">
@@ -130,7 +162,11 @@ const Login = () => {
             </div>
           </div>
           <ThemeProvider theme={DarkTheme}>
-            <Button onClick={idPassLogin} className="mui-dark-btn" variant="contained">
+            <Button
+              onClick={idPassLogin}
+              className="mui-dark-btn"
+              variant="contained"
+            >
               Sign In
             </Button>
           </ThemeProvider>

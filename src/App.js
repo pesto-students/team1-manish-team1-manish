@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import "./styles.css";
+import { useDispatch, useSelector } from "react-redux";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -10,8 +10,9 @@ import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import CarDetails from "./Pages/CarDetails/CarDetails";
 import { authorizeUser, setUserDetails } from "./Store/CarStore";
-import { useDispatch, useSelector } from "react-redux";
+import Profile from "./Pages/Profile/Profile";
 import axios from "axios";
+import "./styles.css";
 
 const App = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -19,37 +20,34 @@ const App = () => {
   useEffect(() => {
     const autoLogin = async () => {
       await axios({
-        method: 'get',
+        method: "get",
         url: process.env.REACT_APP_GOOGLE_LOGIN_URL,
         withCredentials: true,
         headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
         },
       })
         .then((response) => {
           if (response.status == 200) {
             dispatch(authorizeUser());
-            dispatch(setUserDetails(response.data))
+            dispatch(setUserDetails(response.data));
           }
         })
         .catch((err) => {
           console.log(err);
         });
-    }
+    };
     autoLogin();
   }, []);
   return (
     <div className="App">
-      {isAuthorized ? (
-        <AuthenticatedHeader />
-      ) : (
-        <Header />)
-      }
+      {isAuthorized ? <AuthenticatedHeader /> : <Header />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/me" element={<Profile />} />
         {/* Temp route for testing */}
         <Route path="/cars/details" element={<CarDetails carId={0} />} />
       </Routes>
