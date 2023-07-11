@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -10,7 +11,7 @@ import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import CarDetails from "./Pages/CarDetails/CarDetails";
 import ShowCar from "./Pages/ShowCarPage/ShowCar";
 import { authorizeUser, setUserDetails } from "./Store/CarStore";
-import { useDispatch, useSelector } from "react-redux";
+import Profile from "./Pages/Profile/Profile";
 import axios from "axios";
 import "./styles.css";
 
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/me" element={<Profile />} />
         {/* Temp route for testing */}
         <Route path="/cars/details" element={<CarDetails carId={0} />} />
         {/* <Route path="/" element={<ShowCar />} /> */}

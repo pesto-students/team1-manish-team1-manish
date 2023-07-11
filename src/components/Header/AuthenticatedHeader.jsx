@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserDetails, togglePage, unAuthorizeUser } from "../../Store/CarStore";
+import {
+  setUserDetails,
+  togglePage,
+  unAuthorizeUser,
+} from "../../Store/CarStore";
 import UseMenu from "../UserProfileMenu/UserMenu";
 import "./Header.css";
 import axios from "axios";
@@ -14,11 +18,11 @@ const AuthenticatedHeader = () => {
 
   const logoutUser = async () => {
     await axios({
-      method: 'get',
+      method: "get",
       url: process.env.REACT_APP_LOGOUT_URL,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
       },
     })
       .then((response) => {
@@ -26,8 +30,8 @@ const AuthenticatedHeader = () => {
           // setShowToast({ type: 1, message: 'Successfully Logged out!' })
           setTimeout(() => {
             dispatch(unAuthorizeUser());
-            dispatch(setUserDetails(null))
-            navigate('/')
+            dispatch(setUserDetails(null));
+            navigate("/");
           }, 3000);
         }
       })
@@ -35,7 +39,7 @@ const AuthenticatedHeader = () => {
         console.log(error);
         // setShowToast({ type: 2, message: error.response.data.message });
       });
-  }
+  };
   const toggleHeader = () => {
     if (toggleHeaderClass === "close") {
       setToggleHeaderClass("open");
@@ -97,15 +101,32 @@ const AuthenticatedHeader = () => {
             <span></span>
           </div>
           <div className={`hamburger-links-${toggleHeaderClass}`}>
-            <p className="hamburger-signup-btn dark-font" onClick={() => { toggleHeader(); dispatch(togglePage()) }}>
+            <p
+              className="hamburger-signup-btn dark-font"
+              onClick={() => {
+                toggleHeader();
+                dispatch(togglePage());
+              }}
+            >
               {flagPage ? "Sell Car" : "Buy Car"}
             </p>
-            <Link to="/profile">
-              <p className="hamburger-signup-btn" onClick={() => { toggleHeader() }}>
+            <Link to="/me">
+              <p
+                className="hamburger-signup-btn"
+                onClick={() => {
+                  toggleHeader();
+                }}
+              >
                 Profile
               </p>
             </Link>
-            <p className="hamburger-signup-btn dark-font" onClick={() => { toggleHeader(); logoutUser() }}>
+            <p
+              className="hamburger-signup-btn dark-font"
+              onClick={() => {
+                toggleHeader();
+                logoutUser();
+              }}
+            >
               Logout
             </p>
           </div>

@@ -1,0 +1,50 @@
+.user-activity__container {
+  width: 80%;
+  cursor: pointer;
+}
+
+.user-activity__activity-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.user-activity__activity-details {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.user-activity__activity-arrow {
+  transform: rotate(0deg);
+}
+
+.active {
+  background-color: #373737;
+  color: #fff;
+}
+
+.user-activity__card {
+  margin-top: 1rem;
+  color: #373737;
+  background-color: #fff;
+}
+
+@media (min-width: 35em) {
+  .user-activity__card {
+    display: none;
+  }
+
+  .user-activity__container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 35em) {
+  .user-activity__activity-arrow {
+    transform: rotate(90deg);
+    transition: 0.2s;
+  }
+}
