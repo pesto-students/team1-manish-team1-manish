@@ -53,7 +53,7 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    dispatch(carBudgetRange());
+    // dispatch(carBudgetRange());
     dispatch(getCarBrandsData());
   }, []);
 

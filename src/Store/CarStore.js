@@ -29,12 +29,6 @@ const CarSlice = createSlice({
     toggleBookmark: (state) => {
       state.bookmarkFlag = !state.bookmarkFlag;
     },
-    carBodyData: (state) => {
-      state.carBodysData;
-    },
-    carBudgetRange: (state) => {
-      state.carBudgetRange;
-    },
     authorizeUser: (state) => {
       state.isAuthUser = true;
     },
@@ -49,6 +43,9 @@ const CarSlice = createSlice({
     },
     setBuyCarDetails: (state, action) => {
       state.buyCarDetails.buyCar = action.payload;
+    },
+    setCarVariantData: (state, action) => {
+      state.carVariantData = action.payload;
     },
   },
   extraReducers: {
@@ -75,6 +72,7 @@ export const {
   unAuthorizeUser,
   setCarModelData,
   setBuyCarDetails,
+  setCarVariantData,
 } = CarSlice.actions;
 
 const CarStore = configureStore({
