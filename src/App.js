@@ -51,7 +51,7 @@ const App = () => {
         <Route path="/me" element={<Profile />} />
         {/* Temp route for testing */}
         <Route path="/cars/details" element={<CarDetails carId={0} />} />
-        {/* <Route path="/" element={<ShowCar />} /> */}
+        <Route path="/buy-car" element={<ShowCar />} />
       </Routes>
       <Footer />
     </div>

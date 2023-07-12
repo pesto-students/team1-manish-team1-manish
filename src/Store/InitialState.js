@@ -24,11 +24,15 @@ export const globalInitialState = {
     loading: false,
   },
   carBudgetRange: [
-    "Up to 5L",
-    "5L to 10L",
-    "10L to 20L",
-    "20L to 50L",
-    "Above 50L",
+    { displayPrice: "Up to 5L", value: [0, 500000] },
+    { displayPrice: "5L to 10L", value: [500001, 1000000] },
+    { displayPrice: "10L to 20L", value: [1000001, 2000000] },
+    { displayPrice: "20L to 50L", value: [2000001, 5000000] },
+    { displayPrice: "Above 50L", value: [5000000, 10000000] },
   ],
+  buyCarDetails: {
+    buyCar: [],
+    loading: false,
+  },
   userDetails: null,
 };

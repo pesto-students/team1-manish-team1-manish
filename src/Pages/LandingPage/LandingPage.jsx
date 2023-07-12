@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -9,6 +10,7 @@ import {
   getCarBrandsData,
   togglePage,
   setCarModelData,
+  setBuyCarDetails,
 } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
@@ -16,6 +18,10 @@ import "./LandingPage.css";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [budget, setBudget] = useState(null);
+  const [brand, setBrand] = useState(null);
+  const [model, setModel] = useState(null);
   const flagPage = useSelector((state) => state.flag);
   const carPriceRange = useSelector((state) => state.carBudgetRange);
   const carBrands = useSelector((state) => {
@@ -24,7 +30,27 @@ const LandingPage = () => {
   const carModels = useSelector((state) => {
     return state.carModelData.carModel;
   });
-  const handleCarSearch = () => {};
+  const handleCarSearch = async () => {
+    const url = `http://localhost:3000/cars/brands/${brand}/models/${model}/price/${budget[0]}/${budget[1]}/`;
+    await axios({
+      method: "get",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      },
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          setTimeout(() => {
+            dispatch(setBuyCarDetails(response.data));
+            navigate("/buy-car");
+          }, 3000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     dispatch(carBudgetRange());
@@ -58,14 +84,17 @@ const LandingPage = () => {
                     <DropDown
                       selectName="Select Budget"
                       dataToShow={carPriceRange}
+                      eventChange={setBudget}
                     />
                     <DropDown
                       selectName="Select Brand"
                       dataToShow={carBrands}
+                      eventChange={setBrand}
                     />
                     <DropDown
                       selectName="Select Model"
                       dataToShow={carModels}
+                      eventChange={setModel}
                     />
                   </div>
                   <button className="search-car-btn" onClick={handleCarSearch}>
@@ -146,31 +175,27 @@ const LandingPage = () => {
 };
 
 function DropDown(props) {
-  const { selectName, dataToShow } = props;
-  const [selectOption, setSelectOption] = React.useState("");
+  const { selectName, dataToShow, eventChange } = props;
+  const [selectOption, setSelectOption] = React.useState(" ");
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setSelectOption(event.target.value);
+    eventChange(event.target.value);
   };
 
-  // console.log(selectOption);
   useEffect(() => {
     const getCarModelData = async () => {
-      const url = "http://localhost:3000/cars-api/brand/models";
+      const url = `http://localhost:3000/cars-api/make_id/${selectOption}/year-name`;
       await axios({
-        method: "post",
+        method: "get",
         url: url,
         headers: {
           "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
         },
-        data: {
-          makeId: `${selectOption}`,
-        },
       })
         .then((res) => res.data)
         .then((res) => {
-          console.log(res);
           dispatch(setCarModelData(res));
         });
     };
@@ -206,8 +231,8 @@ function DropDown(props) {
           : dataToShow.map((el) => {
               if (selectName === "Select Budget") {
                 return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
+                  <MenuItem value={el.value} key={el + Math.random(1, 9)}>
+                    {el.displayPrice}
                   </MenuItem>
                 );
               } else if (selectName === "Select Brand") {

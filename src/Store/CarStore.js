@@ -47,17 +47,20 @@ const CarSlice = createSlice({
     setCarModelData: (state, action) => {
       state.carModelData.carModel = action.payload;
     },
+    setBuyCarDetails: (state, action) => {
+      state.buyCarDetails.buyCar = action.payload;
+    },
   },
   extraReducers: {
     [getCarBrandsData.pending]: (state, actions) => {
-      state.loading = true;
+      state.carBrandData.loading = true;
     },
     [getCarBrandsData.fulfilled]: (state, actions) => {
       state.carBrandData.loading = false;
       state.carBrandData.carBrand = actions.payload;
     },
     [getCarBrandsData.rejected]: (state, actions) => {
-      state.loading = true;
+      state.carBrandData.loading = true;
     },
   },
 });
@@ -71,6 +74,7 @@ export const {
   setUserDetails,
   unAuthorizeUser,
   setCarModelData,
+  setBuyCarDetails,
 } = CarSlice.actions;
 
 const CarStore = configureStore({

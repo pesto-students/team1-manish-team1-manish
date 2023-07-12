@@ -11,7 +11,10 @@ import "./ShowCar.css";
 export default function ShowCar() {
   const dispatch = useDispatch();
   const carBrands = useSelector((state) => {
-    return state.carBrandData.carBrands;
+    return state.carBrandData.carBrand;
+  });
+  const buyCarDetail = useSelector((state) => {
+    return state.buyCarDetails.buyCar;
   });
 
   const isBookMarked = useSelector((state) => state.bookmarkFlag);
@@ -21,6 +24,12 @@ export default function ShowCar() {
 
   const bookmarkToggle = () => {
     dispatch(toggleBookmark());
+  };
+  const formatPrice = (price) => {
+    return price.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
   };
 
   useEffect(() => {
@@ -46,8 +55,11 @@ export default function ShowCar() {
               ? ""
               : carBrands.map((el) => {
                   return (
-                    <div className="brand-f1" key={el.make_id}>
-                      <p className="b-filter-title">{el.make_display}</p>
+                    <div
+                      className="brand-f1"
+                      key={el.make_id + Math.random(0, 1)}
+                    >
+                      <p className="b-filter-title">{el.make_id}</p>
                       <input
                         type="checkbox"
                         name="brand-filter-1"
@@ -136,28 +148,34 @@ export default function ShowCar() {
           </div>
         </div>
         <div className="show-car-ondemand">
-          <div className="show-car-card">
-            <div className="car-card-header">
-              <div className="car-card-details">
-                <p className="car-card-name">Maruti Suzuki Swift</p>
-                <p className="car-card-type">Sedan</p>
+          {buyCarDetail.map((el) => {
+            return (
+              <div className="show-car-card" key={el.id}>
+                <div className="car-card-header">
+                  <div className="car-card-details">
+                    <p className="car-card-name">{el.brand + " " + el.model}</p>
+                    <p className="car-card-type">Sedan</p>
+                  </div>
+                  <button className="darker-btn" onClick={bookmarkToggle}>
+                    {isBookMarked ? (
+                      <Icon icon="iconamoon:bookmark-fill" />
+                    ) : (
+                      <Icon icon="iconamoon:bookmark-bold" />
+                    )}
+                  </button>
+                </div>
+                <div className="car-card-img">
+                  <img src="/Assets/temp-car-img.svg" alt="Car Image" />
+                </div>
+                <div className="car-card-specs">
+                  <span>Tags</span>
+                  <p className="car-card-price">
+                    {formatPrice(parseFloat(el.price))}
+                  </p>
+                </div>
               </div>
-              <button className="darker-btn" onClick={bookmarkToggle}>
-                {isBookMarked ? (
-                  <Icon icon="iconamoon:bookmark-fill" />
-                ) : (
-                  <Icon icon="iconamoon:bookmark-bold" />
-                )}
-              </button>
-            </div>
-            <div className="car-card-img">
-              <img src="/Assets/temp-car-img.svg" alt="Car Image" />
-            </div>
-            <div className="car-card-specs">
-              <span>Tags</span>
-              <p className="car-card-price">RS 10,00,000</p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
