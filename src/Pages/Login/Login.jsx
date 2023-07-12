@@ -53,7 +53,7 @@ const Login = () => {
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message });
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
       });
   }
   const googleLogin = () => {
@@ -85,7 +85,7 @@ const Login = () => {
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
           console.log(error);
-          setShowToast({ type: 2, message: error.response.data.message });
+          setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
         });
       setIsLoading(false);
     }, 1000);
