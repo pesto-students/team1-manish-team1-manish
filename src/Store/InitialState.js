@@ -35,4 +35,5 @@ export const globalInitialState = {
     loading: false,
   },
   userDetails: null,
+  carType: [],
 };

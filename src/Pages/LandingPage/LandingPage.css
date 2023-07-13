@@ -38,6 +38,7 @@
   background: #ffffff;
   border-radius: 10px;
   border: none;
+  cursor: pointer;
 }
 
 .landing-page-heading {
@@ -92,11 +93,11 @@
   height: 60%;
 }
 
-.search-car-drop-down>select,
-.car-drop-down-1>select,
-.car-drop-down-2>select,
-.car-drop-down-3>select,
-.car-drop-down-4>select {
+.search-car-drop-down > select,
+.car-drop-down-1 > select,
+.car-drop-down-2 > select,
+.car-drop-down-3 > select,
+.car-drop-down-4 > select {
   width: 283px;
   height: 45.42px;
   box-sizing: border-box;
@@ -119,11 +120,11 @@
   height: 38px;
   left: 127px;
   top: 1217px;
-
   background: #373737;
   border-radius: 10px;
   color: #ffffff;
   border: none;
+  cursor: pointer;
 }
 
 .landing-page-right-div {
@@ -132,7 +133,7 @@
   justify-content: center;
 }
 
-.landing-page-right-div>img {
+.landing-page-right-div > img {
   width: 100%;
   margin: 1rem;
 }
@@ -209,9 +210,9 @@
   margin-top: 1rem;
 }
 
-.vop-img>img,
-.ep-img>img,
-.cto-img>img {
+.vop-img > img,
+.ep-img > img,
+.cto-img > img {
   width: 80%;
 }
 

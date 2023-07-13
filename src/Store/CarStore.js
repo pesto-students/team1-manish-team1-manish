@@ -50,6 +50,9 @@ const CarSlice = createSlice({
     setBuyCarDetails: (state, action) => {
       state.buyCarDetails.buyCar = action.payload;
     },
+    setCarType: (state, action) => {
+      state.carType = action.payload;
+    },
   },
   extraReducers: {
     [getCarBrandsData.pending]: (state, actions) => {
@@ -75,6 +78,7 @@ export const {
   unAuthorizeUser,
   setCarModelData,
   setBuyCarDetails,
+  setCarType,
 } = CarSlice.actions;
 
 const CarStore = configureStore({
