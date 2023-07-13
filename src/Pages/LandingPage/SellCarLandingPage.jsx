@@ -5,27 +5,30 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import {
-  getCarBrandsData,
-  setCarModelData,
-  setCarVariantData,
-} from "../../Store/CarStore";
+import { getCarBrandsData, setCarModelData } from "../../Store/CarStore";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
-  const carBrands = useSelector((state) => state.carBrandData.carBrand);
-  const carModels = useSelector((state) => {
-    return state.carModelData.carModel;
-  });
+
   const carYear = useSelector((state) => state.purchasedCarYear);
-  const carVariant = useSelector((state) => {
-    console.log(state);
-    return state.carVariantData;
+  const carBrands = useSelector((state) => {
+    // console.log(state);
+    return state.carBrandData.carBrand;
   });
-  const [files, setFiles] = useState(null);
-  const [brand, setBrand] = useState(null);
-  const [model, setModel] = useState(null);
+  const [brandEvent, setBrandEvent] = useState({
+    showData: carBrands,
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  const [modelEvent, setModelEvent] = useState({
+    showData: [],
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  // const [files, setFiles] = useState(null);
+  // const [brand, setBrand] = useState(null);
+  // const [model, setModel] = useState(null);
   const [year, setYear] = useState(null);
   const [variant, setVariant] = useState(null);
 
@@ -33,7 +36,36 @@ export function SellCarLandingPage() {
 
   useEffect(() => {
     dispatch(getCarBrandsData());
-    // console.log(carVariant);
+    let flagBrand = brandEvent.isStateUpdate;
+
+    const getCarModelData = async () => {
+      const url = `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+      await axios({
+        method: "get",
+        url: url,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        },
+      })
+        .then((res) => {
+          if (res.status == 200) {
+            let updatedModel = {};
+            updatedModel = { showData: res.data };
+            setBrandEvent((res) => ({
+              ...res,
+              ...updatedModel,
+            }));
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    };
+
+    if (flagBrand) {
+      getCarModelData();
+    }
+    console.log(carBrands);
   }, []);
 
   return (
@@ -51,16 +83,16 @@ export function SellCarLandingPage() {
               <div className="car-drop-down-1">
                 <DropDown
                   selectName="Select Brand"
-                  dataToShow={carBrands}
-                  eventChange={setBrand}
+                  eventToHandle={brandEvent}
+                  setEventToHandle={setBrandEvent}
                 />
                 <DropDown
                   selectName="Select Model"
-                  dataToShow={carModels}
-                  eventChange={setModel}
+                  eventToHandle={modelEvent}
+                  setEventToHandle={setModelEvent}
                 />
               </div>
-              <div className="car-drop-down-2">
+              {/* <div className="car-drop-down-2">
                 <DropDown
                   selectName="Select Variant"
                   dataToShow={carVariant}
@@ -101,7 +133,7 @@ export function SellCarLandingPage() {
                   <option value="">Select Car Location</option>
                   <option value="dog">Dog</option>
                 </select>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="upload-img-div">
@@ -166,37 +198,19 @@ export function SellCarLandingPage() {
 }
 
 function DropDown(props) {
-  const { selectName, dataToShow, eventChange } = props;
-  const [selectOption, setSelectOption] = React.useState(" ");
-  const brand = useRef();
-  const model = useRef();
-  const dispatch = useDispatch();
-
+  const { selectName, eventToHandle, setEventToHandle } = props;
+  console.log(eventToHandle);
   const handleChange = (event) => {
-    setSelectOption(event.target.value);
-    eventChange(event.target.value);
-    if (selectName === "Select Brand") {
-      brand.current = event.target.value;
-    } else if (selectName === "Select Model") {
-      model.current = event.target.value;
-    }
+    let updatedValue = {};
+    updatedValue = { eventChange: event.target.value, isStateUpdate: true };
+
+    setEventToHandle((eventToHandle) => ({
+      ...eventToHandle,
+      ...updatedValue,
+    }));
   };
 
   useEffect(() => {
-    const getCarModelData = async () => {
-      const url = `http://localhost:3000/cars-api/make_id/${selectOption}/year-name`;
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
-        },
-      })
-        .then((res) => res.data)
-        .then((res) => {
-          dispatch(setCarModelData(res));
-        });
-    };
     const getCarVariant = async () => {
       console.log(brand, model);
       const url = `http://localhost:3000/cars-api/make_id/${brand}/name/${model}/trim`;
@@ -213,13 +227,7 @@ function DropDown(props) {
           dispatch(setCarVariantData(res));
         });
     };
-    if (selectName === "Select Brand") {
-      getCarModelData();
-    }
-    if (selectName === "Select Model") {
-      getCarVariant();
-    }
-  }, [selectOption]);
+  }, []);
 
   return (
     <FormControl
@@ -239,13 +247,13 @@ function DropDown(props) {
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={selectOption}
+        value={eventToHandle.eventChange}
         label={selectName}
         onChange={handleChange}
       >
-        {!dataToShow
+        {!eventToHandle
           ? ""
-          : dataToShow.map((el) => {
+          : eventToHandle.showData.map((el) => {
               if (selectName === "Select Brand") {
                 return (
                   <MenuItem value={el.make_id} key={el + Math.random(1, 9)}>

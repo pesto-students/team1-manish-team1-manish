@@ -5,11 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  togglePage,
-  setCarModelData,
-  setBuyCarDetails,
-} from "../../Store/CarStore";
+import { togglePage, setBuyCarDetails } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
 import "./LandingPage.css";
@@ -237,8 +233,6 @@ const LandingPage = () => {
 
 function DropDown(props) {
   const { selectName, eventToHandle, setEventToHandle } = props;
-  const dispatch = useDispatch();
-
   const handleChange = (event) => {
     let updatedValue = {};
     updatedValue = { eventChange: event.target.value, isStateUpdate: true };
