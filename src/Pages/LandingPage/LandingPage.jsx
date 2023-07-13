@@ -6,8 +6,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  carBudgetRange,
-  getCarBrandsData,
   togglePage,
   setCarModelData,
   setBuyCarDetails,
@@ -19,19 +17,26 @@ import "./LandingPage.css";
 const LandingPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [budget, setBudget] = useState(null);
-  const [brand, setBrand] = useState(null);
-  const [model, setModel] = useState(null);
-  const flagPage = useSelector((state) => state.flag);
   const carPriceRange = useSelector((state) => state.carBudgetRange);
-  const carBrands = useSelector((state) => {
-    return state.carBrandData.carBrand;
+  const [budgetEvent, setBudgetEvent] = useState({
+    showData: carPriceRange,
+    isStateUpdate: false,
+    eventChange: null,
   });
-  const carModels = useSelector((state) => {
-    return state.carModelData.carModel;
+  const [brandEvent, setBrandEvent] = useState({
+    showData: [],
+    isStateUpdate: false,
+    eventChange: "",
   });
+  const [typeEvent, setTypeEvent] = useState({
+    showData: [],
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  const flagPage = useSelector((state) => state.flag);
+
   const handleCarSearch = async () => {
-    const url = `http://localhost:3000/cars/brands/${brand}/models/${model}/price/${budget[0]}/${budget[1]}/`;
+    const url = `http://localhost:3000/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`;
     await axios({
       method: "get",
       url: url,
@@ -53,9 +58,65 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    // dispatch(carBudgetRange());
-    dispatch(getCarBrandsData());
-  }, []);
+    let flagBudget = budgetEvent.isStateUpdate;
+    let flagBrand = brandEvent.isStateUpdate;
+
+    const getBrandData = async () => {
+      const url = `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}`;
+      await axios({
+        method: "get",
+        url: url,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        },
+      })
+        .then((res) => {
+          if (res.status == 200) {
+            let updatedBrand = {};
+            updatedBrand = { showData: res.data };
+            setBrandEvent((res) => ({
+              ...res,
+              ...updatedBrand,
+            }));
+            setBudgetEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    };
+    const getCarType = async () => {
+      const url = `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}/types/${brandEvent.eventChange}`;
+
+      await axios({
+        method: "get",
+        url: url,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        },
+      })
+        .then((res) => {
+          if (res.status == 200) {
+            let updatedType = {};
+            updatedType = { showData: res.data };
+            setTypeEvent((res) => ({
+              ...res,
+              ...updatedType,
+            }));
+            setBrandEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    };
+    if (flagBudget) {
+      getBrandData();
+    }
+    if (flagBrand) {
+      getCarType();
+    }
+  }, [budgetEvent, brandEvent]);
 
   return (
     <>
@@ -83,18 +144,18 @@ const LandingPage = () => {
                   <div className="search-car-drop-down">
                     <DropDown
                       selectName="Select Budget"
-                      dataToShow={carPriceRange}
-                      eventChange={setBudget}
+                      eventToHandle={budgetEvent}
+                      setEventToHandle={setBudgetEvent}
                     />
                     <DropDown
                       selectName="Select Brand"
-                      dataToShow={carBrands}
-                      eventChange={setBrand}
+                      eventToHandle={brandEvent}
+                      setEventToHandle={setBrandEvent}
                     />
                     <DropDown
-                      selectName="Select Model"
-                      dataToShow={carModels}
-                      eventChange={setModel}
+                      selectName="Select Vehicle Type"
+                      eventToHandle={typeEvent}
+                      setEventToHandle={setTypeEvent}
                     />
                   </div>
                   <button className="search-car-btn" onClick={handleCarSearch}>
@@ -175,34 +236,18 @@ const LandingPage = () => {
 };
 
 function DropDown(props) {
-  const { selectName, dataToShow, eventChange } = props;
-  const [selectOption, setSelectOption] = React.useState(" ");
+  const { selectName, eventToHandle, setEventToHandle } = props;
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
-    setSelectOption(event.target.value);
-    eventChange(event.target.value);
-  };
+    let updatedValue = {};
+    updatedValue = { eventChange: event.target.value, isStateUpdate: true };
 
-  useEffect(() => {
-    const getCarModelData = async () => {
-      const url = `http://localhost:3000/cars-api/make_id/${selectOption}/year-name`;
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
-        },
-      })
-        .then((res) => res.data)
-        .then((res) => {
-          dispatch(setCarModelData(res));
-        });
-    };
-    if (selectName === "Select Budget" || selectName === "Select Brand") {
-      getCarModelData();
-    }
-  }, [selectOption]);
+    setEventToHandle((eventToHandle) => ({
+      ...eventToHandle,
+      ...updatedValue,
+    }));
+  };
 
   return (
     <FormControl
@@ -222,13 +267,13 @@ function DropDown(props) {
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={selectOption}
+        value={eventToHandle.eventChange}
         label={selectName}
         onChange={handleChange}
       >
-        {!dataToShow
+        {!eventToHandle.showData
           ? ""
-          : dataToShow.map((el) => {
+          : eventToHandle.showData.map((el) => {
               if (selectName === "Select Budget") {
                 return (
                   <MenuItem value={el.value} key={el + Math.random(1, 9)}>
@@ -237,14 +282,14 @@ function DropDown(props) {
                 );
               } else if (selectName === "Select Brand") {
                 return (
-                  <MenuItem value={el.make_id} key={el + Math.random(1, 9)}>
-                    {el.make_id}
+                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                    {el.brand}
                   </MenuItem>
                 );
-              } else if (selectName === "Select Model") {
+              } else if (selectName === "Select Vehicle Type") {
                 return (
-                  <MenuItem value={el.name} key={el + Math.random(1, 9)}>
-                    {el.name}
+                  <MenuItem value={el.type} key={el + Math.random(1, 9)}>
+                    {el.type}
                   </MenuItem>
                 );
               }

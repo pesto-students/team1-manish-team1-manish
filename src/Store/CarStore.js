@@ -44,8 +44,8 @@ const CarSlice = createSlice({
     setBuyCarDetails: (state, action) => {
       state.buyCarDetails.buyCar = action.payload;
     },
-    setCarVariantData: (state, action) => {
-      state.carVariantData = action.payload;
+    setCarType: (state, action) => {
+      state.carType = action.payload;
     },
   },
   extraReducers: {
@@ -72,7 +72,7 @@ export const {
   unAuthorizeUser,
   setCarModelData,
   setBuyCarDetails,
-  setCarVariantData,
+  setCarType,
 } = CarSlice.actions;
 
 const CarStore = configureStore({

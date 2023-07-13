@@ -60,4 +60,5 @@ export const globalInitialState = {
     "2022",
   ],
   carVariantData: [],
+  carType: [],
 };
