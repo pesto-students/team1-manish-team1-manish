@@ -9,6 +9,7 @@ import Login from "./Pages/Login/Login";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import CarDetails from "./Pages/CarDetails/CarDetails";
+import ShowCar from "./Pages/ShowCarPage/ShowCar";
 import { authorizeUser, setUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
 import axios from "axios";
@@ -50,6 +51,7 @@ const App = () => {
         <Route path="/me" element={<Profile />} />
         {/* Temp route for testing */}
         <Route path="/cars/details" element={<CarDetails carId={0} />} />
+        <Route path="/buy-car" element={<ShowCar />} />
       </Routes>
       <Footer />
     </div>

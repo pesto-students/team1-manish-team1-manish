@@ -2,25 +2,33 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./CarDetails.css";
-import { CarDetailsData, CarFeatures, CarSpecifications } from "./DummyCarDetailsData";
+import {
+  CarDetailsData,
+  CarFeatures,
+  CarSpecifications,
+} from "./DummyCarDetailsData";
 import { Icon } from "@iconify/react";
 import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleBookmark } from "../../Store/CarStore";
 import axios from "axios";
 
 const CarDetails = ({ carId }) => {
   const [carData, setCarData] = useState(null);
-  const [isBookMarked, setIsBookMarked] = useState(false);
+  // const [isBookMarked, setIsBookMarked] = useState(false);
   const [isImageFading, setIsImageFading] = useState([0, true]);
   const [moreOverviewToggle, setMoreOverviewToggle] = useState(false);
   const [moreFeatureToggle, setMoreFeatureToggle] = useState(false);
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(null);
+  const isBookMarked = useSelector((state) => state.bookmarkFlag);
+  const dispatch = useDispatch();
+
   const isAuthorized = useSelector((state) => state.isAuthUser);
   console.log(isAuthorized);
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
-    setIsBookMarked((value) => !value);
+    dispatch(toggleBookmark());
   };
   const manualNextImage = () => {
     clearTimeout(timeOutId.current);
@@ -66,7 +74,10 @@ const CarDetails = ({ carId }) => {
     const updateScrollDirection = () => {
       const scrollY = window.scrollY;
       const direction = scrollY > lastScrollY ? "down" : "up";
-      if (direction !== scrollDirection && (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)) {
+      if (
+        direction !== scrollDirection &&
+        (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)
+      ) {
         setScrollDirection(direction);
       }
       lastScrollY = scrollY > 0 ? scrollY : 0;
@@ -74,7 +85,7 @@ const CarDetails = ({ carId }) => {
     window.addEventListener("scroll", updateScrollDirection); // add event listener
     return () => {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
-    }
+    };
   }, [carData, isImageFading, scrollDirection]);
   return (
     <>
@@ -117,9 +128,7 @@ const CarDetails = ({ carId }) => {
                       <Icon icon="iconamoon:bookmark-bold" />
                     )}
                   </button>
-                  <button
-                    className="darker-btn"
-                  >
+                  <button className="darker-btn">
                     <p>View Seller Details</p>
                   </button>
                 </div>
@@ -233,28 +242,66 @@ const CarDetails = ({ carId }) => {
                     <div className="content-value">{carData.Year}</div>
                   </div>
                 </div>
-              ) : (<></>)}
-              <h3 onClick={() => { setMoreOverviewToggle(value => !value) }} className="div-header mobile pointer">View More <Icon className={moreOverviewToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
+              ) : (
+                <></>
+              )}
+              <h3
+                onClick={() => {
+                  setMoreOverviewToggle((value) => !value);
+                }}
+                className="div-header mobile pointer"
+              >
+                View More{" "}
+                <Icon
+                  className={moreOverviewToggle ? "contract" : "expand"}
+                  icon="ic:round-greater-than"
+                />
+              </h3>
             </div>
             <div className="info-body">
               <h3 className="div-header">Features</h3>
               <div className="feature-content">
                 {Object.keys(CarFeatures[0]).map((key, index) => {
-                  return (index > 0 && index <= 6 ? (
+                  return index > 0 && index <= 6 ? (
                     <div className="content-key" key={crypto.randomUUID()}>
-                      {CarFeatures[0][key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
+                      {CarFeatures[0][key] ? (
+                        <Icon className="tick-icon" icon="charm:tick" />
+                      ) : (
+                        <Icon className="cross-icon" icon="charm:cross" />
+                      )}{" "}
+                      {key}
                     </div>
-                  ) : <></>)
+                  ) : (
+                    <></>
+                  );
                 })}
                 {Object.keys(CarFeatures[0]).map((key, index) => {
-                  return (index > 6 && moreFeatureToggle ? (
+                  return index > 6 && moreFeatureToggle ? (
                     <div className="content-key" key={crypto.randomUUID()}>
-                      {CarFeatures[0][key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
+                      {CarFeatures[0][key] ? (
+                        <Icon className="tick-icon" icon="charm:tick" />
+                      ) : (
+                        <Icon className="cross-icon" icon="charm:cross" />
+                      )}{" "}
+                      {key}
                     </div>
-                  ) : <></>)
+                  ) : (
+                    <></>
+                  );
                 })}
               </div>
-              <h3 onClick={() => { setMoreFeatureToggle(value => !value) }} className="div-header pointer">View all Features <Icon className={moreFeatureToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
+              <h3
+                onClick={() => {
+                  setMoreFeatureToggle((value) => !value);
+                }}
+                className="div-header pointer"
+              >
+                View all Features{" "}
+                <Icon
+                  className={moreFeatureToggle ? "contract" : "expand"}
+                  icon="ic:round-greater-than"
+                />
+              </h3>
             </div>
             <div className="info-body">
               <h3 className="div-header">Specifications</h3>
@@ -270,20 +317,38 @@ const CarDetails = ({ carId }) => {
                       <div className="content-key">Max Power (rpm)</div>
                       <div className="content-key">Emission Standard</div>
                     </>
-                  ) : (<></>)}
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">{CarSpecifications["Mileage"]}</div>
-                  <div className="content-value">{CarSpecifications["Torque"]}</div>
-                  <div className="content-value">{CarSpecifications["Brake Type (rear)"]}</div>
+                  <div className="content-value">
+                    {CarSpecifications["Mileage"]}
+                  </div>
+                  <div className="content-value">
+                    {CarSpecifications["Torque"]}
+                  </div>
+                  <div className="content-value">
+                    {CarSpecifications["Brake Type (rear)"]}
+                  </div>
                   {moreSpecificationToggle ? (
                     <>
-                      <div className="content-value">{CarSpecifications["Brake Type (front)"]}</div>
-                      <div className="content-value">{CarSpecifications["Body Type"]}</div>
-                      <div className="content-value">{CarSpecifications["Max Power (rpm)"]}</div>
-                      <div className="content-value">{CarSpecifications["Emission Standard"]}</div>
+                      <div className="content-value">
+                        {CarSpecifications["Brake Type (front)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Body Type"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Max Power (rpm)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Emission Standard"]}
+                      </div>
                     </>
-                  ) : (<></>)}
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="overview-content">
                   <div className="content-key">Max Power (bhp)</div>
@@ -296,20 +361,38 @@ const CarDetails = ({ carId }) => {
                       <div className="content-key">Fuel Tank Capacity</div>
                       <div className="content-key">Boot Space (Litres)</div>
                     </>
-                  ) : (<></>)}
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">{CarSpecifications["Max Power (bhp)"]}</div>
-                  <div className="content-value">{CarSpecifications["Engine"]}</div>
-                  <div className="content-value">{CarSpecifications["Seats"]}</div>
+                  <div className="content-value">
+                    {CarSpecifications["Max Power (bhp)"]}
+                  </div>
+                  <div className="content-value">
+                    {CarSpecifications["Engine"]}
+                  </div>
+                  <div className="content-value">
+                    {CarSpecifications["Seats"]}
+                  </div>
                   {moreSpecificationToggle ? (
                     <>
-                      <div className="content-value">{CarSpecifications["Displacement (cc)"]}</div>
-                      <div className="content-value">{CarSpecifications["Cylinders"]}</div>
-                      <div className="content-value">{CarSpecifications["Fuel Tank Capacity"]}</div>
-                      <div className="content-value">{CarSpecifications["Boot Space (Litres)"]}</div>
+                      <div className="content-value">
+                        {CarSpecifications["Displacement (cc)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Cylinders"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Fuel Tank Capacity"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Boot Space (Litres)"]}
+                      </div>
                     </>
-                  ) : (<></>)}
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               <div className="info-content-mobile">
@@ -331,42 +414,98 @@ const CarDetails = ({ carId }) => {
                       <div className="content-key">Fuel Tank CAP</div>
                       <div className="content-key">Boot Space(L)</div>
                     </>
-                  ) : (<></>)}
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">{CarSpecifications["Mileage"]}</div>
-                  <div className="content-value">{CarSpecifications["Torque"]}</div>
-                  <div className="content-value">{CarSpecifications["Brake Type (rear)"]}</div>
+                  <div className="content-value">
+                    {CarSpecifications["Mileage"]}
+                  </div>
+                  <div className="content-value">
+                    {CarSpecifications["Torque"]}
+                  </div>
+                  <div className="content-value">
+                    {CarSpecifications["Brake Type (rear)"]}
+                  </div>
                   {moreSpecificationToggle ? (
                     <>
-                      <div className="content-value">{CarSpecifications["Brake Type (front)"]}</div>
-                      <div className="content-value">{CarSpecifications["Body Type"]}</div>
-                      <div className="content-value">{CarSpecifications["Max Power (rpm)"]}</div>
-                      <div className="content-value">{CarSpecifications["Emission Standard"]}</div>
-                      <div className="content-value">{CarSpecifications["Max Power (bhp)"]}</div>
-                      <div className="content-value">{CarSpecifications["Engine"]}</div>
-                      <div className="content-value">{CarSpecifications["Seats"]}</div>
-                      <div className="content-value">{CarSpecifications["Displacement (cc)"]}</div>
-                      <div className="content-value">{CarSpecifications["Cylinders"]}</div>
-                      <div className="content-value">{CarSpecifications["Fuel Tank Capacity"]}</div>
-                      <div className="content-value">{CarSpecifications["Boot Space (Litres)"]}</div>
+                      <div className="content-value">
+                        {CarSpecifications["Brake Type (front)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Body Type"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Max Power (rpm)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Emission Standard"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Max Power (bhp)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Engine"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Seats"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Displacement (cc)"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Cylinders"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Fuel Tank Capacity"]}
+                      </div>
+                      <div className="content-value">
+                        {CarSpecifications["Boot Space (Litres)"]}
+                      </div>
                     </>
-                  ) : (<></>)}
+                  ) : (
+                    <></>
+                  )}
                 </div>
-
               </div>
-              <h3 onClick={() => { setMoreSpecificationToggle(value => !value) }} className="div-header pointer">View all Specifications <Icon className={moreSpecificationToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
+              <h3
+                onClick={() => {
+                  setMoreSpecificationToggle((value) => !value);
+                }}
+                className="div-header pointer"
+              >
+                View all Specifications{" "}
+                <Icon
+                  className={moreSpecificationToggle ? "contract" : "expand"}
+                  icon="ic:round-greater-than"
+                />
+              </h3>
             </div>
           </>
         )}
       </div>
       {carData ? (
         <>
-          <div className={`mobile-buy-footer ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"} transition-all`}>
-            <div className={`mobile-price ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"} transition-all`}>
+          <div
+            className={`mobile-buy-footer ${
+              scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
+            } transition-all`}
+          >
+            <div
+              className={`mobile-price ${
+                scrollDirection === "down"
+                  ? "hide-buy-footer"
+                  : "show-buy-footer"
+              } transition-all`}
+            >
               Rs. {carData.Price}
             </div>
-            <div className={`car-interactive-button-mobile ${scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"} transition-all`}>
+            <div
+              className={`car-interactive-button-mobile ${
+                scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
+              } transition-all`}
+            >
               <button className="darker-btn" onClick={bookmarkToggle}>
                 {isBookMarked ? (
                   <Icon icon="iconamoon:bookmark-fill" />
@@ -374,15 +513,15 @@ const CarDetails = ({ carId }) => {
                   <Icon icon="iconamoon:bookmark-bold" />
                 )}
               </button>
-              <button
-                className="darker-btn"
-              >
+              <button className="darker-btn">
                 <p>View Seller Details</p>
               </button>
             </div>
           </div>
         </>
-      ) : (<></>)}
+      ) : (
+        <></>
+      )}
     </>
   );
 };
