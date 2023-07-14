@@ -49,7 +49,7 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/me" element={<Profile />} />
         {/* Temp route for testing */}
-        <Route path="/cars/details" element={<CarDetails carId={0} />} />
+        <Route path="/cars/details" element={<CarDetails carId={1} />} />
       </Routes>
       <Footer />
     </div>
