@@ -434,4 +434,8 @@ div.car-photos {
   .show-buy-div {
     opacity: 1;
   }
+
+  .App {
+    overflow: inherit !important;
+  }
 }
