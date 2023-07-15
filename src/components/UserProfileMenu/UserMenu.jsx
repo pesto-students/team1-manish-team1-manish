@@ -102,10 +102,16 @@ export default function UseMenu() {
       if (menuItem === "Logout") {
         await axios({
           method: "get",
-          url: process.env.REACT_APP_LOGOUT_URL,
+          url:
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEV_LOGOUT_URL
+              : process.env.REACT_APP_PROD_LOGOUT_UR,
           withCredentials: true,
           headers: {
-            "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+            "Access-Control-Allow-Origin":
+              process.env.NODE_ENV === "development"
+                ? process.env.REACT_APP_DEV_CORS_URL
+                : process.env.REACT_APP_PROD_CORS_URL,
           },
         })
           .then((response) => {

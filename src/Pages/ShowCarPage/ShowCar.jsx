@@ -127,7 +127,7 @@ export default function ShowCar() {
           </button>
         </div>
         <div className="show-car-header">
-          <p className="no-car-found">102 Cars Found</p>
+          <p className="no-car-found">{buyCarDetail.length} Cars Found</p>
           <div className="applied-filters">
             <button className="active-filter-btn">
               <p>Rs. 5,00,000 - 15,00,000</p>

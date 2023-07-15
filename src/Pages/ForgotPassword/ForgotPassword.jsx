@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import ForgotPasswordOTP from "./ForgotPasswordOTP";
 import "./ForgotPassword.css";
-import { Alert, Button, CircularProgress, Snackbar, ThemeProvider } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Snackbar,
+  ThemeProvider,
+} from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
 import axios from "axios";
 
@@ -9,11 +15,11 @@ const forgotPassword = () => {
   const [IsEmailExist, setIsEmailExist] = useState(false);
   const [missingForgotEmail, setMissingForgotEmail] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showToast, setShowToast] = useState({ type: 0, message: '' });
-  const [email, setEmail] = useState('');
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
+  const [email, setEmail] = useState("");
   const resetToast = () => {
-    setShowToast({ type: 0, message: '' });
-  }
+    setShowToast({ type: 0, message: "" });
+  };
   const forgotContinue = async () => {
     if (!email) {
       setIsEmailExist(false);
@@ -23,20 +29,26 @@ const forgotPassword = () => {
     }
     setIsLoading(true);
     await axios({
-      method: 'post',
-      url: process.env.REACT_APP_SEND_OTP_URL,
+      method: "post",
+      url:
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEV_SEND_OTP_URL
+          : process.env.REACT_APP_PROD_SEND_OTP_URL,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
       data: {
-        email: email
-      }
+        email: email,
+      },
     })
       .then((response) => {
         if (response.status == 200) {
           setIsLoading(false);
-          setShowToast({ type: 1, message: 'OTP Sent successfully !' })
+          setShowToast({ type: 1, message: "OTP Sent successfully !" });
           setTimeout(() => setIsEmailExist(true), 2500);
         }
       })
@@ -45,7 +57,7 @@ const forgotPassword = () => {
         console.log(error);
         setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
       });
-  }
+  };
   if (IsEmailExist) {
     return <ForgotPasswordOTP email={email} />;
   }
@@ -55,14 +67,28 @@ const forgotPassword = () => {
         <div className="circular-loader">
           <CircularProgress />
         </div>
-      ) : (<></>)}
-      <Snackbar className="toastify-class" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showToast.type == 2} autoHideDuration={5000} onClose={resetToast}>
-        <Alert onClose={resetToast} severity="error" sx={{ width: '100%' }}>
+      ) : (
+        <></>
+      )}
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
           {showToast.message}
         </Alert>
       </Snackbar>
-      <Snackbar className="toastify-class" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showToast.type == 1} autoHideDuration={2500} onClose={resetToast}>
-        <Alert onClose={resetToast} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
           {showToast.message}
         </Alert>
       </Snackbar>
@@ -73,7 +99,9 @@ const forgotPassword = () => {
             Enter your registered email id to receive OTP
           </p>
           <input
-            className={`forgot__password__input ${missingForgotEmail ? 'wrong-submit' : ''}`}
+            className={`forgot__password__input ${
+              missingForgotEmail ? "wrong-submit" : ""
+            }`}
             type="email"
             placeholder="Email address"
             value={email}
@@ -81,7 +109,11 @@ const forgotPassword = () => {
           ></input>
 
           <ThemeProvider theme={DarkTheme}>
-            <Button onClick={forgotContinue} className="mui-dark-btn" variant="contained">
+            <Button
+              onClick={forgotContinue}
+              className="mui-dark-btn"
+              variant="contained"
+            >
               Continue
             </Button>
           </ThemeProvider>

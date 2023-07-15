@@ -11,7 +11,10 @@ export const getCarBrandsData = createAsyncThunk(
     const url = "http://localhost:3000/cars-api/make_id";
     const response = await fetch(url, {
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
     });
     const data = await response.json();
@@ -28,12 +31,6 @@ const CarSlice = createSlice({
     },
     toggleBookmark: (state) => {
       state.bookmarkFlag = !state.bookmarkFlag;
-    },
-    carBodyData: (state) => {
-      state.carBodysData;
-    },
-    carBudgetRange: (state) => {
-      state.carBudgetRange;
     },
     authorizeUser: (state) => {
       state.isAuthUser = true;

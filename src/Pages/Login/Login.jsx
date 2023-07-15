@@ -30,10 +30,16 @@ const Login = () => {
     }
     await axios({
       method: "post",
-      url: process.env.REACT_APP_LOGIN_URL,
+      url:
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEV_LOGIN_URL
+          : process.env.REACT_APP_PROD_LOGIN_URL,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
       data: {
         email: email,
@@ -58,7 +64,9 @@ const Login = () => {
   };
   const googleLogin = () => {
     const popup = window.open(
-      process.env.REACT_APP_CALLBACK_URL,
+      process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_DEV_CALLBACK_URL
+        : process.env.REACT_APP_PROD_CALLBACK_URL,
       "popup",
       `popup = true,width=400,height=600,left=${
         screen.width / 2 - 400 / 2 + window.screenX
@@ -72,10 +80,16 @@ const Login = () => {
       clearInterval(checkPopup);
       await axios({
         method: "get",
-        url: process.env.REACT_APP_GOOGLE_LOGIN_URL,
+        url:
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_GOOGLE_LOGIN_URL
+            : process.env.REACT_APP_PROD_GOOGLE_LOGIN_URL,
         withCredentials: true,
         headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+          "Access-Control-Allow-Origin":
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEV_CORS_URL
+              : process.env.REACT_APP_PROD_CORS_URL,
         },
       })
         .then((response) => {
