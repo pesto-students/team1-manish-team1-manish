@@ -5,17 +5,28 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { getCarBrandsData, setCarModelData } from "../../Store/CarStore";
+import { getCarBrandsData } from "../../Store/CarStore";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
 
-  const carYear = useSelector((state) => state.purchasedCarYear);
+  // const carYear = useSelector((state) => state.purchasedCarYear);
   const carBrands = useSelector((state) => {
-    // console.log(state);
     return state.carBrandData.carBrand;
   });
+  const carOwners = useSelector((state) => {
+    return state.carOwnerShip;
+  });
+  const carFuel = useSelector((state) => {
+    return state.carFuelType;
+  });
+  const carRegState = useSelector((state) => {
+    return state.carRegState;
+  });
+
   const [brandEvent, setBrandEvent] = useState({
     showData: carBrands,
     isStateUpdate: false,
@@ -26,47 +37,141 @@ export function SellCarLandingPage() {
     isStateUpdate: false,
     eventChange: "",
   });
-  // const [files, setFiles] = useState(null);
-  // const [brand, setBrand] = useState(null);
-  // const [model, setModel] = useState(null);
-  const [year, setYear] = useState(null);
-  const [variant, setVariant] = useState(null);
+  const [yearEvent, setYearEvent] = useState({
+    showData: [],
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  const [variantEvent, setVariantEvent] = useState({
+    showData: [],
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  const [fuelTypeEvent, setFuelTypeEvent] = useState({
+    showData: carFuel,
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  const [ownerShipEvent, setOwnerShipEvent] = useState({
+    showData: carOwners,
+    isStateUpdate: false,
+    eventChange: "",
+  });
+  const [carRegStateEvent, setCarRegStateEvent] = useState({
+    showData: carRegState,
+    isStateUpdate: false,
+    eventChange: "",
+  });
 
   const handleSellCarSubmit = () => {};
 
-  useEffect(() => {
-    dispatch(getCarBrandsData());
-    let flagBrand = brandEvent.isStateUpdate;
-
-    const getCarModelData = async () => {
-      const url = `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`;
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
-        },
+  const getCarModelData = async () => {
+    const url = `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+    await axios({
+      method: "get",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
+      },
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          let updatedModel = {};
+          updatedModel = { showData: res.data };
+          setModelEvent((res) => ({
+            ...res,
+            ...updatedModel,
+          }));
+        }
       })
-        .then((res) => {
-          if (res.status == 200) {
-            let updatedModel = {};
-            updatedModel = { showData: res.data };
-            setBrandEvent((res) => ({
-              ...res,
-              ...updatedModel,
-            }));
-          }
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    };
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+  const getCarYearData = async () => {
+    const url = `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+    await axios({
+      method: "get",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
+      },
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          let updatedModel = {};
+          updatedModel = { showData: res.data };
+          setYearEvent((res) => ({
+            ...res,
+            ...updatedModel,
+          }));
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+  const getCarVarientData = async () => {
+    const url = `http://localhost:3000/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
+    await axios({
+      method: "get",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
+      },
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          let updatedModel = {};
+          updatedModel = { showData: res.data };
+          setVariantEvent((res) => ({
+            ...res,
+            ...updatedModel,
+          }));
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+  useEffect(() => {
+    let flagBrand = brandEvent.isStateUpdate;
+    let flagModel = modelEvent.isStateUpdate;
+    let flagYear = yearEvent.isStateUpdate;
+    if (!carBrands.length) {
+      dispatch(getCarBrandsData());
+    } else {
+      setBrandEvent((state) => ({
+        ...state,
+        showData: carBrands,
+      }));
+    }
 
     if (flagBrand) {
       getCarModelData();
     }
-    console.log(carBrands);
-  }, []);
+    if (flagModel) {
+      getCarYearData();
+    }
+    if (flagYear) {
+      getCarVarientData();
+    }
+  }, [
+    carBrands,
+    brandEvent.eventChange,
+    modelEvent.eventChange,
+    yearEvent.eventChange,
+    variantEvent.eventChange,
+  ]);
 
   return (
     <div>
@@ -92,48 +197,52 @@ export function SellCarLandingPage() {
                   setEventToHandle={setModelEvent}
                 />
               </div>
-              {/* <div className="car-drop-down-2">
-                <DropDown
-                  selectName="Select Variant"
-                  dataToShow={carVariant}
-                  eventChange={setVariant}
-                />
-
+              <div className="car-drop-down-2">
                 <DropDown
                   selectName="Select Year"
-                  dataToShow={carYear}
-                  eventChange={setYear}
+                  eventToHandle={yearEvent}
+                  setEventToHandle={setYearEvent}
+                />
+                <DropDown
+                  selectName="Select Variant"
+                  eventToHandle={variantEvent}
+                  setEventToHandle={setVariantEvent}
                 />
               </div>
               <div className="car-drop-down-2">
                 <DropDown
                   selectName="Select Fuel Type"
-                  dataToShow={carYear}
-                  eventChange={setYear}
+                  eventToHandle={fuelTypeEvent}
+                  setEventToHandle={setFuelTypeEvent}
                 />
                 <DropDown
                   selectName="Select Ownership"
-                  dataToShow={carYear}
-                  eventChange={setYear}
+                  eventToHandle={ownerShipEvent}
+                  setEventToHandle={setOwnerShipEvent}
                 />
               </div>
               <div className="car-drop-down-2">
                 <DropDown
                   selectName="Select Reg. State"
-                  dataToShow={carYear}
-                  eventChange={setYear}
+                  eventToHandle={carRegStateEvent}
+                  setEventToHandle={setCarRegStateEvent}
                 />
-                <select name="pets" id="pet-select">
+                <TextFieldSizes />
+                {/* <select name="pets" id="pet-select">
                   <option value="">Select Kms Driven</option>
                   <option value="dog">Dog</option>
-                </select>
+                </select> */}
               </div>
               <div className="car-drop-down-2">
                 <select name="pets" id="pet-select">
                   <option value="">Select Car Location</option>
                   <option value="dog">Dog</option>
                 </select>
-              </div> */}
+                <select name="pets" id="pet-select">
+                  <option value="">Select Nearest RTO Office</option>
+                  <option value="dog">Dog</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="upload-img-div">
@@ -199,7 +308,6 @@ export function SellCarLandingPage() {
 
 function DropDown(props) {
   const { selectName, eventToHandle, setEventToHandle } = props;
-  console.log(eventToHandle);
   const handleChange = (event) => {
     let updatedValue = {};
     updatedValue = { eventChange: event.target.value, isStateUpdate: true };
@@ -209,25 +317,6 @@ function DropDown(props) {
       ...updatedValue,
     }));
   };
-
-  useEffect(() => {
-    const getCarVariant = async () => {
-      console.log(brand, model);
-      const url = `http://localhost:3000/cars-api/make_id/${brand}/name/${model}/trim`;
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
-        },
-      })
-        .then((res) => res.data)
-        .then((res) => {
-          console.log(res);
-          dispatch(setCarVariantData(res));
-        });
-    };
-  }, []);
 
   return (
     <FormControl
@@ -251,7 +340,7 @@ function DropDown(props) {
         label={selectName}
         onChange={handleChange}
       >
-        {!eventToHandle
+        {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
               if (selectName === "Select Brand") {
@@ -268,8 +357,8 @@ function DropDown(props) {
                 );
               } else if (selectName === "Select Year") {
                 return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
+                  <MenuItem value={el.year} key={el + Math.random(1, 9)}>
+                    {el.year}
                   </MenuItem>
                 );
               } else if (selectName === "Select Variant") {
@@ -278,9 +367,50 @@ function DropDown(props) {
                     {el.trim}
                   </MenuItem>
                 );
+              } else if (selectName === "Select Fuel Type") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Ownership") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Reg. State") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
               }
             })}
       </Select>
     </FormControl>
+  );
+}
+
+export default function TextFieldSizes() {
+  return (
+    <Box
+      component="form"
+      sx={{
+        width: 283,
+        "& .MuiTextField-root": {},
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
+        <TextField
+          label="Size"
+          id="outlined-size-small"
+          defaultValue=""
+          size="small"
+        />
+      </div>
+    </Box>
   );
 }
