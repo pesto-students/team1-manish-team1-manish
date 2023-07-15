@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
 import RangeSlider from "../../components/BudgetSlider/BudgetSlider";
-import { toggleBookmark, getCarBrandsData, getCarTypeData, getCarOwnershipData, getCarFuelTypeData, brandToggleCheck, ownershipToggleCheck, fuelTypeToggleCheck, typeToggleCheck, searchCarByFilters } from "../../Store/CarStore";
+import { toggleBookmark, getCarBrandsData, getCarTypeData, getCarOwnershipData, getCarFuelTypeData, brandToggleCheck, ownershipToggleCheck, fuelTypeToggleCheck, typeToggleCheck, searchCarByFilters, toggleCarBookmark } from "../../Store/CarStore";
 import "./ShowCar.css";
 import CarDetails from "../CarDetails/CarDetails";
+import { debounce } from "lodash";
 
 export default function ShowCar() {
   const dispatch = useDispatch();
@@ -16,6 +17,10 @@ export default function ShowCar() {
   const [isTypeFilterMinimised, setIsTypeFilterMinimised] = useState(false);
   const [isFuelTypeFilterMinimised, setIsFuelTypeFilterMinimised] = useState(false);
   const [isOwnershipFilterMinimised, setIsOwnershipFilterMinimised] = useState(false);
+  const [brandSearchBarFilter, setBrandSearchBarFilter] = useState('');
+  const [typeSearchBarFilter, setTypeSearchBarFilter] = useState('');
+  const [fuelTypeSearchBarFilter, setFuelTypeSearchBarFilter] = useState('');
+  const [ownershipSearchBarFilter, setOwnershipSearchBarFilter] = useState('');
   const [toggleFilter, setToggleFilter] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const carBrands = useSelector((state) => state.carBrandData.carBrand);
@@ -24,6 +29,24 @@ export default function ShowCar() {
   const carFuelTypes = useSelector((state) => state.carFuelTypeData.carFuelType);
   const buyCarDetail = useSelector((state) => state.buyCarDetails.buyCar);
   const isBookMarked = useSelector((state) => state.bookmarkFlag);
+
+  const updateBrandSearchFilter = (event) => {
+    setBrandSearchBarFilter(event.target.value);
+  }
+  const updateTypeSearchFilter = (event) => {
+    setTypeSearchBarFilter(event.target.value);
+  }
+  const updateFuelTypeSearchFilter = (event) => {
+    setFuelTypeSearchBarFilter(event.target.value);
+  }
+  const updateOwnershipSearchFilter = (event) => {
+    setOwnershipSearchBarFilter(event.target.value);
+  }
+
+  const debouncedUpdateBrandSearchFilter = useCallback(debounce(updateBrandSearchFilter, 500), []);
+  const debouncedUpdateTypeSearchFilter = useCallback(debounce(updateTypeSearchFilter, 500), []);
+  const debouncedUpdateFuelTypeSearchFilter = useCallback(debounce(updateFuelTypeSearchFilter, 500), []);
+  const debouncedUpdateOwnershipSearchFilter = useCallback(debounce(updateOwnershipSearchFilter, 500), []);
 
   const toggleBrandFilter = () => {
     setIsBrandFilterMinimised(value => !value)
@@ -68,7 +91,6 @@ export default function ShowCar() {
       dispatch(searchCarByFilters())
 
   }, []);
-
   if (selectedCar)
     return <CarDetails carId={selectedCar} />
   else
@@ -85,14 +107,36 @@ export default function ShowCar() {
               </button>
             </div>
             <div className={`search-brand ${isBrandFilterMinimised ? 'minimise-filter' : ''}`}>
-              <input type="text" placeholder="eg. Astorn Martin" />
+              <input onChange={debouncedUpdateBrandSearchFilter} type="text" placeholder="eg. Astorn Martin" />
               <img src="/searchIcon.svg" alt="Search Brand" />
             </div>
             <div className={`brand-filters  ${isBrandFilterMinimised ? 'minimise-filter' : ''}`}>
               {!carBrands.length
                 ? ""
                 : carBrands.map((el) => {
-                  return (
+                  if (brandSearchBarFilter.length) {
+                    if (el.brand.toLocaleLowerCase().includes(brandSearchBarFilter.toLocaleLowerCase())) {
+                      return (
+                        <div
+                          className="brand-f1"
+                          key={el.brand + Math.random(0, 1)}
+                        >
+                          <p className="b-filter-title">{el.brand}</p>
+                          <input
+                            checked={el.checked}
+                            onChange={() => {
+                              dispatch(brandToggleCheck(el.brand))
+                              dispatch(searchCarByFilters())
+                            }}
+                            type="checkbox"
+                            name="brand-filter-1"
+                            id="brand-filter-1"
+                          />
+                        </div>
+                      );
+                    }
+                    else return null
+                  } else return (
                     <div
                       className="brand-f1"
                       key={el.brand + Math.random(0, 1)}
@@ -136,12 +180,32 @@ export default function ShowCar() {
               </button>
             </div>
             <div className={`search-brand   ${isTypeFilterMinimised ? 'minimise-filter' : ''}`}>
-              <input type="text" placeholder="eg. SUV, Sedan" />
+              <input onChange={debouncedUpdateTypeSearchFilter} type="text" placeholder="eg. SUV, Sedan" />
               <img src="/searchIcon.svg" alt="Search Brand" />
             </div>
             <div className={`brand-filters   ${isTypeFilterMinimised ? 'minimise-filter' : ''}`}>
               {carTypes.map((el) => {
-                return (
+                if (typeSearchBarFilter.length) {
+                  if (el.type.toLocaleLowerCase().includes(typeSearchBarFilter.toLocaleLowerCase())) {
+                    return (
+                      <div className="brand-f1" key={el.type + Math.random(0, 1)}>
+                        <p className="b-filter-title">{el.type}</p>
+                        <input
+                          checked={el.checked}
+                          onChange={() => {
+                            dispatch(typeToggleCheck(el.type));
+                            dispatch(searchCarByFilters())
+                          }}
+                          type="checkbox"
+                          name="brand-filter-1"
+                          id="brand-filter-1"
+                        />
+                      </div>
+                    );
+                  }
+                  else return null;
+                }
+                else return (
                   <div className="brand-f1" key={el.type + Math.random(0, 1)}>
                     <p className="b-filter-title">{el.type}</p>
                     <input
@@ -169,12 +233,32 @@ export default function ShowCar() {
               </button>
             </div>
             <div className={`search-brand   ${isFuelTypeFilterMinimised ? 'minimise-filter' : ''}`}>
-              <input type="text" placeholder="eg. SUV, Sedan" />
+              <input onChange={debouncedUpdateFuelTypeSearchFilter} type="text" placeholder="eg. SUV, Sedan" />
               <img src="/searchIcon.svg" alt="Search Brand" />
             </div>
             <div className={`brand-filters   ${isFuelTypeFilterMinimised ? 'minimise-filter' : ''}`}>
               {carFuelTypes.map((el) => {
-                return (
+                if (fuelTypeSearchBarFilter.length) {
+                  if (el.fueltype.toLocaleLowerCase().includes(fuelTypeSearchBarFilter.toLocaleLowerCase())) {
+                    return (
+                      <div className="brand-f1" key={el.fueltype + Math.random(0, 1)}>
+                        <p className="b-filter-title">{el.fueltype}</p>
+                        <input
+                          checked={el.checked}
+                          onChange={() => {
+                            dispatch(fuelTypeToggleCheck(el.fueltype))
+                            dispatch(searchCarByFilters())
+                          }}
+                          type="checkbox"
+                          name="brand-filter-1"
+                          id="brand-filter-1"
+                        />
+                      </div>
+                    );
+                  }
+                  else return null
+                }
+                else return (
                   <div className="brand-f1" key={el.fueltype + Math.random(0, 1)}>
                     <p className="b-filter-title">{el.fueltype}</p>
                     <input
@@ -202,12 +286,32 @@ export default function ShowCar() {
               </button>
             </div>
             <div className={`search-brand   ${isOwnershipFilterMinimised ? 'minimise-filter' : ''}`}>
-              <input type="text" placeholder="eg. SUV, Sedan" />
+              <input onChange={debouncedUpdateOwnershipSearchFilter} type="text" placeholder="eg. SUV, Sedan" />
               <img src="/searchIcon.svg" alt="Search Brand" />
             </div>
             <div className={`brand-filters   ${isOwnershipFilterMinimised ? 'minimise-filter' : ''}`}>
               {carOwnerships.map((el) => {
-                return (
+                if (ownershipSearchBarFilter.length) {
+                  if (el.ownership.toLocaleLowerCase().includes(ownershipSearchBarFilter.toLocaleLowerCase())) {
+                    return (
+                      <div className="brand-f1" key={el.ownership + Math.random(0, 1)}>
+                        <p className="b-filter-title">{el.ownership}</p>
+                        <input
+                          checked={el.checked}
+                          onChange={() => {
+                            dispatch(ownershipToggleCheck(el.ownership))
+                            dispatch(searchCarByFilters())
+                          }}
+                          type="checkbox"
+                          name="brand-filter-1"
+                          id="brand-filter-1"
+                        />
+                      </div>
+                    );
+                  }
+                  else return null;
+                }
+                else return (
                   <div className="brand-f1" key={el.ownership + Math.random(0, 1)}>
                     <p className="b-filter-title">{el.ownership}</p>
                     <input
@@ -228,7 +332,7 @@ export default function ShowCar() {
         </div>
         <div className={toggleFilter ? "full-car-page" : "car-show"}>
           <div className="dashboard-bar">
-            <div className="search-car">
+            <div className={`search-car ${toggleFilter ? 'full-screen-search' : ''}`}>
               <input type="text" placeholder="Search Cars" />
               <img src="/searchIcon.svg" alt="Search Brand" />
             </div>
@@ -238,10 +342,6 @@ export default function ShowCar() {
             >
               <FilterAltOutlinedIcon sx={{ color: "#676E8A" }} />
               <p>Filter</p>
-            </button>
-            <button className="list-filter-btn">
-              <p>Sort by: Recommended</p>
-              <FilterListOutlinedIcon sx={{ color: "#676E8A" }} />
             </button>
           </div>
           <div className="show-car-header">
@@ -270,22 +370,23 @@ export default function ShowCar() {
               return (
                 <div className="show-car-card"
                   key={el.id}
-                  onClick={() => { setSelectedCar(el.id) }}
                 >
                   <div className="car-card-header">
                     <div className="car-card-details">
                       <p className="car-card-name">{el.brand + " " + el.model}</p>
                       <p className="car-card-type">{el.type}</p>
                     </div>
-                    <button className="darker-btn" onClick={bookmarkToggle}>
-                      {isBookMarked ? (
+                    <button className="darker-btn" onClick={() => dispatch(toggleCarBookmark(el.brand))}>
+                      {el.bookmarked ? (
                         <Icon icon="iconamoon:bookmark-fill" />
                       ) : (
                         <Icon icon="iconamoon:bookmark-bold" />
                       )}
                     </button>
                   </div>
-                  <div className="car-card-img">
+                  <div className="car-card-img"
+                    onClick={() => { setSelectedCar(el.id) }}
+                  >
                     <img src="/Assets/temp-car-img.svg" alt="Car Image" />
                   </div>
                   <div className="car-card-specs">

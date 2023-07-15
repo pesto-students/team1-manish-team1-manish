@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: space-around;
   overflow-y: auto;
-  position: fixed;
+  position: sticky;
 }
 
 .side-bar::-webkit-scrollbar {
@@ -23,7 +23,7 @@
   height: inherit;
   border: 1px solid #f4f4f4;
   background: #f4f4f4;
-  margin-left: 22vw;
+  /* margin-left: 22vw; */
 }
 
 .full-car-page {
@@ -172,12 +172,16 @@
 .search-car {
   border-radius: 6px;
   background: #fff;
-  width: 63%;
+  width: 45rem;
   justify-content: flex-start;
   display: flex;
   position: relative;
   margin: 1rem 1.5rem;
   align-items: center;
+}
+
+.full-screen-search {
+  margin-left: 30rem;
 }
 
 .search-car>input {
@@ -199,6 +203,7 @@
   border-radius: 6px;
   background: #fff;
   border: none;
+  margin-right: 1.5rem;
   padding: 0.4rem;
   cursor: pointer;
 }
@@ -248,8 +253,8 @@
 }
 
 .applied-filters {
+  display: none;
   max-width: 50%;
-  display: inherit;
   overflow: auto;
   white-space: nowrap;
   height: 40px;
@@ -348,8 +353,7 @@
   font-family: Poppins;
   font-style: normal;
   font-weight: 500;
-  /* width: 139px; */
-  /* height: 35px; */
+  padding: 5px;
   flex-shrink: 0;
 }
 
@@ -368,8 +372,4 @@
 
 .minimise-filter-container {
   height: fit-content;
-}
-
-.App {
-  overflow: hidden !important;
 }

@@ -68,8 +68,7 @@ const Login = () => {
         ? process.env.REACT_APP_DEV_CALLBACK_URL
         : process.env.REACT_APP_PROD_CALLBACK_URL,
       "popup",
-      `popup = true,width=400,height=600,left=${
-        screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -186,8 +185,6 @@ const Login = () => {
           </ThemeProvider>
           <p className="dark-font">Sign In With</p>
           <div className="login-o2 darkest-font">
-            <Icon icon="la:facebook" />
-            <Icon icon="uil:instagram" />
             <Icon onClick={googleLogin} icon="iconoir:google" />
           </div>
           <div className="signup-already">

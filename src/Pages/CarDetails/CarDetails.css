@@ -87,7 +87,7 @@ div.shimmering {
 div.car-photos {
   display: block !important;
   width: 80vw;
-  height: fit-content;
+  height: 40vw;
   margin: 15px 9vw;
   position: relative;
 }

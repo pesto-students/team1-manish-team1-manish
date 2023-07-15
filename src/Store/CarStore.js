@@ -11,6 +11,8 @@ export const searchCarByFilters = createAsyncThunk(
     const state = thunkAPI.getState();
     const url = "http://localhost:3000/cars/search?" + new URLSearchParams({
       brands: state.carBrandData.carBrand.filter(el => el.checked === true).map(el => el.brand),
+      minPrice: state.carBudgetRange[0] * 1000,
+      maxPrice: state.carBudgetRange[1] * 1000,
       type: state.carTypeData.carType.filter(el => el.checked === true).map(el => el.type),
       fuelType: state.carFuelTypeData.carFuelType.filter(el => el.checked === true).map(el => el.fueltype),
       ownership: state.carOwnershipData.carOwnership.filter(el => el.checked === true).map(el => el.ownership)
@@ -173,6 +175,15 @@ const CarSlice = createSlice({
     },
     setFilterCarBudget: (state, action) => {
       state.carBudgetRange = action.payload
+    },
+    toggleCarBookmark: (state, action) => {
+      let updatedCarsData = state.buyCarDetails.buyCar;
+      updatedCarsData = updatedCarsData.map(el => {
+        if (el.brand === action.payload) {
+          return { ...el, bookmarked: !el.bookmarked }
+        } else return el;
+      })
+      state.buyCarDetails.buyCar = updatedCarsData;
     }
   },
   extraReducers: {
@@ -221,7 +232,7 @@ const CarSlice = createSlice({
     },
     [searchCarByFilters.fulfilled]: (state, actions) => {
       state.buyCarDetails.loading = false;
-      state.buyCarDetails.buyCar = actions.payload;
+      state.buyCarDetails.buyCar = actions.payload.map(el => ({ ...el, bookmarked: false }));
     },
     [searchCarByFilters.rejected]: (state, actions) => {
       state.buyCarDetails.loading = true;
@@ -246,7 +257,8 @@ export const {
   ownershipToggleCheck,
   setFilterCarBrand,
   setFilterCarType,
-  setFilterCarBudget
+  setFilterCarBudget,
+  toggleCarBookmark
 } = CarSlice.actions;
 
 const CarStore = configureStore({

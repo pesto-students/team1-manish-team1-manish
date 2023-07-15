@@ -318,12 +318,12 @@ const CarDetails = ({ carId }) => {
                   <div className="content-key">Variant</div>
                   <div className="content-key">RTO</div>
                   <div className="content-key">Engine</div>
-                  <div className="content-key">Year of Manufacture</div>
+                  <div className="content-key">Manufaturing Yr</div>
                 </div>
                 <div className="overview-content">
                   <div className="content-value">{carData.carOverview.Insaurance}</div>
                   <div className="content-value">{carData.carOverview.Variant}</div>
-                  <div className="content-value">GJ14</div>
+                  <div className="content-value">{carData.carOverview.NearestRtoOffice}</div>
                   <div className="content-value">{carData.carOverview.Engine}</div>
                   <div className="content-value">{carData.carOverview.Year}</div>
                 </div>
