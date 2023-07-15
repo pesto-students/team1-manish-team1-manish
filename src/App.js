@@ -22,10 +22,16 @@ const App = () => {
     const autoLogin = async () => {
       await axios({
         method: "get",
-        url: process.env.REACT_APP_GOOGLE_LOGIN_URL,
+        url:
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_GOOGLE_LOGIN_URL
+            : process.env.REACT_APP_PROD_GOOGLE_LOGIN_URL,
         withCredentials: true,
         headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+          "Access-Control-Allow-Origin":
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEV_CORS_URL
+              : process.env.REACT_APP_PROD_CORS_URL,
         },
       })
         .then((response) => {

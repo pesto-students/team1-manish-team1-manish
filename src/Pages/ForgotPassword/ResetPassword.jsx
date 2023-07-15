@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import SuccessPage from "./SuccessPage";
 import axios from "axios";
-import { Alert, Button, CircularProgress, Snackbar, ThemeProvider } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Snackbar,
+  ThemeProvider,
+} from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
 import { useNavigate } from "react-router";
 
 const ConfirmPassword = ({ email }) => {
   const [isNewPasswordSet, setIsNewPasswordSet] = useState(false);
-  const [password, setPassword] = useState('');
-  const [cpassword, setCPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showToast, setShowToast] = useState({ type: 0, message: '' });
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const [passMissMatch, setPassMissMatch] = useState(false);
   const navigate = useNavigate();
 
   const resetToast = () => {
-    setShowToast({ type: 0, message: '' });
-  }
+    setShowToast({ type: 0, message: "" });
+  };
 
   const resetPassApiCall = async () => {
-    if ((password !== cpassword) && cpassword.length > 0) {
+    if (password !== cpassword && cpassword.length > 0) {
       if (!passMissMatch) {
         setPassMissMatch(true);
         setTimeout(() => setPassMissMatch(false), 2500);
@@ -28,28 +34,33 @@ const ConfirmPassword = ({ email }) => {
     }
     setIsLoading(true);
     await axios({
-      method: 'post',
-      url: process.env.REACT_APP_RESET_PASSWORD_URL,
+      method: "post",
+      url:
+        process.env.NODE_ENV === "development"
+          ? process.env.REACT_APP_DEV_RESET_PASSWORD_URL
+          : process.env.REACT_APP_PROD_RESET_PASSWORD_URL,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
       data: {
         email: email,
-        password: password
-      }
+        password: password,
+      },
     })
       .then((response) => {
         if (response.status == 200) {
           setIsLoading(false);
-          setShowToast({ type: 1, message: 'Password successfully reset !' })
+          setShowToast({ type: 1, message: "Password successfully reset !" });
           setTimeout(() => {
             setIsNewPasswordSet(true);
-            navigate('/login');
+            navigate("/login");
           }, 2500);
           // setIsNewPasswordSet(true);
           // setTimeout(() => setIsNewPasswordSet(false), 2500);
-
         }
       })
       .catch((error) => {
@@ -57,7 +68,7 @@ const ConfirmPassword = ({ email }) => {
         console.log(error);
         setShowToast({ type: 2, message: error.response.data.message });
       });
-  }
+  };
 
   return (
     <>
@@ -65,19 +76,35 @@ const ConfirmPassword = ({ email }) => {
         <div className="circular-loader">
           <CircularProgress />
         </div>
-      ) : (<></>)}
+      ) : (
+        <></>
+      )}
       {isNewPasswordSet ? (
         <div className="pass-reset-success">
           <SuccessPage />
         </div>
-      ) : (<></>)}
-      <Snackbar className="toastify-class" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showToast.type == 2} autoHideDuration={5000} onClose={resetToast}>
-        <Alert onClose={resetToast} severity="error" sx={{ width: '100%' }}>
+      ) : (
+        <></>
+      )}
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
           {showToast.message}
         </Alert>
       </Snackbar>
-      <Snackbar className="toastify-class" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showToast.type == 1} autoHideDuration={2500} onClose={resetToast}>
-        <Alert onClose={resetToast} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
           {showToast.message}
         </Alert>
       </Snackbar>
@@ -94,22 +121,34 @@ const ConfirmPassword = ({ email }) => {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
             <input
-              className={`forgot__password__input--confirm ${(password !== cpassword) && cpassword.length > 0 ? "wrong-password-border" : ""}`}
+              className={`forgot__password__input--confirm ${
+                password !== cpassword && cpassword.length > 0
+                  ? "wrong-password-border"
+                  : ""
+              }`}
               type="password"
               placeholder="Confirm New password again"
               value={cpassword}
               onChange={(e) => setCPassword(e.target.value)}
             ></input>
           </div>
-          {(password !== cpassword) && cpassword.length > 0 ? (
-            <div className={`wrong-password-message ${passMissMatch ? 'wrong-password-submit' : ''}`}>
+          {password !== cpassword && cpassword.length > 0 ? (
+            <div
+              className={`wrong-password-message ${
+                passMissMatch ? "wrong-password-submit" : ""
+              }`}
+            >
               <span>Passwords does not match</span>
             </div>
           ) : (
             <></>
           )}
           <ThemeProvider theme={DarkTheme}>
-            <Button onClick={resetPassApiCall} className="mui-dark-btn" variant="contained">
+            <Button
+              onClick={resetPassApiCall}
+              className="mui-dark-btn"
+              variant="contained"
+            >
               Confirm
             </Button>
           </ThemeProvider>

@@ -238,7 +238,6 @@
 .enter-sell-car-detail {
   box-sizing: border-box;
   width: 53%;
-  height: 391px;
   background: #ffffff;
   border: 1px solid #d0c6c6;
   border-radius: 15px;
@@ -248,7 +247,6 @@
 .upload-img-div {
   box-sizing: border-box;
   width: 36%;
-  height: 391px;
   background: #ffffff;
   border: 1px solid #c7cbd3;
   border-radius: 15px;

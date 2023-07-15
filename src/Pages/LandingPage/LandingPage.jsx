@@ -5,11 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  togglePage,
-  setCarModelData,
-  setBuyCarDetails,
-} from "../../Store/CarStore";
+import { togglePage, setBuyCarDetails } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
 import "./LandingPage.css";
@@ -36,12 +32,18 @@ const LandingPage = () => {
   const flagPage = useSelector((state) => state.flag);
 
   const handleCarSearch = async () => {
-    const url = `http://localhost:3000/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`;
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`
+        : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`;
     await axios({
       method: "get",
       url: url,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -62,12 +64,18 @@ const LandingPage = () => {
     let flagBrand = brandEvent.isStateUpdate;
 
     const getBrandData = async () => {
-      const url = `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}`;
+      const url =
+        process.env.NODE_ENV === "development"
+          ? `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}`
+          : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}`;
       await axios({
         method: "get",
         url: url,
         headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+          "Access-Control-Allow-Origin":
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEV_CORS_URL
+              : process.env.REACT_APP_PROD_CORS_URL,
         },
       })
         .then((res) => {
@@ -86,13 +94,19 @@ const LandingPage = () => {
         });
     };
     const getCarType = async () => {
-      const url = `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}/types/${brandEvent.eventChange}`;
+      const url =
+        process.env.NODE_ENV === "development"
+          ? `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}/types/${brandEvent.eventChange}`
+          : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}/types/${brandEvent.eventChange}`;
 
       await axios({
         method: "get",
         url: url,
         headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+          "Access-Control-Allow-Origin":
+            process.env.NODE_ENV === "development"
+              ? process.env.REACT_APP_DEV_CORS_URL
+              : process.env.REACT_APP_PROD_CORS_URL,
         },
       })
         .then((res) => {
@@ -237,8 +251,6 @@ const LandingPage = () => {
 
 function DropDown(props) {
   const { selectName, eventToHandle, setEventToHandle } = props;
-  const dispatch = useDispatch();
-
   const handleChange = (event) => {
     let updatedValue = {};
     updatedValue = { eventChange: event.target.value, isStateUpdate: true };
