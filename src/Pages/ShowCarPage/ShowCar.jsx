@@ -153,6 +153,7 @@ export default function ShowCar() {
 
     return () => {
       dispatch(resetShowCarDetails());
+
     }
   }, []);
   if (selectedCar)
