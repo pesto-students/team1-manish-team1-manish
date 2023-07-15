@@ -5,7 +5,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
 import RangeSlider from "../../components/BudgetSlider/BudgetSlider";
-import { getCarBrandsData, getCarTypeData, getCarOwnershipData, getCarFuelTypeData, brandToggleCheck, ownershipToggleCheck, fuelTypeToggleCheck, typeToggleCheck, searchCarByFilters, toggleCarBookmark } from "../../Store/CarStore";
+import { getCarBrandsData, getCarTypeData, getCarOwnershipData, getCarFuelTypeData, brandToggleCheck, ownershipToggleCheck, fuelTypeToggleCheck, typeToggleCheck, searchCarByFilters, toggleCarBookmark, resetShowCarDetails } from "../../Store/CarStore";
 import "./ShowCar.css";
 import CarDetails from "../CarDetails/CarDetails";
 import { debounce } from "lodash";
@@ -151,6 +151,9 @@ export default function ShowCar() {
     if (carBrands && carTypes && carOwnerships && carFuelTypes && !buyCarDetail.length)
       dispatch(searchCarByFilters())
 
+    return () => {
+      dispatch(resetShowCarDetails());
+    }
   }, []);
   if (selectedCar)
     return <CarDetails carId={selectedCar} />
