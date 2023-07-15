@@ -101,7 +101,6 @@ const CarDetails = ({ carId }) => {
   }
 
   const removeBookmark = async () => {
-    console.log(carId);
     await axios({
       method: "delete",
       url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,

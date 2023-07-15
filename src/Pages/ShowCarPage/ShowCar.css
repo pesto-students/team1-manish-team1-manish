@@ -184,6 +184,10 @@
   margin-left: 30rem;
 }
 
+.half-screen-search {
+  margin-left: 15rem;
+}
+
 .search-car>input {
   width: 100%;
   border-radius: 6px;
