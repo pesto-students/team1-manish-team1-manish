@@ -13,7 +13,9 @@ import "./LandingPage.css";
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
 
-  // const carYear = useSelector((state) => state.purchasedCarYear);
+  const userDetail = useSelector((state) => {
+    return state.userDetails;
+  });
   const carBrands = useSelector((state) => {
     return state.carBrandData.carBrand;
   });
@@ -63,7 +65,66 @@ export function SellCarLandingPage() {
     eventChange: "",
   });
 
-  const handleSellCarSubmit = () => {};
+  const [totalKMSDriven, setTotalKMSDriven] = useState(0);
+  const [carPinCode, setCarPinCode] = useState("000000");
+  const [nearRTOoffice, setnearRTOoffice] = useState("");
+  const [files, setFiles] = useState([]);
+  const [image, setImage] = useState({ array: [] });
+  const [selectedCarData, setSelectedCarData] = useState();
+
+  const handleSellCarSubmit = async () => {
+    const sellCarData = {
+      brand: brandEvent.eventChange,
+      year: yearEvent.eventChange,
+      model: modelEvent.eventChange,
+      fuelType: fuelTypeEvent.eventChange,
+      fuelCapacity: selectedCarData[0].fuel_cap_l,
+      registrationYear: yearEvent.eventChange,
+      engine: selectedCarData[0].engine_cc,
+      variant: variantEvent.eventChange,
+      ownership: ownerShipEvent.eventChange,
+      kmDriven: totalKMSDriven,
+      transmission: selectedCarData[0].transmission_type,
+      transmissionShort: selectedCarData[0]?.transmission_type?.substring(0, 5),
+      insurance: "NA",
+      pinCode: carPinCode,
+      registrationState: carRegStateEvent.eventChange,
+      city: "New Delhi",
+      registrationNumber: "BR01CN3473",
+      sellerId: userDetail.id,
+      buyerId: null,
+      nearestRtoOffice: nearRTOoffice,
+      price: Math.ceil(Math.random() * (50000 - 5000) + 5000),
+      type: selectedCarData[0].body,
+      tags: ["Best Sellar"],
+      images: image.array,
+      carApiId: selectedCarData[0].id,
+    };
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars/"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars/";
+
+    await axios({
+      method: "post",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
+      },
+      data: sellCarData,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setSelectedCarData(res.data);
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
 
   const getCarModelData = async () => {
     const url =
@@ -126,7 +187,7 @@ export function SellCarLandingPage() {
   const getCarVarientData = async () => {
     const url =
       process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
+        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
         : `https://car-bazar-backend-pesto-team.vercel.app/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
     await axios({
       method: "get",
@@ -152,6 +213,61 @@ export function SellCarLandingPage() {
         console.log(res);
       });
   };
+  const getSelectedCarDetail = async () => {
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`
+        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`;
+
+    await axios({
+      method: "get",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
+      },
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setSelectedCarData(res.data);
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+
+  const handleUpload = async () => {
+    if (!files) {
+      return;
+    }
+    for (let i = 0; i < files.length; i++) {
+      const formData = new FormData();
+      formData.append("file", files[i]);
+      formData.append("upload_preset", "car-image");
+      formData.append("cloud_name", "dlbeskesi");
+      const url = `https://api.cloudinary.com/v1_1/dlbeskesi/image/upload`;
+
+      await axios
+        .post(url, formData, {
+          onUploadProgress: (ProgressEvent) => {
+            console.log(ProgressEvent);
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          const imageUrl = data.secure_url;
+          let specficObjectInArray = image.array;
+          specficObjectInArray.push(imageUrl);
+          const newObj = { ...image, specficObjectInArray };
+          setImage(newObj);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
   useEffect(() => {
     let flagBrand = brandEvent.isStateUpdate;
     let flagModel = modelEvent.isStateUpdate;
@@ -174,12 +290,16 @@ export function SellCarLandingPage() {
     if (flagYear) {
       getCarVarientData();
     }
+    if (flagBrand && flagModel && variantEvent.isStateUpdate) {
+      getSelectedCarDetail();
+    }
   }, [
     carBrands,
     brandEvent.eventChange,
     modelEvent.eventChange,
     yearEvent.eventChange,
     variantEvent.eventChange,
+    image,
   ]);
 
   return (
@@ -224,10 +344,9 @@ export function SellCarLandingPage() {
                   eventToHandle={fuelTypeEvent}
                   setEventToHandle={setFuelTypeEvent}
                 />
-                <DropDown
-                  selectName="Select Ownership"
-                  eventToHandle={ownerShipEvent}
-                  setEventToHandle={setOwnerShipEvent}
+                <TextFieldSizes
+                  textName="Kms Driven"
+                  inputValue={setTotalKMSDriven}
                 />
               </div>
               <div className="car-drop-down-2">
@@ -236,21 +355,21 @@ export function SellCarLandingPage() {
                   eventToHandle={carRegStateEvent}
                   setEventToHandle={setCarRegStateEvent}
                 />
-                <TextFieldSizes />
-                {/* <select name="pets" id="pet-select">
-                  <option value="">Select Kms Driven</option>
-                  <option value="dog">Dog</option>
-                </select> */}
+                <TextFieldSizes
+                  textName="Car Location (Pincode)"
+                  inputValue={setCarPinCode}
+                />
               </div>
               <div className="car-drop-down-2">
-                <select name="pets" id="pet-select">
-                  <option value="">Select Car Location</option>
-                  <option value="dog">Dog</option>
-                </select>
-                <select name="pets" id="pet-select">
-                  <option value="">Select Nearest RTO Office</option>
-                  <option value="dog">Dog</option>
-                </select>
+                <TextFieldSizes
+                  textName="Nearest RTO Office"
+                  inputValue={setnearRTOoffice}
+                />
+                <DropDown
+                  selectName="Select Ownership"
+                  eventToHandle={ownerShipEvent}
+                  setEventToHandle={setOwnerShipEvent}
+                />
               </div>
             </div>
           </div>
@@ -259,10 +378,9 @@ export function SellCarLandingPage() {
               type="file"
               id="file-upload"
               multiple
-              onChange={(event) => {
-                setFiles(event.target.files);
-              }}
+              onChange={(event) => setFiles(event.target.files)}
             />
+            <button onClick={handleUpload}>Upload</button>
           </div>
         </div>
         <div className="submit-btn">
@@ -401,23 +519,35 @@ function DropDown(props) {
   );
 }
 
-export default function TextFieldSizes() {
+export default function TextFieldSizes(props) {
+  const { textName, inputValue } = props;
   return (
     <Box
       component="form"
       sx={{
         width: 283,
         "& .MuiTextField-root": {},
+        "& .css-1u3bzj6-MuiFormControl-root-MuiTextField-root": {
+          minWidth: "283px",
+        },
+        "& .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root": {
+          background: "#eaf2ff",
+          border: "1px solid #d7e0f2",
+          color: "#7b86b3",
+        },
       }}
       noValidate
       autoComplete="off"
     >
       <div>
         <TextField
-          label="Size"
+          label={textName}
           id="outlined-size-small"
           defaultValue=""
           size="small"
+          onChange={(e) => {
+            inputValue(e.target.value);
+          }}
         />
       </div>
     </Box>
