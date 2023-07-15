@@ -69,7 +69,7 @@ const Register = () => {
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message });
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
       });
   };
   const googleLogin = () => {
@@ -103,8 +103,8 @@ const Register = () => {
         },
       })
         .then((response) => {
-          if (response.status == 200) {
-            setShowToast({ type: 1, message: "Authentication Successfull!" });
+          if (response.status == 201) {
+            setShowToast({ type: 1, message: 'Authentication Successfull!' })
             setTimeout(() => {
               dispatch(authorizeUser());
               dispatch(setUserDetails(response.data));
@@ -115,7 +115,7 @@ const Register = () => {
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
           console.log(error);
-          setShowToast({ type: 2, message: error.response.data.message });
+          setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
         });
       setIsLoading(false);
     }, 1000);

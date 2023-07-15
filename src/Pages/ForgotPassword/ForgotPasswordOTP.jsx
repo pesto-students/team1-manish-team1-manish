@@ -106,7 +106,7 @@ const ForgotPasswordOTP = ({ email }) => {
       .catch((error) => {
         setIsLoading(false);
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message });
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
       });
   };
 
@@ -144,7 +144,7 @@ const ForgotPasswordOTP = ({ email }) => {
       .catch((error) => {
         setIsLoading(false);
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message });
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
       });
   };
 

@@ -2,37 +2,40 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./CarDetails.css";
-import {
-  CarDetailsData,
-  CarFeatures,
-  CarSpecifications,
-} from "./DummyCarDetailsData";
+// import { CarDetailsData, CarFeatures, CarSpecifications } from "./DummyCarDetailsData";
 import { Icon } from "@iconify/react";
 import { useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleBookmark } from "../../Store/CarStore";
 import axios from "axios";
+import { Alert, Snackbar } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const CarDetails = ({ carId }) => {
+  const userId = useSelector((state) => state.userDetails?.id);
   const [carData, setCarData] = useState(null);
-  // const [isBookMarked, setIsBookMarked] = useState(false);
+  const [isBookMarked, setIsBookMarked] = useState(false);
+  const [isBookMarkSet, setIsBookMarkSet] = useState(false);
   const [isImageFading, setIsImageFading] = useState([0, true]);
   const [moreOverviewToggle, setMoreOverviewToggle] = useState(false);
   const [moreFeatureToggle, setMoreFeatureToggle] = useState(false);
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(null);
-  const isBookMarked = useSelector((state) => state.bookmarkFlag);
-  const dispatch = useDispatch();
-
-  const isAuthorized = useSelector((state) => state.isAuthUser);
-  console.log(isAuthorized);
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
+  const resetToast = () => {
+    setShowToast({ type: 0, message: "" });
+  };
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
-    dispatch(toggleBookmark());
+    if (isBookMarked) {
+      removeBookmark();
+    }
+    else {
+      addBookmark();
+    }
+    setIsBookMarked((value) => !value);
   };
   const manualNextImage = () => {
     clearTimeout(timeOutId.current);
-    if (isImageFading[0] > carData.Images.length - 2) {
+    if (isImageFading[0] > carData.carOverview.Images.length - 2) {
       setIsImageFading([0, false]);
     } else {
       setIsImageFading((value) => [value[0] + 1, false]);
@@ -41,27 +44,124 @@ const CarDetails = ({ carId }) => {
   const manualPrevImage = () => {
     clearTimeout(timeOutId.current);
     if (isImageFading[0] < 1) {
-      setIsImageFading([carData.Images.length - 1, false]);
+      setIsImageFading([carData.carOverview.Images.length - 1, false]);
     } else {
       setIsImageFading((value) => [value[0] - 1, false]);
     }
   };
+
+  const getBookmark = async () => {
+    await axios({
+      method: "get",
+      url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      }
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          if (response.data.bookmark_ids) {
+            setIsBookMarked(response.data.bookmark_ids.includes(`${carId}`) ? true : false);
+          }
+          else {
+            setIsBookMarked(false)
+          }
+        }
+      })
+      // Catching and returning error message if the specified place is invalid.
+      .catch((error) => {
+        console.log(error);
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+      });
+  }
+
+  const addBookmark = async () => {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      },
+      data: {
+        bookmarkId: carId
+      }
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          setShowToast({ type: 1, message: 'Car added to the wishlist !' });
+        }
+      })
+      // Catching and returning error message if the specified place is invalid.
+      .catch((error) => {
+        console.log(error);
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+      });
+  }
+
+  const removeBookmark = async () => {
+    console.log(carId);
+    await axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      },
+      data: {
+        bookmarkId: `${carId}`
+      }
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          setShowToast({ type: 1, message: 'Car removed from the wishlist !' });
+        }
+      })
+      // Catching and returning error message if the specified place is invalid.
+      .catch((error) => {
+        console.log(error);
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+      });
+  }
+
+  const fetchCarDetails = async () => {
+    await axios({
+      method: "get",
+      url: `${process.env.REACT_APP_CAR_DETAILS_URL}/${carId}`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      }
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          setCarData(response.data);
+        }
+      })
+      // Catching and returning error message if the specified place is invalid.
+      .catch((error) => {
+        console.log(error);
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+      });
+  }
 
   useEffect(() => {
     if (timeOutId.current) {
       clearTimeout(timeOutId.current);
       timeOutId.current = null;
     }
+    if (userId && !isBookMarkSet) {
+      getBookmark();
+      setIsBookMarkSet(true);
+    }
     if (!carData) {
       //Backend API call for fetching carDetails
-      console.log(carId);
-      setTimeout(() => {
-        setCarData(CarDetailsData[carId]);
-      }, 2000);
+      fetchCarDetails()
     } else {
       if (!timeOutId.current) {
         timeOutId.current = setTimeout(() => {
-          if (isImageFading[0] > carData.Images.length - 2) {
+          if (isImageFading[0] > carData.carOverview.Images.length - 2) {
             setIsImageFading([0, !isImageFading[1]]);
           } else {
             setIsImageFading((value) => [value[0] + 1, !value[1]]);
@@ -74,10 +174,7 @@ const CarDetails = ({ carId }) => {
     const updateScrollDirection = () => {
       const scrollY = window.scrollY;
       const direction = scrollY > lastScrollY ? "down" : "up";
-      if (
-        direction !== scrollDirection &&
-        (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)
-      ) {
+      if (direction !== scrollDirection && (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)) {
         setScrollDirection(direction);
       }
       lastScrollY = scrollY > 0 ? scrollY : 0;
@@ -85,10 +182,32 @@ const CarDetails = ({ carId }) => {
     window.addEventListener("scroll", updateScrollDirection); // add event listener
     return () => {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
-    };
-  }, [carData, isImageFading, scrollDirection]);
+    }
+  }, [carData, isImageFading, scrollDirection, userId, isBookMarkSet]);
   return (
     <>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
       <div id="style-1" className="car-details">
         <div className="car-preview">
           {!carData ? (
@@ -106,17 +225,17 @@ const CarDetails = ({ carId }) => {
                 <div className="car-description darker-font">
                   <div className="car-name">
                     <p className="">
-                      {carData.Year} {carData.Brand} {carData.Model}{" "}
-                      {carData.FualCapacity}L {carData.Type} {carData.Variant}{" "}
-                      {carData.TransmissionShort}
+                      {carData.carOverview.Year} {carData.carOverview.Brand} {carData.carOverview.Model}{" "}
+                      {carData.carOverview.FualCapacity}L {carData.carOverview.Type} {carData.carOverview.Variant}{" "}
+                      {carData.carOverview.TransmissionShort}
                     </p>
                   </div>
                   <div className="car-highlights">
                     <ul>
-                      <li>{carData.KmDriven}</li>
-                      <li>{carData.FualType}</li>
-                      <li>{carData.Ownership}</li>
-                      <li>Rs. {carData.Price / 100000} Lakh</li>
+                      <li>{carData.carOverview.KmDriven}</li>
+                      <li>{carData.carOverview.FualType}</li>
+                      <li>{carData.carOverview.Ownership}</li>
+                      <li>Rs. {carData.carOverview.Price / 100000} Lakh</li>
                     </ul>
                   </div>
                 </div>
@@ -128,8 +247,10 @@ const CarDetails = ({ carId }) => {
                       <Icon icon="iconamoon:bookmark-bold" />
                     )}
                   </button>
-                  <button className="darker-btn">
-                    <p>View Seller Details</p>
+                  <button
+                    className="darker-btn"
+                  >
+                    <p>BUY</p>
                   </button>
                 </div>
               </div>
@@ -142,7 +263,7 @@ const CarDetails = ({ carId }) => {
                 </div>
                 <img
                   className={isImageFading[1] ? "easeload" : ""}
-                  src={carData.Images[isImageFading[0]]}
+                  src={carData.carOverview.Images[isImageFading[0]]}
                 />
               </div>
             </>
@@ -185,12 +306,12 @@ const CarDetails = ({ carId }) => {
                 </div>
                 <div className="overview-content">
                   <div className="content-value">
-                    {carData.RegistrationYear}
+                    {carData.carOverview.RegistrationYear}
                   </div>
-                  <div className="content-value">{carData.FualType}</div>
-                  <div className="content-value">{carData.KmDriven}</div>
-                  <div className="content-value">{carData.Ownership}</div>
-                  <div className="content-value">{carData.Transmission}</div>
+                  <div className="content-value">{carData.carOverview.FualType}</div>
+                  <div className="content-value">{carData.carOverview.KmDriven}</div>
+                  <div className="content-value">{carData.carOverview.Ownership}</div>
+                  <div className="content-value">{carData.carOverview.Transmission}</div>
                 </div>
                 <div className="overview-content">
                   <div className="content-key">Insaurance</div>
@@ -200,11 +321,11 @@ const CarDetails = ({ carId }) => {
                   <div className="content-key">Year of Manufacture</div>
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">{carData.Insaurance}</div>
-                  <div className="content-value">{carData.Variant}</div>
+                  <div className="content-value">{carData.carOverview.Insaurance}</div>
+                  <div className="content-value">{carData.carOverview.Variant}</div>
                   <div className="content-value">GJ14</div>
-                  <div className="content-value">{carData.Engine}</div>
-                  <div className="content-value">{carData.Year}</div>
+                  <div className="content-value">{carData.carOverview.Engine}</div>
+                  <div className="content-value">{carData.carOverview.Year}</div>
                 </div>
               </div>
               <div className="info-content-mobile">
@@ -217,12 +338,12 @@ const CarDetails = ({ carId }) => {
                 </div>
                 <div className="overview-content">
                   <div className="content-value">
-                    {carData.RegistrationYear}
+                    {carData.carOverview.RegistrationYear}
                   </div>
-                  <div className="content-value">{carData.FualType}</div>
-                  <div className="content-value">{carData.KmDriven}</div>
-                  <div className="content-value">{carData.Ownership}</div>
-                  <div className="content-value">{carData.Transmission}</div>
+                  <div className="content-value">{carData.carOverview.FualType}</div>
+                  <div className="content-value">{carData.carOverview.KmDriven}</div>
+                  <div className="content-value">{carData.carOverview.Ownership}</div>
+                  <div className="content-value">{carData.carOverview.Transmission}</div>
                 </div>
               </div>
               {moreOverviewToggle ? (
@@ -235,73 +356,35 @@ const CarDetails = ({ carId }) => {
                     <div className="content-key">Yr. of Mfg</div>
                   </div>
                   <div className="overview-content">
-                    <div className="content-value">{carData.Insaurance}</div>
-                    <div className="content-value">{carData.Variant}</div>
+                    <div className="content-value">{carData.carOverview.Insaurance}</div>
+                    <div className="content-value">{carData.carOverview.Variant}</div>
                     <div className="content-value">GJ14</div>
-                    <div className="content-value">{carData.Engine}</div>
-                    <div className="content-value">{carData.Year}</div>
+                    <div className="content-value">{carData.carOverview.Engine}</div>
+                    <div className="content-value">{carData.carOverview.Year}</div>
                   </div>
                 </div>
-              ) : (
-                <></>
-              )}
-              <h3
-                onClick={() => {
-                  setMoreOverviewToggle((value) => !value);
-                }}
-                className="div-header mobile pointer"
-              >
-                View More{" "}
-                <Icon
-                  className={moreOverviewToggle ? "contract" : "expand"}
-                  icon="ic:round-greater-than"
-                />
-              </h3>
+              ) : (<></>)}
+              <h3 onClick={() => { setMoreOverviewToggle(value => !value) }} className="div-header mobile pointer">View More <Icon className={moreOverviewToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
             <div className="info-body">
               <h3 className="div-header">Features</h3>
               <div className="feature-content">
-                {Object.keys(CarFeatures[0]).map((key, index) => {
-                  return index > 0 && index <= 6 ? (
+                {Object.keys(carData.carFeatures).map((key, index) => {
+                  return (index > 0 && index <= 6 ? (
                     <div className="content-key" key={crypto.randomUUID()}>
-                      {CarFeatures[0][key] ? (
-                        <Icon className="tick-icon" icon="charm:tick" />
-                      ) : (
-                        <Icon className="cross-icon" icon="charm:cross" />
-                      )}{" "}
-                      {key}
+                      {carData.carFeatures[key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
                     </div>
-                  ) : (
-                    <></>
-                  );
+                  ) : <></>)
                 })}
-                {Object.keys(CarFeatures[0]).map((key, index) => {
-                  return index > 6 && moreFeatureToggle ? (
+                {Object.keys(carData.carFeatures).map((key, index) => {
+                  return (index > 6 && moreFeatureToggle ? (
                     <div className="content-key" key={crypto.randomUUID()}>
-                      {CarFeatures[0][key] ? (
-                        <Icon className="tick-icon" icon="charm:tick" />
-                      ) : (
-                        <Icon className="cross-icon" icon="charm:cross" />
-                      )}{" "}
-                      {key}
+                      {carData.carFeatures[key] ? <Icon className="tick-icon" icon="charm:tick" /> : <Icon className="cross-icon" icon="charm:cross" />} {key}
                     </div>
-                  ) : (
-                    <></>
-                  );
+                  ) : <></>)
                 })}
               </div>
-              <h3
-                onClick={() => {
-                  setMoreFeatureToggle((value) => !value);
-                }}
-                className="div-header pointer"
-              >
-                View all Features{" "}
-                <Icon
-                  className={moreFeatureToggle ? "contract" : "expand"}
-                  icon="ic:round-greater-than"
-                />
-              </h3>
+              <h3 onClick={() => { setMoreFeatureToggle(value => !value) }} className="div-header pointer">View all Features <Icon className={moreFeatureToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
             <div className="info-body">
               <h3 className="div-header">Specifications</h3>
@@ -317,38 +400,20 @@ const CarDetails = ({ carId }) => {
                       <div className="content-key">Max Power (rpm)</div>
                       <div className="content-key">Emission Standard</div>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : (<></>)}
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">
-                    {CarSpecifications["Mileage"]}
-                  </div>
-                  <div className="content-value">
-                    {CarSpecifications["Torque"]}
-                  </div>
-                  <div className="content-value">
-                    {CarSpecifications["Brake Type (rear)"]}
-                  </div>
+                  <div className="content-value">{carData.carSpecifications["Mileage"]}</div>
+                  <div className="content-value">{carData.carSpecifications["Torque"]}</div>
+                  <div className="content-value">{carData.carSpecifications["Brake Type (rear)"]}</div>
                   {moreSpecificationToggle ? (
                     <>
-                      <div className="content-value">
-                        {CarSpecifications["Brake Type (front)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Body Type"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Max Power (rpm)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Emission Standard"]}
-                      </div>
+                      <div className="content-value">{carData.carSpecifications["Brake Type (front)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Body Type"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Max Power (rpm)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Emission Standard"]}</div>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : (<></>)}
                 </div>
                 <div className="overview-content">
                   <div className="content-key">Max Power (bhp)</div>
@@ -361,38 +426,20 @@ const CarDetails = ({ carId }) => {
                       <div className="content-key">Fuel Tank Capacity</div>
                       <div className="content-key">Boot Space (Litres)</div>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : (<></>)}
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">
-                    {CarSpecifications["Max Power (bhp)"]}
-                  </div>
-                  <div className="content-value">
-                    {CarSpecifications["Engine"]}
-                  </div>
-                  <div className="content-value">
-                    {CarSpecifications["Seats"]}
-                  </div>
+                  <div className="content-value">{carData.carSpecifications["Max Power (bhp)"]}</div>
+                  <div className="content-value">{carData.carSpecifications["Engine"]}</div>
+                  <div className="content-value">{carData.carSpecifications["Seats"]}</div>
                   {moreSpecificationToggle ? (
                     <>
-                      <div className="content-value">
-                        {CarSpecifications["Displacement (cc)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Cylinders"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Fuel Tank Capacity"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Boot Space (Litres)"]}
-                      </div>
+                      <div className="content-value">{carData.carSpecifications["Displacement (cc)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Cylinders"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Fuel Tank Capacity"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Boot Space (Litres)"]}</div>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : (<></>)}
                 </div>
               </div>
               <div className="info-content-mobile">
@@ -414,98 +461,42 @@ const CarDetails = ({ carId }) => {
                       <div className="content-key">Fuel Tank CAP</div>
                       <div className="content-key">Boot Space(L)</div>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : (<></>)}
                 </div>
                 <div className="overview-content">
-                  <div className="content-value">
-                    {CarSpecifications["Mileage"]}
-                  </div>
-                  <div className="content-value">
-                    {CarSpecifications["Torque"]}
-                  </div>
-                  <div className="content-value">
-                    {CarSpecifications["Brake Type (rear)"]}
-                  </div>
+                  <div className="content-value">{carData.carSpecifications["Mileage"]}</div>
+                  <div className="content-value">{carData.carSpecifications["Torque"]}</div>
+                  <div className="content-value">{carData.carSpecifications["Brake Type (rear)"]}</div>
                   {moreSpecificationToggle ? (
                     <>
-                      <div className="content-value">
-                        {CarSpecifications["Brake Type (front)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Body Type"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Max Power (rpm)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Emission Standard"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Max Power (bhp)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Engine"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Seats"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Displacement (cc)"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Cylinders"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Fuel Tank Capacity"]}
-                      </div>
-                      <div className="content-value">
-                        {CarSpecifications["Boot Space (Litres)"]}
-                      </div>
+                      <div className="content-value">{carData.carSpecifications["Brake Type (front)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Body Type"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Max Power (rpm)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Emission Standard"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Max Power (bhp)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Engine"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Seats"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Displacement (cc)"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Cylinders"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Fuel Tank Capacity"]}</div>
+                      <div className="content-value">{carData.carSpecifications["Boot Space (Litres)"]}</div>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : (<></>)}
                 </div>
+
               </div>
-              <h3
-                onClick={() => {
-                  setMoreSpecificationToggle((value) => !value);
-                }}
-                className="div-header pointer"
-              >
-                View all Specifications{" "}
-                <Icon
-                  className={moreSpecificationToggle ? "contract" : "expand"}
-                  icon="ic:round-greater-than"
-                />
-              </h3>
+              <h3 onClick={() => { setMoreSpecificationToggle(value => !value) }} className="div-header pointer">View all Specifications <Icon className={moreSpecificationToggle ? 'contract' : 'expand'} icon="ic:round-greater-than" /></h3>
             </div>
           </>
         )}
       </div>
       {carData ? (
         <>
-          <div
-            className={`mobile-buy-footer ${
-              scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
-            } transition-all`}
-          >
-            <div
-              className={`mobile-price ${
-                scrollDirection === "down"
-                  ? "hide-buy-footer"
-                  : "show-buy-footer"
-              } transition-all`}
-            >
-              Rs. {carData.Price}
+          <div className={`mobile-buy-footer ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"} transition-all`}>
+            <div className={`mobile-price ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"} transition-all`}>
+              Rs. {carData.carOverview.Price}
             </div>
-            <div
-              className={`car-interactive-button-mobile ${
-                scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
-              } transition-all`}
-            >
+            <div className={`car-interactive-button-mobile ${scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"} transition-all`}>
               <button className="darker-btn" onClick={bookmarkToggle}>
                 {isBookMarked ? (
                   <Icon icon="iconamoon:bookmark-fill" />
@@ -513,15 +504,15 @@ const CarDetails = ({ carId }) => {
                   <Icon icon="iconamoon:bookmark-bold" />
                 )}
               </button>
-              <button className="darker-btn">
-                <p>View Seller Details</p>
+              <button
+                className="darker-btn"
+              >
+                <p>BUY</p>
               </button>
             </div>
           </div>
         </>
-      ) : (
-        <></>
-      )}
+      ) : (<></>)}
     </>
   );
 };

@@ -126,7 +126,7 @@ export default function UseMenu() {
           })
           .catch((error) => {
             console.log(error);
-            // setShowToast({ type: 2, message: error.response.data.message });
+            // setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
           });
       }
       setOpen(false);
@@ -180,7 +180,7 @@ const grey = {
   600: "#57606a",
   700: "#424a53",
   800: "#32383f",
-  900: "#24292f",
+  900: "#373737",
 };
 
 const blue = {
@@ -262,7 +262,7 @@ const styles = `
     font-size: 0.875rem;
     box-sizing: border-box;
     min-height: calc(1.5em + 22px);
-    border-radius: 12px;
+    border-radius: 6px;
     padding: 8px 14px;
     line-height: 1.5;
     background: #fff;

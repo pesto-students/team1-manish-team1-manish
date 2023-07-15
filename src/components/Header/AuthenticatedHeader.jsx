@@ -43,7 +43,6 @@ const AuthenticatedHeader = () => {
       })
       .catch((error) => {
         console.log(error);
-        // setShowToast({ type: 2, message: error.response.data.message });
       });
   };
   const toggleHeader = () => {
@@ -63,15 +62,6 @@ const AuthenticatedHeader = () => {
           <div className="brand-name dark-font">Car Bazaar</div>
         </div>
         <div className="auth-header">
-          <div className="user-location">
-            <div className="location">
-              <img src="./locationIcon.svg" alt="User Location" />
-            </div>
-            <select name="location" id="location-select">
-              <option value="">New Delhi</option>
-              <option value="dog">Uttar Pradesh</option>
-            </select>
-          </div>
           <div className="header-search-bar">
             <input type="text" placeholder="Search cars" />
             <div className="search">

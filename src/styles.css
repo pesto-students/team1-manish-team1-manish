@@ -57,6 +57,10 @@ html {
   margin-top: 20px;
 }
 
+.toastify-class {
+  margin-top: 10vh;
+}
+
 .mui-dark-btn {
   width: 186.44px;
   height: 38px;

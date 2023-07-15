@@ -60,15 +60,15 @@
 }
 
 .darker-btn>.iconify {
-  font-size: 3.5vh;
-  margin: 1vh 1vw;
+  font-size: 25px;
+  margin: 2vh 1vw;
   color: white;
 }
 
 .darker-btn>p {
   color: white;
-  margin: 1vh 1vw;
-  font-size: 2.5vh;
+  margin: 2vh 5vw;
+  font-size: 18px;
 }
 
 .shimmer {
@@ -365,12 +365,11 @@ div.car-photos {
   }
 
   .darker-btn>.iconify {
-    border-radius: 1vh;
-    margin: 2vh 3vw;
+    margin: 2vh 2vw;
   }
 
   .darker-btn>p {
-    margin: 2vh 3vw;
+    margin: 2vh 10vw;
   }
 
   .info-body {
@@ -434,5 +433,9 @@ div.car-photos {
 
   .show-buy-div {
     opacity: 1;
+  }
+
+  .App {
+    overflow: inherit !important;
   }
 }
