@@ -66,7 +66,10 @@ export function SellCarLandingPage() {
   const handleSellCarSubmit = () => {};
 
   const getCarModelData = async () => {
-    const url = `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`
+        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id/${brandEvent.eventChange}/year-name`;
     await axios({
       method: "get",
       url: url,
@@ -92,7 +95,10 @@ export function SellCarLandingPage() {
       });
   };
   const getCarYearData = async () => {
-    const url = `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`
+        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id/${brandEvent.eventChange}/year-name`;
     await axios({
       method: "get",
       url: url,
@@ -118,7 +124,10 @@ export function SellCarLandingPage() {
       });
   };
   const getCarVarientData = async () => {
-    const url = `http://localhost:3000/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
+        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
     await axios({
       method: "get",
       url: url,
