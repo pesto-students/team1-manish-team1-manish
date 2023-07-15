@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
-import { togglePage, setBuyCarDetails } from "../../Store/CarStore";
+import { togglePage, setBuyCarDetails, getCarBrandsData, getCarTypeData, setFilterCarBudget, setFilterCarType, setFilterCarBrand } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
 import "./LandingPage.css";
@@ -13,9 +13,14 @@ import "./LandingPage.css";
 const LandingPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const carPriceRange = useSelector((state) => state.carBudgetRange);
   const [budgetEvent, setBudgetEvent] = useState({
-    showData: carPriceRange,
+    showData: [
+      { displayPrice: "Up to 5K", value: [0, 5] },
+      { displayPrice: "5K to 10K", value: [5, 10] },
+      { displayPrice: "10K to 20K", value: [11, 20] },
+      { displayPrice: "20K to 50K", value: [21, 50] },
+      { displayPrice: "Above 50K", value: [51, 100] },
+    ],
     isStateUpdate: false,
     eventChange: null,
   });
@@ -31,99 +36,72 @@ const LandingPage = () => {
   });
   const flagPage = useSelector((state) => state.flag);
 
-  const handleCarSearch = async () => {
-    const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`;
+  const getBrandData = async () => {
+    const url = `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000`;
     await axios({
       method: "get",
       url: url,
       headers: {
-        "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
       },
     })
-      .then((response) => {
-        if (response.status == 200) {
-          setTimeout(() => {
-            dispatch(setBuyCarDetails(response.data));
-            navigate("/buy-car");
-          }, 3000);
+      .then((res) => {
+        if (res.status == 200) {
+          let updatedBrand = {};
+          updatedBrand = { showData: res.data };
+          setBrandEvent((res) => ({
+            ...res,
+            ...updatedBrand,
+          }));
+          setBudgetEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((res) => {
+        console.log(res);
       });
+  };
+  const getCarType = async () => {
+    const url = `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000/types/${brandEvent.eventChange}`;
+
+    await axios({
+      method: "get",
+      url: url,
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      },
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          let updatedType = {};
+          updatedType = { showData: res.data };
+          setTypeEvent((res) => ({
+            ...res,
+            ...updatedType,
+          }));
+          setBrandEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+
+  const handleCarSearch = async () => {
+    // const url = `http://localhost:3000/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`;
+    dispatch(getCarBrandsData());
+    dispatch(getCarTypeData());
+    setTimeout(() => {
+      dispatch(setFilterCarBrand(brandEvent.eventChange));
+      dispatch(setFilterCarType(typeEvent.eventChange));
+      dispatch(setFilterCarBudget(budgetEvent.eventChange));
+      navigate("/buy-car");
+    }, 2500);
   };
 
   useEffect(() => {
     let flagBudget = budgetEvent.isStateUpdate;
     let flagBrand = brandEvent.isStateUpdate;
 
-    const getBrandData = async () => {
-      const url =
-        process.env.NODE_ENV === "development"
-          ? `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}`
-          : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}`;
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          "Access-Control-Allow-Origin":
-            process.env.NODE_ENV === "development"
-              ? process.env.REACT_APP_DEV_CORS_URL
-              : process.env.REACT_APP_PROD_CORS_URL,
-        },
-      })
-        .then((res) => {
-          if (res.status == 200) {
-            let updatedBrand = {};
-            updatedBrand = { showData: res.data };
-            setBrandEvent((res) => ({
-              ...res,
-              ...updatedBrand,
-            }));
-            setBudgetEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
-          }
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    };
-    const getCarType = async () => {
-      const url =
-        process.env.NODE_ENV === "development"
-          ? `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}/types/${brandEvent.eventChange}`
-          : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent?.eventChange[0]}/${budgetEvent?.eventChange[1]}/types/${brandEvent.eventChange}`;
-
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          "Access-Control-Allow-Origin":
-            process.env.NODE_ENV === "development"
-              ? process.env.REACT_APP_DEV_CORS_URL
-              : process.env.REACT_APP_PROD_CORS_URL,
-        },
-      })
-        .then((res) => {
-          if (res.status == 200) {
-            let updatedType = {};
-            updatedType = { showData: res.data };
-            setTypeEvent((res) => ({
-              ...res,
-              ...updatedType,
-            }));
-            setBrandEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
-          }
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    };
     if (flagBudget) {
       getBrandData();
     }
@@ -267,11 +245,11 @@ function DropDown(props) {
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-          {
-            background: "#eaf2ff",
-            border: "1px solid #d7e0f2",
-            color: "#7b86b3",
-          },
+        {
+          background: "#eaf2ff",
+          border: "1px solid #d7e0f2",
+          color: "#7b86b3",
+        },
       }}
       size="small"
     >
@@ -286,26 +264,26 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-              if (selectName === "Select Budget") {
-                return (
-                  <MenuItem value={el.value} key={el + Math.random(1, 9)}>
-                    {el.displayPrice}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Brand") {
-                return (
-                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                    {el.brand}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Vehicle Type") {
-                return (
-                  <MenuItem value={el.type} key={el + Math.random(1, 9)}>
-                    {el.type}
-                  </MenuItem>
-                );
-              }
-            })}
+            if (selectName === "Select Budget") {
+              return (
+                <MenuItem value={el.value} key={el + Math.random(1, 9)}>
+                  {el.displayPrice}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Brand") {
+              return (
+                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                  {el.brand}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Vehicle Type") {
+              return (
+                <MenuItem value={el.type} key={el + Math.random(1, 9)}>
+                  {el.type}
+                </MenuItem>
+              );
+            }
+          })}
       </Select>
     </FormControl>
   );

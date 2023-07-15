@@ -137,7 +137,7 @@ a:link {
 .auth-header {
   width: 78%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -173,7 +173,7 @@ a:link {
 }
 
 .header-search-bar {
-  display: flex;
+  display: none;
   width: 40%;
   border-radius: 6px;
   background: rgba(184, 210, 255, 0.16);
@@ -239,8 +239,8 @@ a:link {
   background: black;
   display: flex;
   justify-content: center;
-  width: 3.5vw;
-  min-height: 5vh;
+  width: 2vw;
+  min-height: 4vh;
   align-items: center;
 }
 
