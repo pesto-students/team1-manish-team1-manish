@@ -8,10 +8,16 @@ import axios from "axios";
 import { getSellCarBrandsData } from "../../Store/CarStore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Alert, Snackbar } from "@mui/material";
 import "./LandingPage.css";
 
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
+
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
+  const resetToast = () => {
+    setShowToast({ type: 0, message: "" });
+  };
 
   const userDetail = useSelector((state) => {
     return state.userDetails;
@@ -78,7 +84,7 @@ export function SellCarLandingPage() {
       year: yearEvent.eventChange,
       model: modelEvent.eventChange,
       fuelType: fuelTypeEvent.eventChange,
-      fuelCapacity: selectedCarData[0].fuel_cap_l ?? 'NA',
+      fuelCapacity: selectedCarData[0].fuel_cap_l ?? "NA",
       registrationYear: yearEvent.eventChange,
       engine: selectedCarData[0].engine_cc,
       variant: variantEvent.eventChange,
@@ -119,6 +125,7 @@ export function SellCarLandingPage() {
       .then((res) => {
         if (res.status == 200) {
           setSelectedCarData(res.data);
+          setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
         }
       })
       .catch((res) => {
@@ -173,7 +180,7 @@ export function SellCarLandingPage() {
       .then((res) => {
         if (res.status == 200) {
           let updatedModel = {};
-          updatedModel = { showData: res.data };
+          updatedModel = { showData: [res.data[0]] };
           setYearEvent((res) => ({
             ...res,
             ...updatedModel,
@@ -266,6 +273,7 @@ export function SellCarLandingPage() {
         })
         .catch((err) => console.log(err));
     }
+    setShowToast({ type: 1, message: "Image Uploaded Successfull!" });
   };
 
   useEffect(() => {
@@ -304,6 +312,28 @@ export function SellCarLandingPage() {
 
   return (
     <div>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
       <div className="sell-car-landing-page-div2">
         <p className="landing-page-heading sell-car-div-heading">
           Sell your car!
@@ -451,11 +481,11 @@ function DropDown(props) {
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-        {
-          background: "#eaf2ff",
-          border: "1px solid #d7e0f2",
-          color: "#7b86b3",
-        },
+          {
+            background: "#eaf2ff",
+            border: "1px solid #d7e0f2",
+            color: "#7b86b3",
+          },
       }}
       size="small"
     >
@@ -470,50 +500,50 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-            if (selectName === "Select Brand") {
-              return (
-                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                  {el.brand}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Model") {
-              return (
-                <MenuItem value={el.name} key={el + Math.random(1, 9)}>
-                  {el.name}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Year") {
-              return (
-                <MenuItem value={el.year} key={el + Math.random(1, 9)}>
-                  {el.year}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Variant") {
-              return (
-                <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
-                  {el.trim}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Fuel Type") {
-              return (
-                <MenuItem value={el} key={el + Math.random(1, 9)}>
-                  {el}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Ownership") {
-              return (
-                <MenuItem value={el} key={el + Math.random(1, 9)}>
-                  {el}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Reg. State") {
-              return (
-                <MenuItem value={el} key={el + Math.random(1, 9)}>
-                  {el}
-                </MenuItem>
-              );
-            }
-          })}
+              if (selectName === "Select Brand") {
+                return (
+                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                    {el.brand}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Model") {
+                return (
+                  <MenuItem value={el.name} key={el + Math.random(1, 9)}>
+                    {el.name}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Year") {
+                return (
+                  <MenuItem value={el.year} key={el + Math.random(1, 9)}>
+                    {el.year}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Variant") {
+                return (
+                  <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
+                    {el.trim}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Fuel Type") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Ownership") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Reg. State") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              }
+            })}
       </Select>
     </FormControl>
   );

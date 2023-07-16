@@ -52,10 +52,16 @@ const CarDetails = ({ carId }) => {
   const getBookmark = async () => {
     await axios({
       method: "get",
-      url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+      url:
+        process.env.NODE_ENV === "development"
+          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -84,10 +90,16 @@ const CarDetails = ({ carId }) => {
   const addBookmark = async () => {
     await axios({
       method: "post",
-      url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+      url:
+        process.env.NODE_ENV === "development"
+          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
       data: {
         bookmarkId: carId,
@@ -113,10 +125,16 @@ const CarDetails = ({ carId }) => {
   const removeBookmark = async () => {
     await axios({
       method: "delete",
-      url: `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+      url:
+        process.env.NODE_ENV === "development"
+          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
       data: {
         bookmarkId: `${carId}`,
@@ -142,10 +160,16 @@ const CarDetails = ({ carId }) => {
   const fetchCarDetails = async () => {
     await axios({
       method: "get",
-      url: `${process.env.REACT_APP_CAR_DETAILS_URL}/${carId}`,
+      url:
+        process.env.NODE_ENV == "development"
+          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/${carId}`
+          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/${carId}`,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -176,7 +200,10 @@ const CarDetails = ({ carId }) => {
       url: url,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
       data: {
         buyerId: userId,

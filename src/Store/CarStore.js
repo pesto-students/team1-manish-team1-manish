@@ -9,14 +9,26 @@ export const searchCarByFilters = createAsyncThunk(
   "carDetails/searchCarByFilters",
   async (args, thunkAPI) => {
     const state = thunkAPI.getState();
-    const url = "http://localhost:3000/cars/search?" + new URLSearchParams({
-      brands: state.carBrandData.carBrand.filter(el => el.checked === true).map(el => el.brand),
-      minPrice: state.carBudgetRange[0] * 1000,
-      maxPrice: state.carBudgetRange[1] * 1000,
-      type: state.carTypeData.carType.filter(el => el.checked === true).map(el => el.type),
-      fuelType: state.carFuelTypeData.carFuelType.filter(el => el.checked === true).map(el => el.fueltype),
-      ownership: state.carOwnershipData.carOwnership.filter(el => el.checked === true).map(el => el.ownership)
-    }).toString();
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars/search?"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars/search?" +
+          new URLSearchParams({
+            brands: state.carBrandData.carBrand
+              .filter((el) => el.checked === true)
+              .map((el) => el.brand),
+            minPrice: state.carBudgetRange[0] * 1000,
+            maxPrice: state.carBudgetRange[1] * 1000,
+            type: state.carTypeData.carType
+              .filter((el) => el.checked === true)
+              .map((el) => el.type),
+            fuelType: state.carFuelTypeData.carFuelType
+              .filter((el) => el.checked === true)
+              .map((el) => el.fueltype),
+            ownership: state.carOwnershipData.carOwnership
+              .filter((el) => el.checked === true)
+              .map((el) => el.ownership),
+          }).toString();
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
@@ -24,85 +36,109 @@ export const searchCarByFilters = createAsyncThunk(
             ? process.env.REACT_APP_DEV_CORS_URL
             : process.env.REACT_APP_PROD_CORS_URL,
       },
-    })
-      .then(async response => {
-        return await response.json();
-      });
+    }).then(async (response) => {
+      return await response.json();
+    });
   }
 );
 
 export const getCarBrandsData = createAsyncThunk(
   "carBrands/getCarBrandsData",
   async () => {
-    const url = "http://localhost:3000/cars/brands";
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars/brands"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars/brands";
     return fetch(url, {
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
-    })
-      .then(async response => {
-        return await response.json();
-      });
+    }).then(async (response) => {
+      return await response.json();
+    });
   }
 );
 
 export const getSellCarBrandsData = createAsyncThunk(
   "carBrands/getSellCarBrandsData",
   async () => {
-    const url = "http://localhost:3000/cars-api/make_id";
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars-api/make_id"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id";
     return fetch(url, {
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
-    })
-      .then(async response => {
-        return await response.json();
-      });
+    }).then(async (response) => {
+      return await response.json();
+    });
   }
 );
 
 export const getCarTypeData = createAsyncThunk(
   "carTypes/getCarTypesData",
   async () => {
-    const url = "http://localhost:3000/cars/car-types";
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars/car-types"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars/car-types";
     return fetch(url, {
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
-    })
-      .then(async response => {
-        return await response.json();
-      });
+    }).then(async (response) => {
+      return await response.json();
+    });
   }
 );
 
 export const getCarFuelTypeData = createAsyncThunk(
   "carFualTypes/getCarFualTypesData",
   async () => {
-    const url = "http://localhost:3000/cars/fuel-types";
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars/fuel-types"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars/fuel-types";
     return fetch(url, {
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
-    })
-      .then(async response => {
-        return await response.json();
-      });
+    }).then(async (response) => {
+      return await response.json();
+    });
   }
 );
 
 export const getCarOwnershipData = createAsyncThunk(
   "carOwnership/getCarOwnershipData",
   async () => {
-    const url = "http://localhost:3000/cars/ownerships";
+    const url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000/cars/ownerships"
+        : "https://car-bazar-backend-pesto-team.vercel.app/cars/ownerships";
     return fetch(url, {
       headers: {
-        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+        "Access-Control-Allow-Origin":
+          process.env.NODE_ENV === "development"
+            ? process.env.REACT_APP_DEV_CORS_URL
+            : process.env.REACT_APP_PROD_CORS_URL,
       },
-    })
-      .then(async response => {
-        return await response.json();
-      });
+    }).then(async (response) => {
+      return await response.json();
+    });
   }
 );
 
@@ -135,74 +171,71 @@ const CarSlice = createSlice({
       state.carType = action.payload;
     },
     brandToggleCheck: (state, action) => {
-      state.carBrandData.carBrand = state.carBrandData.carBrand.map(el => {
+      state.carBrandData.carBrand = state.carBrandData.carBrand.map((el) => {
         if (el.brand === action.payload) {
           return { brand: el.brand, checked: !el.checked };
-        }
-        else return el;
-      })
+        } else return el;
+      });
     },
     typeToggleCheck: (state, action) => {
-      state.carTypeData.carType = state.carTypeData.carType.map(el => {
+      state.carTypeData.carType = state.carTypeData.carType.map((el) => {
         if (el.type === action.payload) {
           return { type: el.type, checked: !el.checked };
-        }
-        else return el;
-      })
+        } else return el;
+      });
     },
     fuelTypeToggleCheck: (state, action) => {
-      state.carFuelTypeData.carFuelType = state.carFuelTypeData.carFuelType.map(el => {
-        if (el.fueltype === action.payload) {
-          return { fueltype: el.fueltype, checked: !el.checked };
+      state.carFuelTypeData.carFuelType = state.carFuelTypeData.carFuelType.map(
+        (el) => {
+          if (el.fueltype === action.payload) {
+            return { fueltype: el.fueltype, checked: !el.checked };
+          } else return el;
         }
-        else return el;
-      })
+      );
     },
     ownershipToggleCheck: (state, action) => {
-      state.carOwnershipData.carOwnership = state.carOwnershipData.carOwnership.map(el => {
-        if (el.ownership === action.payload) {
-          return { ownership: el.ownership, checked: !el.checked };
-        }
-        else return el;
-      })
+      state.carOwnershipData.carOwnership =
+        state.carOwnershipData.carOwnership.map((el) => {
+          if (el.ownership === action.payload) {
+            return { ownership: el.ownership, checked: !el.checked };
+          } else return el;
+        });
     },
     setFilterCarBrand: (state, action) => {
       let updatedFilterCarBrand = state.carBrandData.carBrand;
-      updatedFilterCarBrand = updatedFilterCarBrand.map(el => {
+      updatedFilterCarBrand = updatedFilterCarBrand.map((el) => {
         if (el.brand === action.payload) {
           return { brand: el.brand, checked: true };
-        }
-        else {
+        } else {
           return el;
         }
-      })
+      });
       state.carBrandData.carBrand = updatedFilterCarBrand;
     },
     setFilterCarType: (state, action) => {
       let updatedFilterCarBrand = state.carTypeData.carType;
-      updatedFilterCarBrand = updatedFilterCarBrand.map(el => {
+      updatedFilterCarBrand = updatedFilterCarBrand.map((el) => {
         if (el.type === action.payload) {
           return { type: el.type, checked: true };
-        }
-        else return el;
-      })
+        } else return el;
+      });
       state.carTypeData.carType = updatedFilterCarBrand;
     },
     setFilterCarBudget: (state, action) => {
-      state.carBudgetRange = action.payload
+      state.carBudgetRange = action.payload;
     },
     toggleCarBookmark: (state, action) => {
       let updatedCarsData = state.buyCarDetails.buyCar;
-      updatedCarsData = updatedCarsData.map(el => {
+      updatedCarsData = updatedCarsData.map((el) => {
         if (el.brand === action.payload) {
-          return { ...el, bookmarked: !el.bookmarked }
+          return { ...el, bookmarked: !el.bookmarked };
         } else return el;
-      })
+      });
       state.buyCarDetails.buyCar = updatedCarsData;
     },
     resetShowCarDetails: (state, action) => {
       state.buyCarDetails.buyCar = [];
-    }
+    },
   },
   extraReducers: {
     [getSellCarBrandsData.pending]: (state, actions) => {
@@ -210,7 +243,10 @@ const CarSlice = createSlice({
     },
     [getSellCarBrandsData.fulfilled]: (state, actions) => {
       state.sellCarBrandData.loading = false;
-      state.sellCarBrandData.carBrand = actions.payload.map(el => ({ brand: el.make_id, checked: false }));
+      state.sellCarBrandData.carBrand = actions.payload.map((el) => ({
+        brand: el.make_id,
+        checked: false,
+      }));
     },
     [getSellCarBrandsData.rejected]: (state, actions) => {
       state.sellCarBrandData.loading = true;
@@ -220,7 +256,10 @@ const CarSlice = createSlice({
     },
     [getCarBrandsData.fulfilled]: (state, actions) => {
       state.carBrandData.loading = false;
-      state.carBrandData.carBrand = actions.payload.map(el => ({ brand: el.brand, checked: false }));
+      state.carBrandData.carBrand = actions.payload.map((el) => ({
+        brand: el.brand,
+        checked: false,
+      }));
     },
     [getCarBrandsData.rejected]: (state, actions) => {
       state.carBrandData.loading = true;
@@ -230,7 +269,10 @@ const CarSlice = createSlice({
     },
     [getCarTypeData.fulfilled]: (state, actions) => {
       state.carTypeData.loading = false;
-      state.carTypeData.carType = actions.payload.map(el => ({ type: el.type, checked: false }));
+      state.carTypeData.carType = actions.payload.map((el) => ({
+        type: el.type,
+        checked: false,
+      }));
     },
     [getCarTypeData.rejected]: (state, actions) => {
       state.carTypeData.loading = true;
@@ -240,7 +282,10 @@ const CarSlice = createSlice({
     },
     [getCarOwnershipData.fulfilled]: (state, actions) => {
       state.carOwnershipData.loading = false;
-      state.carOwnershipData.carOwnership = actions.payload.map(el => ({ ownership: el.ownership, checked: false }));
+      state.carOwnershipData.carOwnership = actions.payload.map((el) => ({
+        ownership: el.ownership,
+        checked: false,
+      }));
     },
     [getCarOwnershipData.rejected]: (state, actions) => {
       state.carOwnershipData.loading = true;
@@ -250,7 +295,10 @@ const CarSlice = createSlice({
     },
     [getCarFuelTypeData.fulfilled]: (state, actions) => {
       state.carFuelTypeData.loading = false;
-      state.carFuelTypeData.carFuelType = actions.payload.map(el => ({ fueltype: el.fueltype, checked: false }));
+      state.carFuelTypeData.carFuelType = actions.payload.map((el) => ({
+        fueltype: el.fueltype,
+        checked: false,
+      }));
     },
     [getCarFuelTypeData.rejected]: (state, actions) => {
       state.carFuelTypeData.loading = true;
@@ -260,11 +308,14 @@ const CarSlice = createSlice({
     },
     [searchCarByFilters.fulfilled]: (state, actions) => {
       state.buyCarDetails.loading = false;
-      state.buyCarDetails.buyCar = actions.payload.map(el => {
-        if (state.userDetails && state.userDetails.bookmark_ids && state.userDetails.bookmark_ids.includes(el.id)) {
+      state.buyCarDetails.buyCar = actions.payload.map((el) => {
+        if (
+          state.userDetails &&
+          state.userDetails.bookmark_ids &&
+          state.userDetails.bookmark_ids.includes(el.id)
+        ) {
           return { ...el, bookmarked: true };
-        }
-        else return { ...el, bookmarked: false };
+        } else return { ...el, bookmarked: false };
       });
       console.log(state.userDetails);
     },
@@ -293,7 +344,7 @@ export const {
   setFilterCarType,
   setFilterCarBudget,
   toggleCarBookmark,
-  resetShowCarDetails
+  resetShowCarDetails,
 } = CarSlice.actions;
 
 const CarStore = configureStore({
