@@ -184,6 +184,9 @@ const CarSlice = createSlice({
         } else return el;
       })
       state.buyCarDetails.buyCar = updatedCarsData;
+    },
+    resetShowCarDetails: (state, action) => {
+      state.buyCarDetails.buyCar = [];
     }
   },
   extraReducers: {
@@ -232,7 +235,13 @@ const CarSlice = createSlice({
     },
     [searchCarByFilters.fulfilled]: (state, actions) => {
       state.buyCarDetails.loading = false;
-      state.buyCarDetails.buyCar = actions.payload.map(el => ({ ...el, bookmarked: false }));
+      state.buyCarDetails.buyCar = actions.payload.map(el => {
+        if (state.userDetails && state.userDetails.bookmark_ids && state.userDetails.bookmark_ids.includes(el.id)) {
+          return { ...el, bookmarked: true };
+        }
+        else return { ...el, bookmarked: false };
+      });
+      console.log(state.userDetails);
     },
     [searchCarByFilters.rejected]: (state, actions) => {
       state.buyCarDetails.loading = true;
@@ -258,7 +267,8 @@ export const {
   setFilterCarBrand,
   setFilterCarType,
   setFilterCarBudget,
-  toggleCarBookmark
+  toggleCarBookmark,
+  resetShowCarDetails
 } = CarSlice.actions;
 
 const CarStore = configureStore({
