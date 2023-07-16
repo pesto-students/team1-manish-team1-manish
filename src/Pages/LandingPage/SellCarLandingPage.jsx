@@ -472,8 +472,8 @@ function DropDown(props) {
           : eventToHandle.showData.map((el) => {
               if (selectName === "Select Brand") {
                 return (
-                  <MenuItem value={el.make_id} key={el + Math.random(1, 9)}>
-                    {el.make_id}
+                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                    {el.brand}
                   </MenuItem>
                 );
               } else if (selectName === "Select Model") {
