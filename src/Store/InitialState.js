@@ -10,6 +10,10 @@ export const globalInitialState = {
     carBrand: [],
     loading: false,
   },
+  sellCarBrandData: {
+    carBrand: [],
+    loading: false,
+  },
   carOwnershipData: {
     carOwnership: [],
     loading: false,
