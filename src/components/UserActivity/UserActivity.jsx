@@ -8,7 +8,7 @@ import UserActivityCard from '../UserActivityCard/UserActivityCard';
 import './UserActivity.css';
 
 function UserActivity(props) {
-  const { name, icon, isActive, setIsActive, index } = props;
+  const { name, icon, isActive, setIsActive, index, data } = props;
 
   const activityIcon = (icon) => {
     if (icon === 'box') {
@@ -45,7 +45,12 @@ function UserActivity(props) {
         />
       </div>
       <div className='user-activity__card'>
-        <UserActivityCard name={name} icon={icon} isActive={isActive} />
+        <UserActivityCard
+          name={name}
+          icon={icon}
+          isActive={isActive}
+          data={data}
+        />
       </div>
     </div>
   );

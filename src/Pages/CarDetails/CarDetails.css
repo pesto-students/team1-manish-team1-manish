@@ -15,7 +15,7 @@
   gap: 3vw;
 }
 
-.car-highlights>ul {
+.car-highlights > ul {
   padding-left: 2vw;
   display: flex;
   gap: 4vw;
@@ -59,13 +59,13 @@
   background-color: rgb(38, 38, 38);
 }
 
-.darker-btn>.iconify {
+.darker-btn > .iconify {
   font-size: 25px;
   margin: 2vh 1vw;
   color: white;
 }
 
-.darker-btn>p {
+.darker-btn > p {
   color: white;
   margin: 2vh 5vw;
   font-size: 18px;
@@ -98,7 +98,7 @@ div.car-photos {
   animation-fill-mode: both;
 }
 
-.car-photos>img {
+.car-photos > img {
   height: inherit;
   width: inherit;
   border-radius: 2vh;
@@ -106,7 +106,7 @@ div.car-photos {
   user-select: none;
 }
 
-.car-photos>div {
+.car-photos > div {
   background: rgba(36, 39, 44, 0.087);
   height: 37px;
   width: 30px;
@@ -116,12 +116,12 @@ div.car-photos {
   border-radius: 5px;
 }
 
-.car-photos>div:hover {
+.car-photos > div:hover {
   background: rgba(30, 32, 36, 0.423);
   cursor: pointer;
 }
 
-.car-photos>div>.iconify {
+.car-photos > div > .iconify {
   color: white;
 }
 
@@ -141,11 +141,13 @@ div.car-photos {
 
 .shimmering {
   background: #f6f7f8;
-  background-image: linear-gradient(to right,
-      #f6f7f8 0%,
-      #edeef1 20%,
-      #f6f7f8 40%,
-      #f6f7f8 100%);
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
   background-repeat: no-repeat;
   background-size: inherit;
   display: inline-block;
@@ -170,7 +172,7 @@ div.car-photos {
   color: rgba(103, 110, 138, 1);
 }
 
-.div-header>.expand {
+.div-header > .expand {
   color: rgba(103, 110, 138, 1);
   align-self: center;
   font-size: larger;
@@ -179,7 +181,7 @@ div.car-photos {
   stroke-width: 2px;
 }
 
-.div-header>.contract {
+.div-header > .contract {
   color: rgba(103, 110, 138, 1);
   align-self: center;
   font-size: larger;
@@ -248,8 +250,8 @@ div.car-photos {
   align-items: center;
 }
 
-.tick-icon>path {
-  color: #34BFA7;
+.tick-icon > path {
+  color: #34bfa7;
   font-size: larger;
 }
 
@@ -271,11 +273,13 @@ div.car-photos {
 
 .shimmering-effect {
   background: #f6f7f8;
-  background-image: linear-gradient(to right,
-      #f6f7f8 0%,
-      #edeef1 20%,
-      #f6f7f8 40%,
-      #f6f7f8 100%);
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
   background-repeat: no-repeat;
   background-size: inherit;
   display: inline-block;
@@ -321,6 +325,11 @@ div.car-photos {
   display: none;
 }
 
+.darker-btn:disabled {
+  background-color: #e6274b;
+  cursor: not-allowed;
+}
+
 @media (max-width: 550px) {
   .car-info {
     flex-direction: column;
@@ -364,11 +373,11 @@ div.car-photos {
     border-radius: 1vh;
   }
 
-  .darker-btn>.iconify {
+  .darker-btn > .iconify {
     margin: 2vh 2vw;
   }
 
-  .darker-btn>p {
+  .darker-btn > p {
     margin: 2vh 10vw;
   }
 
@@ -389,7 +398,7 @@ div.car-photos {
     padding-left: 10vw;
   }
 
-  .feature-content>.content-key {
+  .feature-content > .content-key {
     flex: none;
     display: flex;
   }
@@ -397,7 +406,7 @@ div.car-photos {
   .transition-all {
     transition-property: all;
     transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    transition-duration: .5s;
+    transition-duration: 0.5s;
   }
 
   .mobile-buy-footer {

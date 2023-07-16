@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserActivity from "../UserActivity/UserActivity";
 import UserActivityCard from "../UserActivityCard/UserActivityCard";
 import { setUserDetails, unAuthorizeUser } from "../../Store/CarStore";
@@ -8,6 +8,13 @@ import axios from "axios";
 import "./UserDetailView.css";
 
 function UserDetailView() {
+  const [order, setOrder] = useState([]);
+  const [bookmark, setBookmark] = useState([]);
+  const baseUrlProd = "https://car-bazar-backend-pesto-team.vercel.app";
+  const baseUrlDev = "http://localhost:3000";
+
+  const userId = useSelector((state) => state.userDetails?.id);
+
   const activityData = Object.freeze([
     {
       name: "My Orders",
@@ -70,6 +77,46 @@ function UserDetailView() {
       });
   };
 
+  const updateOrder = () => {
+    if (userId)
+      fetch(
+        (process.env.NODE_ENV === "development" ? baseUrlDev : baseUrlProd) +
+          `/auth/users/${userId}/orders`,
+        { credentials: "include" }
+      )
+        .then((res) => {
+          if (res.status !== 200) throw Error("Error response");
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          return setOrder(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
+  const updateBookmark = () => {
+    userDetail?.bookmark_ids?.map((carId) => {
+      fetch(
+        (process.env.NODE_ENV === "development" ? baseUrlDev : baseUrlProd) +
+          `/cars/ids/${carId}`,
+        { credentials: "include" }
+      )
+        .then((response) => response.json())
+        .then((d) => {
+          if (!!bookmark?.filter((car) => car.id === d.id)) {
+            setBookmark((prev) => [...prev, d]);
+          }
+        });
+    });
+  };
+
+  useEffect(() => updateOrder(), [userId]);
+
+  useEffect(() => updateBookmark(), [userDetail]);
+
   return (
     <div className="user-detail-view__wrapper">
       <div className="user-detail-view__container">
@@ -94,6 +141,15 @@ function UserDetailView() {
         </div>
         <div className="user-detail-view__user-activity-container">
           {activityData.map((activity, idx) => {
+            let data;
+            if (
+              activity.name.toLowerCase() === "my orders" ||
+              activity.name.toLowerCase() === "my vehicles"
+            ) {
+              data = order;
+            } else if (activity.name.toLowerCase() === "shortlisted vehicles") {
+              data = bookmark;
+            }
             return (
               <>
                 <UserActivity
@@ -103,6 +159,7 @@ function UserDetailView() {
                   index={idx}
                   isActive={activeTab === idx}
                   setIsActive={setActiveTab}
+                  data={data}
                 />
               </>
             );
@@ -114,11 +171,25 @@ function UserDetailView() {
       </div>
       <div className="user-detail-view__activity-card">
         {activityData.map((activity, idx) => {
+          let data;
+          if (activity.name.toLowerCase() === "my orders") {
+            data = order.filter((el) => {
+              return el.order_status === "Bought";
+            });
+          } else if (activity.name.toLowerCase() === "shortlisted vehicles") {
+            console.log(bookmark);
+            data = bookmark;
+          } else if (activity.name.toLowerCase() === "my vehicles") {
+            data = order.filter((el) => {
+              return el.order_status === "Listed";
+            });
+          }
           return (
             <UserActivityCard
               name={activity.name}
               icon={activity.icon}
               key={idx}
+              data={data}
               isActive={activeTab === idx}
             />
           );
