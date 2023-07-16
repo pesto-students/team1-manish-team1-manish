@@ -46,6 +46,21 @@ export const getCarBrandsData = createAsyncThunk(
   }
 );
 
+export const getSellCarBrandsData = createAsyncThunk(
+  "carBrands/getSellCarBrandsData",
+  async () => {
+    const url = "http://localhost:3000/cars-api/make_id";
+    return fetch(url, {
+      headers: {
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_URL,
+      },
+    })
+      .then(async response => {
+        return await response.json();
+      });
+  }
+);
+
 export const getCarTypeData = createAsyncThunk(
   "carTypes/getCarTypesData",
   async () => {
@@ -190,6 +205,16 @@ const CarSlice = createSlice({
     }
   },
   extraReducers: {
+    [getSellCarBrandsData.pending]: (state, actions) => {
+      state.sellCarBrandData.loading = true;
+    },
+    [getSellCarBrandsData.fulfilled]: (state, actions) => {
+      state.sellCarBrandData.loading = false;
+      state.sellCarBrandData.carBrand = actions.payload.map(el => ({ brand: el.make_id, checked: false }));
+    },
+    [getSellCarBrandsData.rejected]: (state, actions) => {
+      state.sellCarBrandData.loading = true;
+    },
     [getCarBrandsData.pending]: (state, actions) => {
       state.carBrandData.loading = true;
     },
