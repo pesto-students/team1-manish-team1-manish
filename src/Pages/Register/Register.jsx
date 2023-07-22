@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "./Register.css";
-import Button from "@mui/material/Button";
-import DarkTheme from "../../Themes/ButtonThemes";
 import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
-import { Icon } from "@iconify/react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { authorizeUser, setUserDetails } from "../../Store/CarStore";
+import Button from "@mui/material/Button";
+import { Icon } from "@iconify/react";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
+import axios from "axios";
+import { authorizeUser, setUserDetails } from "../../Store/CarStore";
+import DarkTheme from "../../Themes/ButtonThemes";
+import "./Register.css";
+import "../../styles.css";
+import { emailValidation, phoneNoValidation } from "../../Utils/FormValidation";
 
 const Register = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -20,13 +22,52 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [passMissMatch, setPassMissMatch] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [validMobNo, setValidMobNo] = useState(false);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
   };
+
   const idPassRegister = async () => {
+    if (
+      firstName.length == 0 &&
+      lastName.length == 0 &&
+      phoneNo.length == 0 &&
+      email.length == 0 &&
+      password.length == 0 &&
+      cpassword.length == 0
+    ) {
+      setShowToast({ type: 2, message: "Empty Submittion not Allowded" });
+      return;
+    }
+    if (!isValidEmail && !isMobNoValid) {
+      setValidEmail(true);
+      setValidMobNo(true);
+      setTimeout(() => {
+        setValidEmail(false);
+        setValidMobNo(false);
+      }, 2500);
+      return;
+    }
+    if (!isValidEmail) {
+      setValidEmail(true);
+      setTimeout(() => {
+        setValidEmail(false);
+      }, 2500);
+      return;
+    }
+    if (!isMobNoValid) {
+      setValidMobNo(true);
+      setTimeout(() => {
+        setValidMobNo(false);
+      }, 2500);
+
+      return;
+    }
     if (password !== cpassword && cpassword.length > 0) {
       if (!passMissMatch) {
         setPassMissMatch(true);
@@ -69,7 +110,12 @@ const Register = () => {
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const googleLogin = () => {
@@ -78,7 +124,8 @@ const Register = () => {
         ? process.env.REACT_APP_DEV_CALLBACK_URL
         : process.env.REACT_APP_PROD_CALLBACK_URL,
       "popup",
-      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${
+        screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -103,7 +150,7 @@ const Register = () => {
       })
         .then((response) => {
           if (response.status == 201) {
-            setShowToast({ type: 1, message: 'Authentication Successfull!' })
+            setShowToast({ type: 1, message: "Authentication Successfull!" });
             setTimeout(() => {
               dispatch(authorizeUser());
               dispatch(setUserDetails(response.data));
@@ -114,11 +161,18 @@ const Register = () => {
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
           console.log(error);
-          setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          });
         });
       setIsLoading(false);
     }, 1000);
   };
+  const isValidEmail = emailValidation(email);
+  const isMobNoValid = phoneNoValidation(phoneNo);
   useEffect(() => {
     if (isAuthorized) {
       navigate("/");
@@ -180,12 +234,14 @@ const Register = () => {
                 placeholder=" Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className={validEmail ? "wrong-submit" : ""}
               />
               <input
                 type="tel"
                 placeholder=" Phone No."
                 value={phoneNo}
                 onChange={(e) => setPhoneNo(e.target.value)}
+                className={validMobNo ? "wrong-submit" : ""}
               />
             </div>
             <div className="input-container-3">
@@ -209,8 +265,9 @@ const Register = () => {
             </div>
             {password !== cpassword && cpassword.length > 0 ? (
               <div
-                className={`wrong-password-message ${passMissMatch ? "wrong-submit" : ""
-                  }`}
+                className={`wrong-password-message ${
+                  passMissMatch ? "wrong-submit" : ""
+                }`}
               >
                 <span>Passwords does not match</span>
               </div>
