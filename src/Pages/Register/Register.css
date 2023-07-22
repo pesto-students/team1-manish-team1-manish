@@ -51,7 +51,7 @@
   gap: 20px;
   padding: 5px;
 
-  iconify {
+  .iconify {
     height: 30px;
     width: 30px;
     cursor: pointer;
