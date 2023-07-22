@@ -9,6 +9,7 @@ import {
 import UseMenu from "../UserProfileMenu/UserMenu";
 import "./Header.css";
 import axios from "axios";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const AuthenticatedHeader = () => {
   const flagPage = useSelector((state) => state.flag);
@@ -20,15 +21,15 @@ const AuthenticatedHeader = () => {
     await axios({
       method: "get",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_LOGOUT_URL
-          : process.env.REACT_APP_PROD_LOGOUT_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -56,10 +57,12 @@ const AuthenticatedHeader = () => {
     <>
       <div className={`header header-${toggleHeaderClass}`}>
         <div className="header-brand">
-          <div className="brand-logo-header">
-            <img src="/Assets/Logo.svg" />
-          </div>
-          <div className="brand-name dark-font">Car Bazaar</div>
+          <Link to="/">
+            <div className="brand-logo-header">
+              <img src="/Assets/Logo.svg" />
+            </div>
+            <div className="brand-name dark-font">Car Bazaar</div>
+          </Link>
         </div>
         <div className="auth-header">
           <div className="header-search-bar">
@@ -69,8 +72,6 @@ const AuthenticatedHeader = () => {
             </div>
           </div>
           <div className="header-action-btn">
-            <img src="/messageIcon.svg" alt="Message Icon" id="message-icon" />
-            <img src="/bellIcon.svg" alt="Bell Icon" id="bell-icon" />
             <div className="user-profile-icon">
               <UseMenu />
             </div>

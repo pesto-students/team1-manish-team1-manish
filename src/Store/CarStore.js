@@ -4,37 +4,40 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { globalInitialState } from "./InitialState";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+
 
 export const searchCarByFilters = createAsyncThunk(
   "carDetails/searchCarByFilters",
   async (args, thunkAPI) => {
     const state = thunkAPI.getState();
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars/search?"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars/search?" +
-          new URLSearchParams({
-            brands: state.carBrandData.carBrand
-              .filter((el) => el.checked === true)
-              .map((el) => el.brand),
-            minPrice: state.carBudgetRange[0] * 1000,
-            maxPrice: state.carBudgetRange[1] * 1000,
-            type: state.carTypeData.carType
-              .filter((el) => el.checked === true)
-              .map((el) => el.type),
-            fuelType: state.carFuelTypeData.carFuelType
-              .filter((el) => el.checked === true)
-              .map((el) => el.fueltype),
-            ownership: state.carOwnershipData.carOwnership
-              .filter((el) => el.checked === true)
-              .map((el) => el.ownership),
-          }).toString();
+      (NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/search?`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/search?`) +
+      new URLSearchParams({
+        brands: state.carBrandData.carBrand
+          .filter((el) => el.checked === true)
+          .map((el) => el.brand),
+        minPrice: state.carBudgetRange[0] * 1000,
+        maxPrice: state.carBudgetRange[1] * 1000,
+        type: state.carTypeData.carType
+          .filter((el) => el.checked === true)
+          .map((el) => el.type),
+        fuelType: state.carFuelTypeData.carFuelType
+          .filter((el) => el.checked === true)
+          .map((el) => el.fueltype),
+        ownership: state.carOwnershipData.carOwnership
+          .filter((el) => el.checked === true)
+          .map((el) => el.ownership),
+      }).toString();
+    console.log(url);
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     }).then(async (response) => {
       return await response.json();
@@ -46,15 +49,15 @@ export const getCarBrandsData = createAsyncThunk(
   "carBrands/getCarBrandsData",
   async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars/brands"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars/brands";
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/brands`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands`;
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     }).then(async (response) => {
       return await response.json();
@@ -66,15 +69,15 @@ export const getSellCarBrandsData = createAsyncThunk(
   "carBrands/getSellCarBrandsData",
   async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars-api/make_id"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id";
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id`;
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     }).then(async (response) => {
       return await response.json();
@@ -86,15 +89,15 @@ export const getCarTypeData = createAsyncThunk(
   "carTypes/getCarTypesData",
   async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars/car-types"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars/car-types";
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/car-types`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/car-types`;
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     }).then(async (response) => {
       return await response.json();
@@ -106,15 +109,15 @@ export const getCarFuelTypeData = createAsyncThunk(
   "carFualTypes/getCarFualTypesData",
   async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars/fuel-types"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars/fuel-types";
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/fuel-types`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/fuel-types`;
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     }).then(async (response) => {
       return await response.json();
@@ -126,15 +129,15 @@ export const getCarOwnershipData = createAsyncThunk(
   "carOwnership/getCarOwnershipData",
   async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars/ownerships"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars/ownerships";
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ownerships`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ownerships`;
     return fetch(url, {
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     }).then(async (response) => {
       return await response.json();
@@ -317,7 +320,6 @@ const CarSlice = createSlice({
           return { ...el, bookmarked: true };
         } else return { ...el, bookmarked: false };
       });
-      console.log(state.userDetails);
     },
     [searchCarByFilters.rejected]: (state, actions) => {
       state.buyCarDetails.loading = true;

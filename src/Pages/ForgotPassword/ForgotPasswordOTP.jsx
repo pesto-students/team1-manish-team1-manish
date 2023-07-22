@@ -9,6 +9,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const ForgotPasswordOTP = ({ email }) => {
   const num1 = useRef();
@@ -83,15 +84,15 @@ const ForgotPasswordOTP = ({ email }) => {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_SEND_OTP_URL
-          : process.env.REACT_APP_PROD_SEND_OTP_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/send`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/send`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         email: email,
@@ -119,15 +120,15 @@ const ForgotPasswordOTP = ({ email }) => {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_VALIDATE_OTP_URL
-          : process.env.REACT_APP_PROD_VALIDATE_OTP_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/validate`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/validate`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         email: email,

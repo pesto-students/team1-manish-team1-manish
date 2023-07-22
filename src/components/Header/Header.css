@@ -206,10 +206,8 @@ a:link {
 }
 
 .header-action-btn {
-  display: flex;
-  align-items: center;
   width: fit-content;
-  justify-content: space-between;
+  margin: 0 15px;
 }
 
 .header-action-btn>img {
