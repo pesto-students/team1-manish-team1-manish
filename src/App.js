@@ -8,12 +8,12 @@ import Register from "./Pages/Register/Register";
 import Login from "./Pages/Login/Login";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
-import CarDetails from "./Pages/CarDetails/CarDetails";
 import ShowCar from "./Pages/ShowCarPage/ShowCar";
 import { authorizeUser, setUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
 import axios from "axios";
 import "./styles.css";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const App = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -23,15 +23,15 @@ const App = () => {
       await axios({
         method: "get",
         url:
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_GOOGLE_LOGIN_URL
-            : process.env.REACT_APP_PROD_GOOGLE_LOGIN_URL,
+          NODE_ENV === "development"
+            ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/login/success`
+            : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/login/success`,
         withCredentials: true,
         headers: {
           "Access-Control-Allow-Origin":
-            process.env.NODE_ENV === "development"
-              ? process.env.REACT_APP_DEV_CORS_URL
-              : process.env.REACT_APP_PROD_CORS_URL,
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
         },
       })
         .then((response) => {
@@ -55,8 +55,6 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/me" element={<Profile />} />
-        {/* Temp route for testing */}
-        <Route path="/cars/details" element={<CarDetails carId={1} />} />
         <Route path="/buy-car" element={<ShowCar />} />
       </Routes>
       <Footer />

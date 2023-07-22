@@ -9,6 +9,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { authorizeUser, setUserDetails } from "../../Store/CarStore";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const Register = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -37,15 +38,15 @@ const Register = () => {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_REGISTER_URL
-          : process.env.REACT_APP_PROD_REGISTER_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/register`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/register`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         name: `${firstName} ${lastName}`,
@@ -74,9 +75,9 @@ const Register = () => {
   };
   const googleLogin = () => {
     const popup = window.open(
-      process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_DEV_CALLBACK_URL
-        : process.env.REACT_APP_PROD_CALLBACK_URL,
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/google`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/google`,
       "popup",
       `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
@@ -90,15 +91,15 @@ const Register = () => {
       await axios({
         method: "get",
         url:
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_GOOGLE_REGISTER_URL
-            : process.env.REACT_APP_PROD_GOOGLE_REGISTER_URL,
+          NODE_ENV === "development"
+            ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/register/success`
+            : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/register/success`,
         withCredentials: true,
         headers: {
           "Access-Control-Allow-Origin":
-            process.env.NODE_ENV === "development"
-              ? process.env.REACT_APP_DEV_CORS_URL
-              : process.env.REACT_APP_PROD_CORS_URL,
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
         },
       })
         .then((response) => {

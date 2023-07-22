@@ -23,6 +23,7 @@ import CarDetails from "../CarDetails/CarDetails";
 import { debounce } from "lodash";
 import axios from "axios";
 import { Alert, Snackbar } from "@mui/material";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 export default function ShowCar() {
   const dispatch = useDispatch();
@@ -121,15 +122,15 @@ export default function ShowCar() {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         bookmarkId: id,
@@ -157,15 +158,15 @@ export default function ShowCar() {
     await axios({
       method: "delete",
       url:
-        process.env.NODE_ENV === "development"
-          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         bookmarkId: id,
@@ -242,9 +243,8 @@ export default function ShowCar() {
         <div className="main-car-show">
           <div className={toggleFilter ? "hide-side-bar" : "side-bar"}>
             <div
-              className={`car-brand  ${
-                isBrandFilterMinimised ? "minimise-filter-container" : ""
-              }`}
+              className={`car-brand  ${isBrandFilterMinimised ? "minimise-filter-container" : ""
+                }`}
             >
               <div className="brand-header">
                 <p className="brand-title">Brand</p>
@@ -253,9 +253,8 @@ export default function ShowCar() {
                 </button>
               </div>
               <div
-                className={`search-brand ${
-                  isBrandFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`search-brand ${isBrandFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 <input
                   onChange={debouncedUpdateBrandSearchFilter}
@@ -265,39 +264,18 @@ export default function ShowCar() {
                 <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
-                className={`brand-filters  ${
-                  isBrandFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`brand-filters  ${isBrandFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 {!carBrands.length
                   ? ""
                   : carBrands.map((el) => {
-                      if (brandSearchBarFilter.length) {
-                        if (
-                          el.brand
-                            .toLocaleLowerCase()
-                            .includes(brandSearchBarFilter.toLocaleLowerCase())
-                        ) {
-                          return (
-                            <div
-                              className="brand-f1"
-                              key={el.brand + Math.random(0, 1)}
-                            >
-                              <p className="b-filter-title">{el.brand}</p>
-                              <input
-                                checked={el.checked}
-                                onChange={() => {
-                                  dispatch(brandToggleCheck(el.brand));
-                                  dispatch(searchCarByFilters());
-                                }}
-                                type="checkbox"
-                                name="brand-filter-1"
-                                id="brand-filter-1"
-                              />
-                            </div>
-                          );
-                        } else return null;
-                      } else
+                    if (brandSearchBarFilter.length) {
+                      if (
+                        el.brand
+                          .toLocaleLowerCase()
+                          .includes(brandSearchBarFilter.toLocaleLowerCase())
+                      ) {
                         return (
                           <div
                             className="brand-f1"
@@ -316,13 +294,32 @@ export default function ShowCar() {
                             />
                           </div>
                         );
-                    })}
+                      } else return null;
+                    } else
+                      return (
+                        <div
+                          className="brand-f1"
+                          key={el.brand + Math.random(0, 1)}
+                        >
+                          <p className="b-filter-title">{el.brand}</p>
+                          <input
+                            checked={el.checked}
+                            onChange={() => {
+                              dispatch(brandToggleCheck(el.brand));
+                              dispatch(searchCarByFilters());
+                            }}
+                            type="checkbox"
+                            name="brand-filter-1"
+                            id="brand-filter-1"
+                          />
+                        </div>
+                      );
+                  })}
               </div>
             </div>
             <div
-              className={`car-budget ${
-                isBudgetFilterMinimised ? "minimise-filter-container" : ""
-              }`}
+              className={`car-budget ${isBudgetFilterMinimised ? "minimise-filter-container" : ""
+                }`}
             >
               <div className="brand-header">
                 <p className="brand-title">Budget</p>
@@ -331,17 +328,15 @@ export default function ShowCar() {
                 </button>
               </div>
               <div
-                className={`budget-slider   ${
-                  isBudgetFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`budget-slider   ${isBudgetFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 <RangeSlider />
               </div>
             </div>
             <div
-              className={`car-type ${
-                isTypeFilterMinimised ? "minimise-filter-container" : ""
-              }`}
+              className={`car-type ${isTypeFilterMinimised ? "minimise-filter-container" : ""
+                }`}
             >
               <div className="brand-header">
                 <p className="brand-title">Type</p>
@@ -350,9 +345,8 @@ export default function ShowCar() {
                 </button>
               </div>
               <div
-                className={`search-brand   ${
-                  isTypeFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`search-brand   ${isTypeFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 <input
                   onChange={debouncedUpdateTypeSearchFilter}
@@ -362,9 +356,8 @@ export default function ShowCar() {
                 <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
-                className={`brand-filters   ${
-                  isTypeFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`brand-filters   ${isTypeFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 {carTypes.map((el) => {
                   if (typeSearchBarFilter.length) {
@@ -415,9 +408,8 @@ export default function ShowCar() {
               </div>
             </div>
             <div
-              className={`car-type ${
-                isFuelTypeFilterMinimised ? "minimise-filter-container" : ""
-              }`}
+              className={`car-type ${isFuelTypeFilterMinimised ? "minimise-filter-container" : ""
+                }`}
             >
               <div className="brand-header">
                 <p className="brand-title">Fuel Type</p>
@@ -426,9 +418,8 @@ export default function ShowCar() {
                 </button>
               </div>
               <div
-                className={`search-brand   ${
-                  isFuelTypeFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`search-brand   ${isFuelTypeFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 <input
                   onChange={debouncedUpdateFuelTypeSearchFilter}
@@ -438,9 +429,8 @@ export default function ShowCar() {
                 <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
-                className={`brand-filters   ${
-                  isFuelTypeFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`brand-filters   ${isFuelTypeFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 {carFuelTypes.map((el) => {
                   if (fuelTypeSearchBarFilter.length) {
@@ -491,9 +481,8 @@ export default function ShowCar() {
               </div>
             </div>
             <div
-              className={`car-type ${
-                isOwnershipFilterMinimised ? "minimise-filter-container" : ""
-              }`}
+              className={`car-type ${isOwnershipFilterMinimised ? "minimise-filter-container" : ""
+                }`}
             >
               <div className="brand-header">
                 <p className="brand-title">Ownerships</p>
@@ -505,9 +494,8 @@ export default function ShowCar() {
                 </button>
               </div>
               <div
-                className={`search-brand   ${
-                  isOwnershipFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`search-brand   ${isOwnershipFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 <input
                   onChange={debouncedUpdateOwnershipSearchFilter}
@@ -517,9 +505,8 @@ export default function ShowCar() {
                 <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
-                className={`brand-filters   ${
-                  isOwnershipFilterMinimised ? "minimise-filter" : ""
-                }`}
+                className={`brand-filters   ${isOwnershipFilterMinimised ? "minimise-filter" : ""
+                  }`}
               >
                 {carOwnerships.map((el) => {
                   if (ownershipSearchBarFilter.length) {
@@ -573,9 +560,8 @@ export default function ShowCar() {
           <div className={toggleFilter ? "full-car-page" : "car-show"}>
             <div className="dashboard-bar">
               <div
-                className={`search-car ${
-                  toggleFilter ? "full-screen-search" : "half-screen-search"
-                }`}
+                className={`search-car ${toggleFilter ? "full-screen-search" : "half-screen-search"
+                  }`}
               >
                 <input
                   onChange={debouncedShowCarDetailSearchFilter}

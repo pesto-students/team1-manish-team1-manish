@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { unAuthorizeUser, setUserDetails } from "../../Store/CarStore";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const Menu = React.forwardRef(function Menu(props, ref) {
   const { children, onOpenChange, open, ...other } = props;
@@ -49,7 +50,7 @@ const MenuItem = React.forwardRef(function MenuItem(props, ref) {
     <li
       className={clsx(classes)}
       {...other}
-      {...getRootProps({ onClick: onClick ?? (() => {}) })}
+      {...getRootProps({ onClick: onClick ?? (() => { }) })}
     >
       {children}
     </li>
@@ -103,15 +104,15 @@ export default function UseMenu() {
         await axios({
           method: "get",
           url:
-            process.env.NODE_ENV === "development"
-              ? process.env.REACT_APP_DEV_LOGOUT_URL
-              : process.env.REACT_APP_PROD_LOGOUT_UR,
+            NODE_ENV === "development"
+              ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+              : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
           withCredentials: true,
           headers: {
             "Access-Control-Allow-Origin":
-              process.env.NODE_ENV === "development"
-                ? process.env.REACT_APP_DEV_CORS_URL
-                : process.env.REACT_APP_PROD_CORS_URL,
+              NODE_ENV === "development"
+                ? REACT_APP_DEV_CORS_URL
+                : REACT_APP_PROD_CORS_URL,
           },
         })
           .then((response) => {
