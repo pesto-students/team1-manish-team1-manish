@@ -10,11 +10,12 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Alert, Snackbar } from "@mui/material";
 import "./LandingPage.css";
+import { useNavigate } from "react-router";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
@@ -124,9 +125,10 @@ export function SellCarLandingPage() {
       data: sellCarData,
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status == 201) {
           setSelectedCarData(res.data);
           setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
+          setTimeout(() => navigate("/"), 2500);
         }
       })
       .catch((res) => {
