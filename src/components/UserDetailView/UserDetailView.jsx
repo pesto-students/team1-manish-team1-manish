@@ -6,12 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UserDetailView.css";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 function UserDetailView() {
   const [order, setOrder] = useState([]);
   const [bookmark, setBookmark] = useState([]);
-  const baseUrlProd = "https://car-bazar-backend-pesto-team.vercel.app";
-  const baseUrlDev = "http://localhost:3000";
 
   const userId = useSelector((state) => state.userDetails?.id);
 
@@ -51,15 +50,15 @@ function UserDetailView() {
     await axios({
       method: "get",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_LOGOUT_URL
-          : process.env.REACT_APP_PROD_LOGOUT_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -80,8 +79,8 @@ function UserDetailView() {
   const updateOrder = () => {
     if (userId)
       fetch(
-        (process.env.NODE_ENV === "development" ? baseUrlDev : baseUrlProd) +
-          `/auth/users/${userId}/orders`,
+        (NODE_ENV === "development" ? REACT_APP_DEV_BACKEND_BASE_URL : REACT_APP_PROD_BACKEND_BASE_URL) +
+        `/auth/users/${userId}/orders`,
         { credentials: "include" }
       )
         .then((res) => {
@@ -100,8 +99,8 @@ function UserDetailView() {
   const updateBookmark = () => {
     userDetail?.bookmark_ids?.map((carId) => {
       fetch(
-        (process.env.NODE_ENV === "development" ? baseUrlDev : baseUrlProd) +
-          `/cars/ids/${carId}`,
+        (NODE_ENV === "development" ? REACT_APP_DEV_BACKEND_BASE_URL : REACT_APP_PROD_BACKEND_BASE_URL) +
+        `/cars/ids/${carId}`,
         { credentials: "include" }
       )
         .then((response) => response.json())

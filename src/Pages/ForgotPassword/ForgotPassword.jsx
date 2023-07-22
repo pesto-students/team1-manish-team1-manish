@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
 import axios from "axios";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const forgotPassword = () => {
   const [IsEmailExist, setIsEmailExist] = useState(false);
@@ -31,15 +32,15 @@ const forgotPassword = () => {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_SEND_OTP_URL
-          : process.env.REACT_APP_PROD_SEND_OTP_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/send`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/send`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         email: email,
@@ -99,9 +100,8 @@ const forgotPassword = () => {
             Enter your registered email id to receive OTP
           </p>
           <input
-            className={`forgot__password__input ${
-              missingForgotEmail ? "wrong-submit" : ""
-            }`}
+            className={`forgot__password__input ${missingForgotEmail ? "wrong-submit" : ""
+              }`}
             type="email"
             placeholder="Email address"
             value={email}

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
 import { useNavigate } from "react-router";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const ConfirmPassword = ({ email }) => {
   const [isNewPasswordSet, setIsNewPasswordSet] = useState(false);
@@ -36,15 +37,15 @@ const ConfirmPassword = ({ email }) => {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? process.env.REACT_APP_DEV_RESET_PASSWORD_URL
-          : process.env.REACT_APP_PROD_RESET_PASSWORD_URL,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/reset`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/reset`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         email: email,
@@ -121,11 +122,10 @@ const ConfirmPassword = ({ email }) => {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
             <input
-              className={`forgot__password__input--confirm ${
-                password !== cpassword && cpassword.length > 0
-                  ? "wrong-password-border"
-                  : ""
-              }`}
+              className={`forgot__password__input--confirm ${password !== cpassword && cpassword.length > 0
+                ? "wrong-password-border"
+                : ""
+                }`}
               type="password"
               placeholder="Confirm New password again"
               value={cpassword}
@@ -134,9 +134,8 @@ const ConfirmPassword = ({ email }) => {
           </div>
           {password !== cpassword && cpassword.length > 0 ? (
             <div
-              className={`wrong-password-message ${
-                passMissMatch ? "wrong-password-submit" : ""
-              }`}
+              className={`wrong-password-message ${passMissMatch ? "wrong-password-submit" : ""
+                }`}
             >
               <span>Passwords does not match</span>
             </div>

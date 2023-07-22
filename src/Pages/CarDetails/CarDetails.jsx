@@ -7,6 +7,7 @@ import { useRef } from "react";
 import axios from "axios";
 import { Alert, Snackbar } from "@mui/material";
 import { useSelector } from "react-redux";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const CarDetails = ({ carId }) => {
   const userId = useSelector((state) => state.userDetails?.id);
@@ -53,15 +54,15 @@ const CarDetails = ({ carId }) => {
     await axios({
       method: "get",
       url:
-        process.env.NODE_ENV === "development"
-          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -91,15 +92,15 @@ const CarDetails = ({ carId }) => {
     await axios({
       method: "post",
       url:
-        process.env.NODE_ENV === "development"
-          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         bookmarkId: carId,
@@ -126,15 +127,15 @@ const CarDetails = ({ carId }) => {
     await axios({
       method: "delete",
       url:
-        process.env.NODE_ENV === "development"
-          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         bookmarkId: `${carId}`,
@@ -161,15 +162,15 @@ const CarDetails = ({ carId }) => {
     await axios({
       method: "get",
       url:
-        process.env.NODE_ENV == "development"
-          ? `${process.env.REACT_APP_DEV_BACKEND_BASE_URL}/${carId}`
-          : `${process.env.REACT_APP_PROD_BACKEND_BASE_URL}/${carId}`,
+        NODE_ENV == "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/details/ids/${carId}`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/details/ids/${carId}`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((response) => {
@@ -191,9 +192,9 @@ const CarDetails = ({ carId }) => {
 
   const handleBuyCar = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars/ids/${carId}/buy`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars/ids/${carsId}/buy`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ids/${carId}/buy`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ids/${carId}/buy`;
     console.log(userId);
     await axios({
       method: "post",
@@ -201,9 +202,9 @@ const CarDetails = ({ carId }) => {
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: {
         buyerId: userId,
@@ -550,9 +551,9 @@ const CarDetails = ({ carId }) => {
               <h3 className="div-header">Specifications</h3>
               <div className="info-content">
                 <div className="overview-content">
-                  <div className="content-key">Mileage</div>
                   <div className="content-key">Torque</div>
                   <div className="content-key">Brake Type (rear)</div>
+                  <div className="content-key">Max Power (bhp)</div>
                   {moreSpecificationToggle ? (
                     <>
                       <div className="content-key">Brake Type (front)</div>
@@ -566,13 +567,13 @@ const CarDetails = ({ carId }) => {
                 </div>
                 <div className="overview-content">
                   <div className="content-value">
-                    {carData.carSpecifications["Mileage"]}
-                  </div>
-                  <div className="content-value">
                     {carData.carSpecifications["Torque"]}
                   </div>
                   <div className="content-value">
                     {carData.carSpecifications["Brake Type (rear)"]}
+                  </div>
+                  <div className="content-value">
+                    {carData.carSpecifications["Max Power (bhp)"]}
                   </div>
                   {moreSpecificationToggle ? (
                     <>
@@ -594,9 +595,9 @@ const CarDetails = ({ carId }) => {
                   )}
                 </div>
                 <div className="overview-content">
-                  <div className="content-key">Max Power (bhp)</div>
                   <div className="content-key">Engine</div>
                   <div className="content-key">Seats</div>
+                  <div className="content-key">Fuel Type</div>
                   {moreSpecificationToggle ? (
                     <>
                       <div className="content-key">Displacement (cc)</div>
@@ -610,13 +611,13 @@ const CarDetails = ({ carId }) => {
                 </div>
                 <div className="overview-content">
                   <div className="content-value">
-                    {carData.carSpecifications["Max Power (bhp)"]}
-                  </div>
-                  <div className="content-value">
                     {carData.carSpecifications["Engine"]}
                   </div>
                   <div className="content-value">
                     {carData.carSpecifications["Seats"]}
+                  </div>
+                  <div className="content-value">
+                    {carData.carOverview.FualType}
                   </div>
                   {moreSpecificationToggle ? (
                     <>
@@ -731,23 +732,20 @@ const CarDetails = ({ carId }) => {
       {carData ? (
         <>
           <div
-            className={`mobile-buy-footer ${
-              scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
-            } transition-all`}
+            className={`mobile-buy-footer ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
+              } transition-all`}
           >
             <div
-              className={`mobile-price ${
-                scrollDirection === "down"
-                  ? "hide-buy-footer"
-                  : "show-buy-footer"
-              } transition-all`}
+              className={`mobile-price ${scrollDirection === "down"
+                ? "hide-buy-footer"
+                : "show-buy-footer"
+                } transition-all`}
             >
               Rs. {carData.carOverview.Price}
             </div>
             <div
-              className={`car-interactive-button-mobile ${
-                scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
-              } transition-all`}
+              className={`car-interactive-button-mobile ${scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
+                } transition-all`}
             >
               <button className="darker-btn" onClick={bookmarkToggle}>
                 {isBookMarked ? (

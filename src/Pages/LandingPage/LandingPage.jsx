@@ -7,7 +7,6 @@ import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import {
   togglePage,
-  setBuyCarDetails,
   getCarBrandsData,
   getCarTypeData,
   setFilterCarBudget,
@@ -17,6 +16,7 @@ import {
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
 import "./LandingPage.css";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const LandingPage = () => {
   const dispatch = useDispatch();
@@ -46,17 +46,17 @@ const LandingPage = () => {
 
   const getBrandData = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000`;
     await axios({
       method: "get",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((res) => {
@@ -76,18 +76,18 @@ const LandingPage = () => {
   };
   const getCarType = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000/types/${brandEvent.eventChange}`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000/types/${brandEvent.eventChange}`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000/types/${brandEvent.eventChange}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands/${budgetEvent?.eventChange[0]}000/${budgetEvent?.eventChange[1]}000/types/${brandEvent.eventChange}`;
 
     await axios({
       method: "get",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((res) => {
@@ -228,20 +228,6 @@ const LandingPage = () => {
         ) : (
           <SellCarLandingPage />
         )}
-        <div className="landing-page-div4">
-          <p className="reviews-heading">Reviews</p>
-          <div className="reviews-div">
-            <div className="customers-review">
-              <img src="/Assets/Component 1.png" alt="Customer Review" />
-            </div>
-            <div className="customers-review">
-              <img src="/Assets/Component 1.png" alt="Customer Review" />
-            </div>
-            <div className="customers-review">
-              <img src="/Assets/Component 1.png" alt="Customer Review" />
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
@@ -265,11 +251,11 @@ function DropDown(props) {
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-          {
-            background: "#eaf2ff",
-            border: "1px solid #d7e0f2",
-            color: "#7b86b3",
-          },
+        {
+          background: "#eaf2ff",
+          border: "1px solid #d7e0f2",
+          color: "#7b86b3",
+        },
       }}
       size="small"
     >
@@ -284,26 +270,26 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-              if (selectName === "Select Budget") {
-                return (
-                  <MenuItem value={el.value} key={el + Math.random(1, 9)}>
-                    {el.displayPrice}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Brand") {
-                return (
-                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                    {el.brand}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Vehicle Type") {
-                return (
-                  <MenuItem value={el.type} key={el + Math.random(1, 9)}>
-                    {el.type}
-                  </MenuItem>
-                );
-              }
-            })}
+            if (selectName === "Select Budget") {
+              return (
+                <MenuItem value={el.value} key={el + Math.random(1, 9)}>
+                  {el.displayPrice}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Brand") {
+              return (
+                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                  {el.brand}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Vehicle Type") {
+              return (
+                <MenuItem value={el.type} key={el + Math.random(1, 9)}>
+                  {el.type}
+                </MenuItem>
+              );
+            }
+          })}
       </Select>
     </FormControl>
   );

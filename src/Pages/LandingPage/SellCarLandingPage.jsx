@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Alert, Snackbar } from "@mui/material";
 import "./LandingPage.css";
+const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 export function SellCarLandingPage() {
   const dispatch = useDispatch();
@@ -107,18 +108,18 @@ export function SellCarLandingPage() {
       carApiId: selectedCarData[0].id,
     };
     const url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/cars/"
-        : "https://car-bazar-backend-pesto-team.vercel.app/cars/";
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars`;
 
     await axios({
       method: "post",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
       data: sellCarData,
     })
@@ -135,17 +136,17 @@ export function SellCarLandingPage() {
 
   const getCarModelData = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year-name`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year-name`;
     await axios({
       method: "get",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((res) => {
@@ -164,17 +165,17 @@ export function SellCarLandingPage() {
   };
   const getCarYearData = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year-name`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id/${brandEvent.eventChange}/year-name`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year-name`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year-name`;
     await axios({
       method: "get",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((res) => {
@@ -193,17 +194,17 @@ export function SellCarLandingPage() {
   };
   const getCarVarientData = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
     await axios({
       method: "get",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((res) => {
@@ -222,18 +223,18 @@ export function SellCarLandingPage() {
   };
   const getSelectedCarDetail = async () => {
     const url =
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:3000/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`
-        : `https://car-bazar-backend-pesto-team.vercel.app/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`;
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`;
 
     await axios({
       method: "get",
       url: url,
       headers: {
         "Access-Control-Allow-Origin":
-          process.env.NODE_ENV === "development"
-            ? process.env.REACT_APP_DEV_CORS_URL
-            : process.env.REACT_APP_PROD_CORS_URL,
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
       },
     })
       .then((res) => {
@@ -481,11 +482,11 @@ function DropDown(props) {
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-          {
-            background: "#eaf2ff",
-            border: "1px solid #d7e0f2",
-            color: "#7b86b3",
-          },
+        {
+          background: "#eaf2ff",
+          border: "1px solid #d7e0f2",
+          color: "#7b86b3",
+        },
       }}
       size="small"
     >
@@ -500,50 +501,50 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-              if (selectName === "Select Brand") {
-                return (
-                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                    {el.brand}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Model") {
-                return (
-                  <MenuItem value={el.name} key={el + Math.random(1, 9)}>
-                    {el.name}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Year") {
-                return (
-                  <MenuItem value={el.year} key={el + Math.random(1, 9)}>
-                    {el.year}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Variant") {
-                return (
-                  <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
-                    {el.trim}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Fuel Type") {
-                return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Ownership") {
-                return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Reg. State") {
-                return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
-                  </MenuItem>
-                );
-              }
-            })}
+            if (selectName === "Select Brand") {
+              return (
+                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                  {el.brand}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Model") {
+              return (
+                <MenuItem value={el.name} key={el + Math.random(1, 9)}>
+                  {el.name}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Year") {
+              return (
+                <MenuItem value={el.year} key={el + Math.random(1, 9)}>
+                  {el.year}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Variant") {
+              return (
+                <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
+                  {el.trim}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Fuel Type") {
+              return (
+                <MenuItem value={el} key={el + Math.random(1, 9)}>
+                  {el}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Ownership") {
+              return (
+                <MenuItem value={el} key={el + Math.random(1, 9)}>
+                  {el}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Reg. State") {
+              return (
+                <MenuItem value={el} key={el + Math.random(1, 9)}>
+                  {el}
+                </MenuItem>
+              );
+            }
+          })}
       </Select>
     </FormControl>
   );
