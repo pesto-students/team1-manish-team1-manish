@@ -9,7 +9,9 @@ import axios from "axios";
 import { authorizeUser, setUserDetails } from "../../Store/CarStore";
 import DarkTheme from "../../Themes/ButtonThemes";
 import { emailValidation, phoneNoValidation } from "../../Utils/FormValidation";
-import { Alert, CircularProgress, Snackbar } from "@mui/material";
+import "./Register.css";
+import "../../styles.css";
+
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -17,8 +19,6 @@ const {
   REACT_APP_DEV_CORS_URL,
   REACT_APP_PROD_CORS_URL,
 } = process.env;
-import "./Register.css";
-import "../../styles.css";
 
 const Register = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -83,6 +83,7 @@ const Register = () => {
       }
       return;
     }
+    setIsLoading(true);
     await axios({
       method: "post",
       url:
@@ -112,6 +113,7 @@ const Register = () => {
             dispatch(authorizeUser());
             dispatch(setUserDetails(response.data));
             navigate("/");
+            setIsLoading(false);
           }, 3000);
         }
       })
@@ -124,6 +126,7 @@ const Register = () => {
             ? error.response.data.message
             : "Something went wrong !",
         });
+        setIsLoading(false);
       });
   };
   const googleLogin = () => {

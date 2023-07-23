@@ -13,7 +13,14 @@ import { authorizeUser, setUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
 import axios from "axios";
 import "./styles.css";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const App = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);

@@ -9,7 +9,13 @@ import "./Login.css";
 import axios from "axios";
 import { authorizeUser, setUserDetails } from "../../Store/CarStore";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const Login = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -29,6 +35,7 @@ const Login = () => {
       setTimeout(() => setMissingLoginParams(false), 1000);
       return;
     }
+    setIsLoading(true);
     await axios({
       method: "post",
       url:
@@ -54,13 +61,20 @@ const Login = () => {
             dispatch(authorizeUser());
             dispatch(setUserDetails(response.data));
             navigate("/");
+            setIsLoading(false);
           }, 3000);
         }
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
+        setIsLoading(false);
       });
   };
   const googleLogin = () => {
@@ -69,7 +83,8 @@ const Login = () => {
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/google`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/google`,
       "popup",
-      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${
+        screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -105,7 +120,12 @@ const Login = () => {
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
           console.log(error);
-          setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          });
         });
       setIsLoading(false);
     }, 1000);
