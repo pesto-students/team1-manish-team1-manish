@@ -6,12 +6,19 @@ import Button from "@mui/material/Button";
 import { Icon } from "@iconify/react";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import axios from "axios";
-import { authorizeUser, setUserDetails } from "../../Store/CarStore";
+import { setUserDetails } from "../../Store/CarStore";
 import DarkTheme from "../../Themes/ButtonThemes";
+import { emailValidation, phoneNoValidation } from "../../Utils/FormValidation";
 import "./Register.css";
 import "../../styles.css";
-import { emailValidation, phoneNoValidation } from "../../Utils/FormValidation";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const Register = () => {
   const isAuthorized = useSelector((state) => state.isAuthUser);
@@ -76,6 +83,7 @@ const Register = () => {
       }
       return;
     }
+    setIsLoading(true);
     await axios({
       method: "post",
       url:
@@ -104,6 +112,7 @@ const Register = () => {
           setTimeout(() => {
             dispatch(setUserDetails(response.data));
             navigate("/");
+            setIsLoading(false);
           }, 3000);
         }
       })
@@ -116,6 +125,7 @@ const Register = () => {
             ? error.response.data.message
             : "Something went wrong !",
         });
+        setIsLoading(false);
       });
   };
   const googleLogin = () => {

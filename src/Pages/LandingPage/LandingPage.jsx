@@ -4,6 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCarBrandsData,
@@ -17,9 +18,16 @@ import {
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
 import "./LandingPage.css";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const LandingPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [budgetEvent, setBudgetEvent] = useState({
@@ -108,6 +116,7 @@ const LandingPage = () => {
   };
 
   const handleCarSearch = async () => {
+    setIsLoading(true);
     dispatch(getCarBrandsData());
     dispatch(getCarTypeData());
     setTimeout(() => {
@@ -115,6 +124,7 @@ const LandingPage = () => {
       dispatch(setFilterCarType(typeEvent.eventChange));
       dispatch(setFilterCarBudget(budgetEvent.eventChange));
       navigate("/buy-car");
+      setIsLoading(false);
     }, 2500);
   };
 
@@ -132,6 +142,13 @@ const LandingPage = () => {
 
   return (
     <>
+      {isLoading ? (
+        <div className="circular-loader">
+          <CircularProgress />
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="landing-page">
         <div className="landing-page-div1">
           <img

@@ -11,7 +11,6 @@ import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import ShowCar from "./Pages/ShowCarPage/ShowCar";
 import { getUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
-import axios from "axios";
 import "./styles.css";
 
 const App = () => {

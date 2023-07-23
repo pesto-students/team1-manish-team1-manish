@@ -8,13 +8,20 @@ import axios from "axios";
 import { getSellCarBrandsData } from "../../Store/CarStore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import "./LandingPage.css";
 import { useNavigate } from "react-router";
 import { carFuelType, carOwnerShip, carRegistrationState } from "../../utility/StaticDropdownContent";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 export function SellCarLandingPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
@@ -78,7 +85,7 @@ export function SellCarLandingPage() {
       year: yearEvent.eventChange,
       model: modelEvent.eventChange,
       fuelType: fuelTypeEvent.eventChange,
-      fuelCapacity: selectedCarData[0].fuel_cap_l ?? "NA",
+      fuelCapacity: selectedCarData[0]?.fuel_cap_l ?? "NA",
       registrationYear: yearEvent.eventChange,
       engine: selectedCarData[0].engine_cc,
       variant: variantEvent.eventChange,
@@ -104,6 +111,7 @@ export function SellCarLandingPage() {
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars`;
+    setIsLoading(true);
 
     await axios({
       method: "post",
@@ -120,10 +128,14 @@ export function SellCarLandingPage() {
         if (res.status == 201) {
           setSelectedCarData(res.data);
           setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
-          setTimeout(() => navigate("/"), 2500);
+          setTimeout(() => {
+            setIsLoading(false);
+            window.location.reload(false);
+          }, 2500);
         }
       })
       .catch((res) => {
+        setIsLoading(false);
         console.log(res);
       });
   };
@@ -216,10 +228,11 @@ export function SellCarLandingPage() {
       });
   };
   const getSelectedCarDetail = async () => {
+    const encodedTrim = encodeURIComponent(variantEvent.eventChange);
     const url =
       NODE_ENV === "development"
-        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${variantEvent.eventChange}`;
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${encodedTrim}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/name/${modelEvent.eventChange}/trim/${encodedTrim}`;
 
     await axios({
       method: "get",
@@ -306,7 +319,14 @@ export function SellCarLandingPage() {
   ]);
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      {isLoading ? (
+        <div className="seller-landing-circular-loader">
+          <CircularProgress />
+        </div>
+      ) : (
+        <></>
+      )}
       <Snackbar
         className="toastify-class"
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
