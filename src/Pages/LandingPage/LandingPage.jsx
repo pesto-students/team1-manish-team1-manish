@@ -7,12 +7,13 @@ import Select from "@mui/material/Select";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  togglePage,
   getCarBrandsData,
   getCarTypeData,
   setFilterCarBudget,
   setFilterCarType,
   setFilterCarBrand,
+  setSellCarFlag,
+  setBuyCarFlag,
 } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
@@ -115,7 +116,6 @@ const LandingPage = () => {
   };
 
   const handleCarSearch = async () => {
-    setIsLoading(true);
     dispatch(getCarBrandsData());
     dispatch(getCarTypeData());
     setTimeout(() => {
@@ -157,7 +157,14 @@ const LandingPage = () => {
           />
           <div className="text-inside-img">
             <p className="img-text">Car to cash in a few hours!</p>
-            <button className="img-btn" onClick={() => dispatch(togglePage())}>
+            <button
+              className="img-btn"
+              onClick={() =>
+                flagPage
+                  ? dispatch(setSellCarFlag())
+                  : dispatch(setBuyCarFlag())
+              }
+            >
               {flagPage ? "Sell Car" : "Buy Car"}
             </button>
           </div>

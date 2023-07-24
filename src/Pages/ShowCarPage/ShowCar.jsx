@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,19 +14,20 @@ import {
   fuelTypeToggleCheck,
   typeToggleCheck,
   searchCarByFilters,
-  toggleCarBookmark,
   resetShowCarDetails,
+  setCarBookmark,
+  removeCarBookmark,
 } from "../../Store/CarStore";
 import "./ShowCar.css";
 import CarDetails from "../CarDetails/CarDetails";
 import { debounce } from "lodash";
 import axios from "axios";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, CircularProgress, Snackbar } from "@mui/material";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 export default function ShowCar() {
   const dispatch = useDispatch();
-  const userId = useSelector((state) => state.userDetails?.id);
+  const userDetails = useSelector((state) => state.userDetails);
   const [isBrandFilterMinimised, setIsBrandFilterMinimised] = useState(false);
   const [isBudgetFilterMinimised, setIsBudgetFilterMinimised] = useState(false);
   const [isTypeFilterMinimised, setIsTypeFilterMinimised] = useState(false);
@@ -114,8 +114,8 @@ export default function ShowCar() {
     setIsOwnershipFilterMinimised((value) => !value);
   };
 
-  const addBookmark = async (id, brand) => {
-    if (!userId) {
+  const addBookmark = async (id) => {
+    if (!userDetails.id) {
       setShowToast({ type: 2, message: "Login to add this car to wishlist !" });
       return;
     }
@@ -123,8 +123,8 @@ export default function ShowCar() {
       method: "post",
       url:
         NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
@@ -138,7 +138,7 @@ export default function ShowCar() {
     })
       .then((response) => {
         if (response.status == 200) {
-          dispatch(toggleCarBookmark(brand));
+          dispatch(setCarBookmark(id));
           setShowToast({ type: 1, message: "Car added to the wishlist !" });
         }
       })
@@ -147,20 +147,20 @@ export default function ShowCar() {
         console.log(error);
         setShowToast({
           type: 2,
-          message: error.response.data.message
+          message: error.response.data?.message
             ? error.response.data.message
             : "Something went wrong !",
         });
       });
   };
 
-  const removeBookmark = async (id, brand) => {
+  const removeBookmark = async (id) => {
     await axios({
       method: "delete",
       url:
         NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
@@ -174,7 +174,7 @@ export default function ShowCar() {
     })
       .then((response) => {
         if (response.status == 200) {
-          dispatch(toggleCarBookmark(brand));
+          dispatch(removeCarBookmark(id));
           setShowToast({ type: 1, message: "Car removed from the wishlist !" });
         }
       })
@@ -183,7 +183,7 @@ export default function ShowCar() {
         console.log(error);
         setShowToast({
           type: 2,
-          message: error.response.data.message
+          message: error.response.data?.message
             ? error.response.data.message
             : "Something went wrong !",
         });
@@ -205,8 +205,7 @@ export default function ShowCar() {
       carBrands &&
       carTypes &&
       carOwnerships &&
-      carFuelTypes &&
-      !buyCarDetail.length
+      carFuelTypes
     )
       dispatch(searchCarByFilters());
 
@@ -261,7 +260,6 @@ export default function ShowCar() {
                   type="text"
                   placeholder="eg. Astorn Martin"
                 />
-                <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
                 className={`brand-filters  ${isBrandFilterMinimised ? "minimise-filter" : ""
@@ -353,7 +351,6 @@ export default function ShowCar() {
                   type="text"
                   placeholder="eg. SUV, Sedan"
                 />
-                <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
                 className={`brand-filters   ${isTypeFilterMinimised ? "minimise-filter" : ""
@@ -426,7 +423,6 @@ export default function ShowCar() {
                   type="text"
                   placeholder="eg. SUV, Sedan"
                 />
-                <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
                 className={`brand-filters   ${isFuelTypeFilterMinimised ? "minimise-filter" : ""
@@ -502,7 +498,6 @@ export default function ShowCar() {
                   type="text"
                   placeholder="eg. SUV, Sedan"
                 />
-                <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <div
                 className={`brand-filters   ${isOwnershipFilterMinimised ? "minimise-filter" : ""
@@ -568,7 +563,6 @@ export default function ShowCar() {
                   type="text"
                   placeholder="Search Cars"
                 />
-                <img src="/searchIcon.svg" alt="Search Brand" />
               </div>
               <button
                 className="filter-btn"
@@ -600,101 +594,119 @@ export default function ShowCar() {
               </div>
             </div>
             <div className="show-car-ondemand">
-              {buyCarDetail.map((el) => {
-                if (showCarDetailSearchBarFilter.length) {
-                  if (
-                    `${el.brand} ${el.model}`
-                      .toLocaleLowerCase()
-                      .includes(
-                        showCarDetailSearchBarFilter.toLocaleLowerCase()
-                      )
-                  ) {
-                    return (
-                      <div className="show-car-card" key={el.id}>
-                        <div className="car-card-header">
-                          <div className="car-card-details">
-                            <p className="car-card-name">
-                              {el.brand + " " + el.model}
-                            </p>
-                            <p className="car-card-type">{el.type}</p>
-                          </div>
-                          <button
-                            className="darker-btn"
-                            onClick={() =>
-                              el.bookmarked
-                                ? removeBookmark(el.id, el.brand)
-                                : addBookmark(el.id, el.brand)
-                            }
-                          >
-                            {el.bookmarked ? (
-                              <Icon icon="iconamoon:bookmark-fill" />
-                            ) : (
-                              <Icon icon="iconamoon:bookmark-bold" />
-                            )}
-                          </button>
-                        </div>
-                        <div
-                          className="car-card-img"
-                          onClick={() => {
-                            setSelectedCar(el.id);
-                          }}
-                        >
-                          <img src="/Assets/temp-car-img.svg" alt="Car Image" />
-                        </div>
-                        <div className="car-card-specs">
-                          <span>Tags</span>
-                          <p className="car-card-price">
-                            {formatPrice(parseFloat(el.price))}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  } else return null;
-                } else
-                  return (
-                    <div className="show-car-card" key={el.id}>
-                      <div className="car-card-header">
-                        <div className="car-card-details">
-                          <p className="car-card-name">
-                            {el.brand + " " + el.model}
-                          </p>
-                          <p className="car-card-type">{el.type}</p>
-                        </div>
-                        <button
-                          className="darker-btn"
-                          onClick={() =>
-                            el.bookmarked
-                              ? removeBookmark(el.id, el.brand)
-                              : addBookmark(el.id, el.brand)
-                          }
-                        >
-                          {el.bookmarked ? (
-                            <Icon icon="iconamoon:bookmark-fill" />
-                          ) : (
-                            <Icon icon="iconamoon:bookmark-bold" />
-                          )}
-                        </button>
-                      </div>
-                      <div
-                        className="car-card-img"
-                        onClick={() => {
-                          setSelectedCar(el.id);
-                        }}
-                      >
-                        <img src="/Assets/temp-car-img.svg" alt="Car Image" />
-                      </div>
-                      <div className="car-card-specs">
-                        <span>Tags</span>
-                        <p className="car-card-price">
-                          {formatPrice(parseFloat(el.price))}
-                        </p>
-                      </div>
+              {
+                !buyCarDetail ?
+                  (
+                    <div className="buy-car-detail-loader">
+                      <CircularProgress />
                     </div>
-                  );
-              })}
+                  ) :
+                  (
+                    buyCarDetail.map((el) => {
+                      if (showCarDetailSearchBarFilter.length) {
+                        if (
+                          `${el.brand} ${el.model}`
+                            .toLocaleLowerCase()
+                            .includes(
+                              showCarDetailSearchBarFilter.toLocaleLowerCase()
+                            )
+                        ) {
+                          return (
+                            <div className="show-car-card" key={el.id}>
+                              <div className="car-card-header">
+                                <div className="car-card-details">
+                                  <p className="car-card-name">
+                                    {el.brand + " " + el.model}
+                                  </p>
+                                  <p className="car-card-type">{el.type}</p>
+                                </div>
+                                {
+                                  userDetails.bookmark_ids.includes(el.id) ?
+                                    (
+                                      <button
+                                        className="darker-btn"
+                                        onClick={() => removeBookmark(el.id)}
+                                      >
+                                        <Icon icon="iconamoon:bookmark-fill" />
+                                      </button>
+                                    ) :
+                                    (
+                                      <button
+                                        className="darker-btn"
+                                        onClick={() => addBookmark(el.id)}
+                                      ><Icon icon="iconamoon:bookmark-bold" />
+                                      </button>
+                                    )
+                                }
+                              </div>
+                              <div
+                                className="car-card-img"
+                                onClick={() => {
+                                  setSelectedCar(el.id);
+                                }}
+                              >
+                                <img src="/Assets/temp-car-img.svg" alt="Car Image" />
+                              </div>
+                              <div className="car-card-specs">
+                                <span>Tags</span>
+                                <p className="car-card-price">
+                                  {formatPrice(parseFloat(el.price))}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        } else return null;
+                      } else
+                        return (
+                          <div className="show-car-card" key={el.id}>
+                            <div className="car-card-header">
+                              <div className="car-card-details">
+                                <p className="car-card-name">
+                                  {el.brand + " " + el.model}
+                                </p>
+                                <p className="car-card-type">{el.type}</p>
+                              </div>
+                              {
+                                userDetails.bookmark_ids.includes(el.id) ?
+                                  (
+                                    <button
+                                      className="darker-btn"
+                                      onClick={() => removeBookmark(el.id)}
+                                    >
+                                      <Icon icon="iconamoon:bookmark-fill" />
+                                    </button>
+                                  ) :
+                                  (
+                                    <button
+                                      className="darker-btn"
+                                      onClick={() => addBookmark(el.id)}
+                                    ><Icon icon="iconamoon:bookmark-bold" />
+                                    </button>
+                                  )
+                              }
+                            </div>
+                            <div
+                              className="car-card-img"
+                              onClick={() => {
+                                setSelectedCar(el.id);
+                              }}
+                            >
+                              <img src="/Assets/temp-car-img.svg" alt="Car Image" />
+                            </div>
+                            <div className="car-card-specs">
+                              <span>Tags</span>
+                              <p className="car-card-price">
+                                {formatPrice(parseFloat(el.price))}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                    })
+                  )
+              }
             </div>
           </div>
-        </div>
+        </div >
       </>
     );
 }

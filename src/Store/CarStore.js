@@ -4,6 +4,7 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { globalInitialState } from "./InitialState";
+import axios from "axios";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 
@@ -31,117 +32,157 @@ export const searchCarByFilters = createAsyncThunk(
           .filter((el) => el.checked === true)
           .map((el) => el.ownership),
       }).toString();
-    console.log(url);
-    return fetch(url, {
+    return axios(url, {
       headers: {
         "Access-Control-Allow-Origin":
           NODE_ENV === "development"
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then(async (response) => {
-      return await response.json();
-    });
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });;
+  }
+);
+
+export const getUserDetails = createAsyncThunk(
+  "userDetails/getUserDetails",
+  async () => {
+    return axios((NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/login/success`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/login/success`), {
+      headers: {
+        "Access-Control-Allow-Origin":
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
+      },
+      withCredentials: true,
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
   }
 );
 
 export const getCarBrandsData = createAsyncThunk(
   "carBrands/getCarBrandsData",
   async () => {
-    const url =
-      NODE_ENV === "development"
+    return axios(
+      (NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/brands`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands`;
-    return fetch(url, {
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands`), {
       headers: {
         "Access-Control-Allow-Origin":
           NODE_ENV === "development"
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then(async (response) => {
-      return await response.json();
-    });
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });;
   }
 );
 
 export const getSellCarBrandsData = createAsyncThunk(
   "carBrands/getSellCarBrandsData",
   async () => {
-    const url =
-      NODE_ENV === "development"
-        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id`;
-    return fetch(url, {
+    return axios((NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id`), {
       headers: {
         "Access-Control-Allow-Origin":
           NODE_ENV === "development"
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then(async (response) => {
-      return await response.json();
-    });
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });;
   }
 );
 
 export const getCarTypeData = createAsyncThunk(
   "carTypes/getCarTypesData",
   async () => {
-    const url =
-      NODE_ENV === "development"
+    return axios(
+      (NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/car-types`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/car-types`;
-    return fetch(url, {
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/car-types`), {
       headers: {
         "Access-Control-Allow-Origin":
           NODE_ENV === "development"
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then(async (response) => {
-      return await response.json();
-    });
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });;
   }
 );
 
 export const getCarFuelTypeData = createAsyncThunk(
   "carFualTypes/getCarFualTypesData",
   async () => {
-    const url =
+    return axios((
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/fuel-types`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/fuel-types`;
-    return fetch(url, {
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/fuel-types`
+    ), {
       headers: {
         "Access-Control-Allow-Origin":
           NODE_ENV === "development"
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then(async (response) => {
-      return await response.json();
-    });
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });;
   }
 );
 
 export const getCarOwnershipData = createAsyncThunk(
   "carOwnership/getCarOwnershipData",
   async () => {
-    const url =
-      NODE_ENV === "development"
-        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ownerships`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ownerships`;
-    return fetch(url, {
+    return axios((NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ownerships`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ownerships`), {
       headers: {
         "Access-Control-Allow-Origin":
           NODE_ENV === "development"
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then(async (response) => {
-      return await response.json();
-    });
+    }).then((response) => {
+      return response.data;
+    })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });;
   }
 );
 
@@ -149,17 +190,27 @@ const CarSlice = createSlice({
   name: "CarDetails",
   initialState: globalInitialState,
   reducers: {
-    togglePage: (state) => {
-      state.flag = !state.flag;
+    setBuyCarFlag: (state) => {
+      state.flag = true;
     },
-    toggleBookmark: (state) => {
-      state.bookmarkFlag = !state.bookmarkFlag;
-    },
-    authorizeUser: (state) => {
-      state.isAuthUser = true;
+    setSellCarFlag: (state) => {
+      state.flag = false;
     },
     unAuthorizeUser: (state) => {
       state.isAuthUser = false;
+      state.userDetails = {
+        id: null,
+        name: null,
+        first_name: null,
+        last_name: null,
+        email: null,
+        phone_no: null,
+        password: null,
+        role_id: null,
+        auth_provider: null,
+        bookmark_ids: [],
+        otp: null
+      };
     },
     setUserDetails: (state, action) => {
       state.userDetails = action.payload;
@@ -227,14 +278,45 @@ const CarSlice = createSlice({
     setFilterCarBudget: (state, action) => {
       state.carBudgetRange = action.payload;
     },
-    toggleCarBookmark: (state, action) => {
-      let updatedCarsData = state.buyCarDetails.buyCar;
+    setCarBookmark: (state, action) => {
+      console.log("add before");
+      console.log({ ...state });
+      let updatedState = { ...state };
+      let updatedCarsData = updatedState.buyCarDetails.buyCar;
       updatedCarsData = updatedCarsData.map((el) => {
-        if (el.brand === action.payload) {
-          return { ...el, bookmarked: !el.bookmarked };
+        if (el.id === action.payload) {
+          return { ...el, bookmarked: true };
         } else return el;
       });
-      state.buyCarDetails.buyCar = updatedCarsData;
+      updatedState.buyCarDetails.buyCar = updatedCarsData;
+
+      let userUpdatedBookmarks = updatedState.userDetails;
+      userUpdatedBookmarks = userUpdatedBookmarks.bookmark_ids.push(action.payload);
+      updatedState.userDetails = userUpdatedBookmarks;
+
+      state = { ...updatedState };
+      console.log("add after");
+      console.log(state);
+    },
+    removeCarBookmark: (state, action) => {
+      console.log("remove before");
+      console.log(state);
+      let updatedState = state;
+      let updatedCarsData = updatedState.buyCarDetails.buyCar;
+      updatedCarsData = updatedCarsData.map((el) => {
+        if (el.id === action.payload) {
+          return { ...el, bookmarked: false };
+        } else return el;
+      });
+      updatedState.buyCarDetails.buyCar = updatedCarsData;
+
+      let userUpdatedBookmarks = updatedState.userDetails;
+      userUpdatedBookmarks = userUpdatedBookmarks.bookmark_ids.filter(id => id !== action.payload);
+      updatedState.userDetails = userUpdatedBookmarks;
+
+      state = updatedState;
+      console.log("removeafter");
+      console.log(state);
     },
     resetShowCarDetails: (state, action) => {
       state.buyCarDetails.buyCar = [];
@@ -253,6 +335,26 @@ const CarSlice = createSlice({
     },
     [getSellCarBrandsData.rejected]: (state, actions) => {
       state.sellCarBrandData.loading = true;
+    },
+    [getUserDetails.fulfilled]: (state, actions) => {
+      state.isAuthUser = true;
+      state.userDetails = actions.payload;
+    },
+    [getUserDetails.rejected]: (state, actions) => {
+      state.isAuthUser = false;
+      state.userDetails = {
+        id: null,
+        name: null,
+        first_name: null,
+        last_name: null,
+        email: null,
+        phone_no: null,
+        password: null,
+        role_id: null,
+        auth_provider: null,
+        bookmark_ids: [],
+        otp: null
+      };
     },
     [getCarBrandsData.pending]: (state, actions) => {
       state.carBrandData.loading = true;
@@ -311,15 +413,7 @@ const CarSlice = createSlice({
     },
     [searchCarByFilters.fulfilled]: (state, actions) => {
       state.buyCarDetails.loading = false;
-      state.buyCarDetails.buyCar = actions.payload.map((el) => {
-        if (
-          state.userDetails &&
-          state.userDetails.bookmark_ids &&
-          state.userDetails.bookmark_ids.includes(el.id)
-        ) {
-          return { ...el, bookmarked: true };
-        } else return { ...el, bookmarked: false };
-      });
+      state.buyCarDetails.buyCar = actions.payload;
     },
     [searchCarByFilters.rejected]: (state, actions) => {
       state.buyCarDetails.loading = true;
@@ -328,11 +422,10 @@ const CarSlice = createSlice({
 });
 
 export const {
-  togglePage,
-  toggleBookmark,
+  setBuyCarFlag,
+  setSellCarFlag,
   carBodyData,
   carBudgetRange,
-  authorizeUser,
   setUserDetails,
   unAuthorizeUser,
   setCarModelData,
@@ -345,7 +438,8 @@ export const {
   setFilterCarBrand,
   setFilterCarType,
   setFilterCarBudget,
-  toggleCarBookmark,
+  setCarBookmark,
+  removeCarBookmark,
   resetShowCarDetails,
 } = CarSlice.actions;
 
