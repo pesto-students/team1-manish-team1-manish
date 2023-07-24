@@ -8,7 +8,7 @@ import { GlobalStyles } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { unAuthorizeUser, setUserDetails } from "../../Store/CarStore";
+import { unAuthorizeUser } from "../../Store/CarStore";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const Menu = React.forwardRef(function Menu(props, ref) {
@@ -120,7 +120,6 @@ export default function UseMenu() {
               // setShowToast({ type: 1, message: 'Successfully Logged out!' })
               setTimeout(() => {
                 dispatch(unAuthorizeUser());
-                dispatch(setUserDetails(null));
                 navigate("/");
               }, 3000);
             }

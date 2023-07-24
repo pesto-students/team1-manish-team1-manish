@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserActivity from "../UserActivity/UserActivity";
 import UserActivityCard from "../UserActivityCard/UserActivityCard";
-import { setUserDetails, unAuthorizeUser } from "../../Store/CarStore";
+import { unAuthorizeUser } from "../../Store/CarStore";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -66,7 +66,6 @@ function UserDetailView() {
           // setShowToast({ type: 1, message: 'Successfully Logged out!' })
           setTimeout(() => {
             dispatch(unAuthorizeUser());
-            dispatch(setUserDetails(null));
             navigate("/");
           }, 3000);
         }

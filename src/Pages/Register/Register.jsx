@@ -61,7 +61,6 @@ const Register = () => {
         if (response.status == 201) {
           setShowToast({ type: 1, message: "Authentication Successfull!" });
           setTimeout(() => {
-            dispatch(authorizeUser());
             dispatch(setUserDetails(response.data));
             navigate("/");
           }, 3000);
@@ -106,7 +105,6 @@ const Register = () => {
           if (response.status == 201) {
             setShowToast({ type: 1, message: 'Authentication Successfull!' })
             setTimeout(() => {
-              dispatch(authorizeUser());
               dispatch(setUserDetails(response.data));
               navigate("/");
             }, 3000);

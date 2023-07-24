@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import { Alert, Snackbar } from "@mui/material";
 import "./LandingPage.css";
 import { useNavigate } from "react-router";
+import { carFuelType, carOwnerShip, carRegistrationState } from "../../utility/StaticDropdownContent";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 export function SellCarLandingPage() {
@@ -26,15 +27,6 @@ export function SellCarLandingPage() {
   });
   const carBrands = useSelector((state) => {
     return state.sellCarBrandData.carBrand;
-  });
-  const carOwners = useSelector((state) => {
-    return state.carOwnerShip;
-  });
-  const carFuel = useSelector((state) => {
-    return state.carFuelType;
-  });
-  const carRegState = useSelector((state) => {
-    return state.carRegState;
   });
 
   const [brandEvent, setBrandEvent] = useState({
@@ -58,17 +50,17 @@ export function SellCarLandingPage() {
     eventChange: "",
   });
   const [fuelTypeEvent, setFuelTypeEvent] = useState({
-    showData: carFuel,
+    showData: carFuelType,
     isStateUpdate: false,
     eventChange: "",
   });
   const [ownerShipEvent, setOwnerShipEvent] = useState({
-    showData: carOwners,
+    showData: carOwnerShip,
     isStateUpdate: false,
     eventChange: "",
   });
   const [carRegStateEvent, setCarRegStateEvent] = useState({
-    showData: carRegState,
+    showData: carRegistrationState,
     isStateUpdate: false,
     eventChange: "",
   });
