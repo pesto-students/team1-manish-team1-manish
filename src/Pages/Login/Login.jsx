@@ -51,7 +51,6 @@ const Login = () => {
         if (response.status == 200) {
           setShowToast({ type: 1, message: "Authentication Successfull!" });
           setTimeout(() => {
-            dispatch(authorizeUser());
             dispatch(setUserDetails(response.data));
             navigate("/");
           }, 3000);
@@ -96,7 +95,6 @@ const Login = () => {
           if (response.status == 200) {
             setShowToast({ type: 1, message: "Authentication Successfull!" });
             setTimeout(() => {
-              dispatch(authorizeUser());
               dispatch(setUserDetails(response.data));
               navigate("/");
             }, 3000);

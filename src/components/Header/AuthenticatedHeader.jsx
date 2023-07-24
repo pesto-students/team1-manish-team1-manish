@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setUserDetails,
-  togglePage,
+  setBuyCarFlag,
+  setSellCarFlag,
   unAuthorizeUser,
 } from "../../Store/CarStore";
 import UseMenu from "../UserProfileMenu/UserMenu";
@@ -37,7 +37,6 @@ const AuthenticatedHeader = () => {
           // setShowToast({ type: 1, message: 'Successfully Logged out!' })
           setTimeout(() => {
             dispatch(unAuthorizeUser());
-            dispatch(setUserDetails(null));
             navigate("/");
           }, 3000);
         }
@@ -78,14 +77,28 @@ const AuthenticatedHeader = () => {
           </div>
         </div>
         <div className="header-links">
-          <Link to="/">
-            <button
-              className="header-signup-btn"
-              onClick={() => dispatch(togglePage())}
-            >
-              {flagPage ? "Buy Car" : "Sell Car"}
-            </button>
-          </Link>
+          {
+            flagPage ?
+              (
+                <Link to="/buy-car">
+                  <button
+                    className="header-signup-btn"
+                    onClick={() => dispatch(setSellCarFlag())}
+                  >
+                    Buy Car
+                  </button>
+                </Link>
+              ) : (
+                <Link to="/">
+                  <button
+                    className="header-signup-btn"
+                    onClick={() => dispatch(setBuyCarFlag())}
+                  >
+                    Sell Car
+                  </button>
+                </Link>
+              )
+          }
         </div>
         <div className="hamburger-container">
           <div
@@ -98,15 +111,29 @@ const AuthenticatedHeader = () => {
             <span></span>
           </div>
           <div className={`hamburger-links-${toggleHeaderClass}`}>
-            <p
-              className="hamburger-signup-btn dark-font"
-              onClick={() => {
-                toggleHeader();
-                dispatch(togglePage());
-              }}
-            >
-              {flagPage ? "Sell Car" : "Buy Car"}
-            </p>
+            {
+              flagPage ?
+                (<p
+                  className="hamburger-signup-btn dark-font"
+                  onClick={() => {
+                    toggleHeader();
+                    dispatch(setSellCarFlag());
+                  }}
+                >
+                  <Link to="/buy-car">
+                    Buy Car
+                  </Link>
+                </p>) :
+                (<p
+                  className="hamburger-signup-btn dark-font"
+                  onClick={() => {
+                    toggleHeader();
+                    dispatch(setBuyCarFlag());
+                  }}
+                >
+                  Sell Car
+                </p>)
+            }
             <Link to="/me">
               <p
                 className="hamburger-signup-btn"

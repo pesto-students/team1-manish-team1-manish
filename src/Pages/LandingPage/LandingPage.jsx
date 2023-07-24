@@ -6,12 +6,13 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  togglePage,
   getCarBrandsData,
   getCarTypeData,
   setFilterCarBudget,
   setFilterCarType,
   setFilterCarBrand,
+  setSellCarFlag,
+  setBuyCarFlag,
 } from "../../Store/CarStore";
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
@@ -107,7 +108,6 @@ const LandingPage = () => {
   };
 
   const handleCarSearch = async () => {
-    // const url = `http://localhost:3000/cars/brands/${budgetEvent.eventChange[0]}/${budgetEvent.eventChange[1]}/types/${brandEvent.eventChange}/${typeEvent.eventChange}`;
     dispatch(getCarBrandsData());
     dispatch(getCarTypeData());
     setTimeout(() => {
@@ -141,7 +141,7 @@ const LandingPage = () => {
           />
           <div className="text-inside-img">
             <p className="img-text">Car to cash in a few hours!</p>
-            <button className="img-btn" onClick={() => dispatch(togglePage())}>
+            <button className="img-btn" onClick={() => flagPage ? dispatch(setSellCarFlag()) : dispatch(setBuyCarFlag())}>
               {flagPage ? "Sell Car" : "Buy Car"}
             </button>
           </div>

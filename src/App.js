@@ -9,46 +9,25 @@ import Login from "./Pages/Login/Login";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import AuthenticatedHeader from "./components/Header/AuthenticatedHeader";
 import ShowCar from "./Pages/ShowCarPage/ShowCar";
-import { authorizeUser, setUserDetails } from "./Store/CarStore";
+import { getUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
 import axios from "axios";
 import "./styles.css";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const App = () => {
-  const isAuthorized = useSelector((state) => state.isAuthUser);
+  const userDetails = useSelector((state) => {
+    return state.userDetails;
+  });
   const dispatch = useDispatch();
   useEffect(() => {
-    const autoLogin = async () => {
-      await axios({
-        method: "get",
-        url:
-          NODE_ENV === "development"
-            ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/login/success`
-            : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/login/success`,
-        withCredentials: true,
-        headers: {
-          "Access-Control-Allow-Origin":
-            NODE_ENV === "development"
-              ? REACT_APP_DEV_CORS_URL
-              : REACT_APP_PROD_CORS_URL,
-        },
-      })
-        .then((response) => {
-          if (response.status == 200) {
-            dispatch(authorizeUser());
-            dispatch(setUserDetails(response.data));
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    autoLogin();
-  }, []);
+    console.log(userDetails.id);
+    if (!userDetails.id) {
+      dispatch(getUserDetails());
+    }
+  }, [userDetails]);
   return (
     <div className="App">
-      {isAuthorized ? <AuthenticatedHeader /> : <Header />}
+      {userDetails.id ? <AuthenticatedHeader /> : <Header />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />

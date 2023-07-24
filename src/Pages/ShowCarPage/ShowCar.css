@@ -370,6 +370,19 @@
   line-height: 22px;
 }
 
+.buy-car-detail-loader {
+  position: fixed;
+  z-index: 99;
+  height: 100%;
+  width: 100%;
+}
+
+.buy-car-detail-loader>span {
+  position: relative;
+  top: 24vh;
+  left: 45vw;
+}
+
 .minimise-filter {
   display: none;
 }
