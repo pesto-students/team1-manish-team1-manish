@@ -12,6 +12,7 @@ import { Alert, Snackbar } from "@mui/material";
 import "./LandingPage.css";
 import { useNavigate } from "react-router";
 import { carFuelType, carOwnerShip, carRegistrationState } from "../../utility/StaticDropdownContent";
+import { hasEmptyValues } from "../../utility/HelperFunctions";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 export function SellCarLandingPage() {
@@ -70,7 +71,7 @@ export function SellCarLandingPage() {
   const [nearRTOoffice, setnearRTOoffice] = useState("");
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState({ array: [] });
-  const [selectedCarData, setSelectedCarData] = useState();
+  const [selectedCarData, setSelectedCarData] = useState([]);
 
   const handleSellCarSubmit = async () => {
     const sellCarData = {
@@ -78,13 +79,13 @@ export function SellCarLandingPage() {
       year: yearEvent.eventChange,
       model: modelEvent.eventChange,
       fuelType: fuelTypeEvent.eventChange,
-      fuelCapacity: selectedCarData[0].fuel_cap_l ?? "NA",
+      fuelCapacity: selectedCarData[0]?.fuel_cap_l ?? "NA",
       registrationYear: yearEvent.eventChange,
-      engine: selectedCarData[0].engine_cc,
+      engine: selectedCarData[0]?.engine_cc,
       variant: variantEvent.eventChange,
       ownership: ownerShipEvent.eventChange,
       kmDriven: totalKMSDriven,
-      transmission: selectedCarData[0].transmission_type,
+      transmission: selectedCarData[0]?.transmission_type,
       transmissionShort: selectedCarData[0]?.transmission_type?.substring(0, 5),
       insurance: "NA",
       pinCode: carPinCode,
@@ -95,11 +96,19 @@ export function SellCarLandingPage() {
       buyerId: null,
       nearestRtoOffice: nearRTOoffice,
       price: Math.ceil(Math.random() * (50000 - 5000) + 5000),
-      type: selectedCarData[0].body,
+      type: selectedCarData[0]?.body,
       tags: ["Best Sellar"],
       images: image.array,
-      carApiId: selectedCarData[0].id,
+      carApiId: selectedCarData[0]?.id,
     };
+    if (!userDetail.id) {
+      setShowToast({ type: 2, message: "Login to sell a car !" });
+      return;
+    }
+    if (hasEmptyValues(sellCarData, 'buyerId') || !image.array.length) {
+      setShowToast({ type: 2, message: "Please fill all details !" });
+      return;
+    }
     const url =
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars`
@@ -120,7 +129,7 @@ export function SellCarLandingPage() {
         if (res.status == 201) {
           setSelectedCarData(res.data);
           setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
-          setTimeout(() => navigate("/"), 2500);
+          setTimeout(() => navigate("/buy-car"), 2500);
         }
       })
       .catch((res) => {
@@ -243,6 +252,10 @@ export function SellCarLandingPage() {
 
   const handleUpload = async () => {
     if (!files) {
+      return;
+    }
+    if (!userDetail.id) {
+      setShowToast({ type: 2, message: "Login to sell a car !" });
       return;
     }
     for (let i = 0; i < files.length; i++) {
@@ -405,7 +418,7 @@ export function SellCarLandingPage() {
               multiple
               onChange={(event) => setFiles(event.target.files)}
             />
-            <button onClick={handleUpload}>Upload</button>
+            <button className="upload-button" onClick={handleUpload}>Upload</button>
           </div>
         </div>
         <div className="submit-btn">
@@ -472,6 +485,7 @@ function DropDown(props) {
 
   return (
     <FormControl
+      disabled={!eventToHandle.showData.length}
       sx={{
         minWidth: 120,
         width: 283,

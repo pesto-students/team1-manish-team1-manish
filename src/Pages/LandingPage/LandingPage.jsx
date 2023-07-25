@@ -17,11 +17,16 @@ import {
 import { SellCarLandingPage } from "./SellCarLandingPage";
 import axios from "axios";
 import "./LandingPage.css";
+import { Alert, Snackbar } from "@mui/material";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const LandingPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
+  const resetToast = () => {
+    setShowToast({ type: 0, message: "" });
+  };
   const [budgetEvent, setBudgetEvent] = useState({
     showData: [
       { displayPrice: "Up to 5K", value: [0, 5] },
@@ -108,6 +113,10 @@ const LandingPage = () => {
   };
 
   const handleCarSearch = async () => {
+    if (!brandEvent.eventChange || !typeEvent.eventChange || !budgetEvent.eventChange) {
+      setShowToast({ type: 2, message: "Please fill all details !" });
+      return;
+    }
     dispatch(getCarBrandsData());
     dispatch(getCarTypeData());
     setTimeout(() => {
@@ -132,6 +141,28 @@ const LandingPage = () => {
 
   return (
     <>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
       <div className="landing-page">
         <div className="landing-page-div1">
           <img
