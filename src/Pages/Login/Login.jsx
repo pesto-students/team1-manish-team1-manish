@@ -7,7 +7,7 @@ import DarkTheme from "../../Themes/ButtonThemes";
 import { useSelector, useDispatch } from "react-redux";
 import "./Login.css";
 import axios from "axios";
-import { authorizeUser, setUserDetails } from "../../Store/CarStore";
+import { setUserDetails } from "../../Store/CarStore";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
 const {
   NODE_ENV,
@@ -18,7 +18,9 @@ const {
 } = process.env;
 
 const Login = () => {
-  const isAuthorized = useSelector((state) => state.isAuthUser);
+  const userDetails = useSelector((state) => {
+    return state.userDetails;
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -82,8 +84,7 @@ const Login = () => {
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/google`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/google`,
       "popup",
-      `popup = true,width=400,height=600,left=${
-        screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -129,10 +130,10 @@ const Login = () => {
     }, 1000);
   };
   useEffect(() => {
-    if (isAuthorized) {
+    if (userDetails.id) {
       navigate("/");
     }
-  }, []);
+  }, [userDetails]);
   return (
     <>
       {isLoading ? (

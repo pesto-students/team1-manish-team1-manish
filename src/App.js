@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import LandingPage from "./Pages/LandingPage/LandingPage";
@@ -17,13 +17,17 @@ const App = () => {
   const userDetails = useSelector((state) => {
     return state.userDetails;
   });
+  const [silentLoginCounter, setSilentLoginCounter] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(userDetails.id);
-    if (!userDetails.id) {
+    if (!userDetails.id && silentLoginCounter < 5) {
       dispatch(getUserDetails());
+      setSilentLoginCounter(value => value + 1)
     }
-  }, [userDetails]);
+    else if (userDetails.id) {
+      setSilentLoginCounter(0);
+    }
+  }, [userDetails, silentLoginCounter]);
   return (
     <div className="App">
       {userDetails.id ? <AuthenticatedHeader /> : <Header />}

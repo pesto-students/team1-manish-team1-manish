@@ -11,7 +11,7 @@ import {
 import DarkTheme from "../../Themes/ButtonThemes";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
-const ForgotPasswordOTP = ({ email }) => {
+const ForgotPasswordOTP = ({ name = 'user', email, callbackComponent = null, callbackFunction = null }) => {
   const num1 = useRef();
   const num2 = useRef();
   const num3 = useRef();
@@ -81,12 +81,15 @@ const ForgotPasswordOTP = ({ email }) => {
 
   const sendOtp = async () => {
     setIsLoading(true);
+    const forgotOtpUrl = NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/send`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/send`
+    const verifyUserOtpUrl = NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/verify/otp/send`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/verify/otp/send`
     await axios({
       method: "post",
-      url:
-        NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/send`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/send`,
+      url: (callbackComponent !== null && callbackFunction === null) ? forgotOtpUrl : verifyUserOtpUrl,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
@@ -94,9 +97,7 @@ const ForgotPasswordOTP = ({ email }) => {
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-      data: {
-        email: email,
-      },
+      data: (callbackComponent !== null && callbackFunction === null) ? { email: email } : { name: name, email: email },
     })
       .then((response) => {
         if (response.status == 200) {
@@ -117,12 +118,15 @@ const ForgotPasswordOTP = ({ email }) => {
       return;
     }
     setIsLoading(true);
+    const forgotOtpUrl = NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/validate`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/validate`
+    const verifyUserOtpUrl = NODE_ENV === "development"
+      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/verify/otp/validate`
+      : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/verify/otp/validate`
     await axios({
       method: "post",
-      url:
-        NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/otp/validate`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/otp/validate`,
+      url: (callbackComponent !== null && callbackFunction === null) ? forgotOtpUrl : verifyUserOtpUrl,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
@@ -137,9 +141,11 @@ const ForgotPasswordOTP = ({ email }) => {
     })
       .then((response) => {
         if (response.status == 200) {
-          setIsLoading(false);
-          setShowToast({ type: 1, message: "OTP validation successfull !" });
-          setTimeout(() => setIsOtpValid(true), 2500);
+          setTimeout(() => {
+            setIsOtpValid(true);
+            setIsLoading(false);
+            setShowToast({ type: 1, message: "OTP validation successfull !" });
+          }, 2500);
         }
       })
       .catch((error) => {
@@ -149,8 +155,12 @@ const ForgotPasswordOTP = ({ email }) => {
       });
   };
 
-  if (isOtpValid) {
-    return <ConfirmPassword email={email} />;
+  if (isOtpValid && callbackComponent !== null) {
+    return callbackComponent();
+  }
+
+  if (isOtpValid && callbackFunction !== null) {
+    callbackFunction();
   }
 
   return (
@@ -186,9 +196,9 @@ const ForgotPasswordOTP = ({ email }) => {
       </Snackbar>
       <div className="forgot__password_container">
         <div className="forgot__password">
-          <h1 className="forgot__password__header">Forgot Password?!</h1>
+          <h1 className="forgot__password__header">{(callbackComponent !== null && callbackFunction === null) ? 'Forgot Password?!' : 'Verify Your Email'}</h1>
           <p className="forgot__password__sub-header">
-            Enter the OTP sent on your registered email ID
+            Enter the OTP sent to your {(callbackComponent !== null && callbackFunction === null) ? 'registered' : ''} email
           </p>
           <div className="forgot_password__otp">
             <input

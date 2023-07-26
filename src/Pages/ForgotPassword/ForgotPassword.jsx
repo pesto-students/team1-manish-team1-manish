@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
 import axios from "axios";
+import ConfirmPassword from "./ResetPassword";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const forgotPassword = () => {
@@ -59,8 +60,11 @@ const forgotPassword = () => {
         setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
       });
   };
+  const callbackComponent = () => {
+    return <ConfirmPassword email={email} />;
+  }
   if (IsEmailExist) {
-    return <ForgotPasswordOTP email={email} />;
+    return <ForgotPasswordOTP email={email} callbackComponent={callbackComponent} />;
   }
   return (
     <>
