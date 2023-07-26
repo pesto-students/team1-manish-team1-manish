@@ -16,6 +16,7 @@ import {
   carOwnerShip,
   carRegistrationState,
 } from "../../utility/StaticDropdownContent";
+import { hasEmptyValues } from "../../utility/HelperFunctions";
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -81,7 +82,7 @@ export function SellCarLandingPage() {
   const [nearRTOoffice, setnearRTOoffice] = useState("");
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState({ array: [] });
-  const [selectedCarData, setSelectedCarData] = useState();
+  const [selectedCarData, setSelectedCarData] = useState([]);
 
   const handleSellCarSubmit = async () => {
     const sellCarData = {
@@ -91,11 +92,11 @@ export function SellCarLandingPage() {
       fuelType: fuelTypeEvent.eventChange,
       fuelCapacity: selectedCarData[0]?.fuel_cap_l ?? "NA",
       registrationYear: yearEvent.eventChange,
-      engine: selectedCarData[0].engine_cc,
+      engine: selectedCarData[0]?.engine_cc,
       variant: variantEvent.eventChange,
       ownership: ownerShipEvent.eventChange,
       kmDriven: totalKMSDriven,
-      transmission: selectedCarData[0].transmission_type,
+      transmission: selectedCarData[0]?.transmission_type,
       transmissionShort: selectedCarData[0]?.transmission_type?.substring(0, 5),
       insurance: "NA",
       pinCode: carPinCode,
@@ -106,11 +107,19 @@ export function SellCarLandingPage() {
       buyerId: null,
       nearestRtoOffice: nearRTOoffice,
       price: Math.ceil(Math.random() * (50000 - 5000) + 5000),
-      type: selectedCarData[0].body,
+      type: selectedCarData[0]?.body,
       tags: ["Best Sellar"],
       images: image.array,
-      carApiId: selectedCarData[0].id,
+      carApiId: selectedCarData[0]?.id,
     };
+    if (!userDetail.id) {
+      setShowToast({ type: 2, message: "Login to sell a car !" });
+      return;
+    }
+    if (hasEmptyValues(sellCarData, "buyerId") || !image.array.length) {
+      setShowToast({ type: 2, message: "Please fill all details !" });
+      return;
+    }
     const url =
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars`
@@ -134,8 +143,8 @@ export function SellCarLandingPage() {
           setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
           setTimeout(() => {
             setIsLoading(false);
-            window.location.reload(false);
-          }, 2500);
+            navigate("/buy-car"), 2500;
+          });
         }
       })
       .catch((res) => {
@@ -260,6 +269,10 @@ export function SellCarLandingPage() {
 
   const handleUpload = async () => {
     if (!files) {
+      return;
+    }
+    if (!userDetail.id) {
+      setShowToast({ type: 2, message: "Login to sell a car !" });
       return;
     }
     for (let i = 0; i < files.length; i++) {
@@ -429,7 +442,9 @@ export function SellCarLandingPage() {
               multiple
               onChange={(event) => setFiles(event.target.files)}
             />
-            <button onClick={handleUpload}>Upload</button>
+            <button className="upload-button" onClick={handleUpload}>
+              Upload
+            </button>
           </div>
         </div>
         <div className="submit-btn">
@@ -496,15 +511,16 @@ function DropDown(props) {
 
   return (
     <FormControl
+      disabled={!eventToHandle.showData.length}
       sx={{
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-        {
-          background: "#eaf2ff",
-          border: "1px solid #d7e0f2",
-          color: "#7b86b3",
-        },
+          {
+            background: "#eaf2ff",
+            border: "1px solid #d7e0f2",
+            color: "#7b86b3",
+          },
       }}
       size="small"
     >
@@ -519,50 +535,50 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-            if (selectName === "Select Brand") {
-              return (
-                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                  {el.brand}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Model") {
-              return (
-                <MenuItem value={el.name} key={el + Math.random(1, 9)}>
-                  {el.name}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Year") {
-              return (
-                <MenuItem value={el.year} key={el + Math.random(1, 9)}>
-                  {el.year}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Variant") {
-              return (
-                <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
-                  {el.trim}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Fuel Type") {
-              return (
-                <MenuItem value={el} key={el + Math.random(1, 9)}>
-                  {el}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Ownership") {
-              return (
-                <MenuItem value={el} key={el + Math.random(1, 9)}>
-                  {el}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Reg. State") {
-              return (
-                <MenuItem value={el} key={el + Math.random(1, 9)}>
-                  {el}
-                </MenuItem>
-              );
-            }
-          })}
+              if (selectName === "Select Brand") {
+                return (
+                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                    {el.brand}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Model") {
+                return (
+                  <MenuItem value={el.name} key={el + Math.random(1, 9)}>
+                    {el.name}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Year") {
+                return (
+                  <MenuItem value={el.year} key={el + Math.random(1, 9)}>
+                    {el.year}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Variant") {
+                return (
+                  <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
+                    {el.trim}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Fuel Type") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Ownership") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Reg. State") {
+                return (
+                  <MenuItem value={el} key={el + Math.random(1, 9)}>
+                    {el}
+                  </MenuItem>
+                );
+              }
+            })}
       </Select>
     </FormControl>
   );

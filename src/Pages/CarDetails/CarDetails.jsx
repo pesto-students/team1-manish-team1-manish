@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
 
 const CarDetails = ({ carId }) => {
-  const userId = useSelector((state) => state.userDetails?.id);
+  const userDetails = useSelector((state) => state.userDetails);
   const [carData, setCarData] = useState(null);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarkSet, setIsBookMarkSet] = useState(false);
@@ -26,12 +26,15 @@ const CarDetails = ({ carId }) => {
   };
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
+    if (!userDetails.id) {
+      setShowToast({ type: 2, message: "Login to add car to the wishlist !" })
+      return;
+    }
     if (isBookMarked) {
       removeBookmark();
     } else {
       addBookmark();
     }
-    setIsBookMarked((value) => !value);
   };
   const manualNextImage = () => {
     clearTimeout(timeOutId.current);
@@ -50,51 +53,13 @@ const CarDetails = ({ carId }) => {
     }
   };
 
-  const getBookmark = async () => {
-    await axios({
-      method: "get",
-      url:
-        NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
-      withCredentials: true,
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-    })
-      .then((response) => {
-        if (response.status == 200) {
-          if (response.data.bookmark_ids) {
-            setIsBookMarked(
-              response.data.bookmark_ids.includes(`${carId}`) ? true : false
-            );
-          } else {
-            setIsBookMarked(false);
-          }
-        }
-      })
-      // Catching and returning error message if the specified place is invalid.
-      .catch((error) => {
-        console.log(error);
-        setShowToast({
-          type: 2,
-          message: error.response.data.message
-            ? error.response.data.message
-            : "Something went wrong !",
-        });
-      });
-  };
-  // console.log(carId, "carId");
   const addBookmark = async () => {
     await axios({
       method: "post",
       url:
         NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
@@ -109,6 +74,7 @@ const CarDetails = ({ carId }) => {
       .then((response) => {
         if (response.status == 200) {
           setShowToast({ type: 1, message: "Car added to the wishlist !" });
+          setIsBookMarked(true);
         }
       })
       // Catching and returning error message if the specified place is invalid.
@@ -128,8 +94,8 @@ const CarDetails = ({ carId }) => {
       method: "delete",
       url:
         NODE_ENV === "development"
-          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`
-          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userId}/bookmarks`,
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${userDetails.id}/bookmarks`,
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin":
@@ -144,6 +110,7 @@ const CarDetails = ({ carId }) => {
       .then((response) => {
         if (response.status == 200) {
           setShowToast({ type: 1, message: "Car removed from the wishlist !" });
+          setIsBookMarked(false);
         }
       })
       // Catching and returning error message if the specified place is invalid.
@@ -195,7 +162,6 @@ const CarDetails = ({ carId }) => {
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ids/${carId}/buy`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ids/${carId}/buy`;
-    console.log(userId);
     await axios({
       method: "post",
       url: url,
@@ -207,7 +173,7 @@ const CarDetails = ({ carId }) => {
             : REACT_APP_PROD_CORS_URL,
       },
       data: {
-        buyerId: userId,
+        buyerId: userDetails.id,
       },
     })
       .then((response) => {
@@ -232,8 +198,10 @@ const CarDetails = ({ carId }) => {
       clearTimeout(timeOutId.current);
       timeOutId.current = null;
     }
-    if (userId && !isBookMarkSet) {
-      getBookmark();
+    if (userDetails.id && !isBookMarkSet) {
+      setIsBookMarked(
+        userDetails.bookmark_ids.includes(`${carId}`) ? true : false
+      );
       setIsBookMarkSet(true);
     }
     if (!carData) {
@@ -267,7 +235,7 @@ const CarDetails = ({ carId }) => {
     return () => {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
     };
-  }, [carData, isImageFading, scrollDirection, userId, isBookMarkSet]);
+  }, [carData, isImageFading, scrollDirection, userDetails, isBookMarkSet]);
   console.log(carData);
   return (
     <>
@@ -337,7 +305,7 @@ const CarDetails = ({ carId }) => {
                   <button
                     className="darker-btn"
                     onClick={handleBuyCar}
-                    disabled={carData.carOverview.SellerId === userId}
+                    disabled={carData.carOverview.SellerId === userDetails.id}
                   >
                     <p>{isBought}</p>
                   </button>

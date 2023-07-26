@@ -4,8 +4,6 @@ import './OrderDetail.css';
 function OrderDetail(props) {
   const { model, brand, orderStatus, year } = props;
 
-  console.log(props);
-
   return (
     <div className='order-details'>
       <div className='order-details__car'>

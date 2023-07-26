@@ -264,7 +264,14 @@
   content: " (or) Drag and Drop files here. ";
 }
 
+.upload-button {
+  width: 10vw;
+  height: 3vh;
+  cursor: pointer;
+}
+
 #file-upload {
+  cursor: pointer;
   padding: 183px 60px 184px 140px;
 }
 

@@ -30,6 +30,10 @@ const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
+  const resetToast = () => {
+    setShowToast({ type: 0, message: "" });
+  };
   const [budgetEvent, setBudgetEvent] = useState({
     showData: [
       { displayPrice: "Up to 5K", value: [0, 5] },
@@ -116,6 +120,14 @@ const LandingPage = () => {
   };
 
   const handleCarSearch = async () => {
+    if (
+      !brandEvent.eventChange ||
+      !typeEvent.eventChange ||
+      !budgetEvent.eventChange
+    ) {
+      setShowToast({ type: 2, message: "Please fill all details !" });
+      return;
+    }
     setIsLoading(true);
     dispatch(getCarBrandsData());
     dispatch(getCarTypeData());
@@ -149,6 +161,28 @@ const LandingPage = () => {
       ) : (
         <></>
       )}
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 2}
+        autoHideDuration={5000}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="error" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        className="toastify-class"
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={showToast.type == 1}
+        autoHideDuration={2500}
+        onClose={resetToast}
+      >
+        <Alert onClose={resetToast} severity="success" sx={{ width: "100%" }}>
+          {showToast.message}
+        </Alert>
+      </Snackbar>
       <div className="landing-page">
         <div className="landing-page-div1">
           <img

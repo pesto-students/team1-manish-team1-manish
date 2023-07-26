@@ -279,44 +279,26 @@ const CarSlice = createSlice({
       state.carBudgetRange = action.payload;
     },
     setCarBookmark: (state, action) => {
-      console.log("add before");
-      console.log({ ...state });
-      let updatedState = { ...state };
-      let updatedCarsData = updatedState.buyCarDetails.buyCar;
-      updatedCarsData = updatedCarsData.map((el) => {
+      state.buyCarDetails.buyCar = state.buyCarDetails.buyCar.map((el) => {
         if (el.id === action.payload) {
           return { ...el, bookmarked: true };
         } else return el;
       });
-      updatedState.buyCarDetails.buyCar = updatedCarsData;
 
-      let userUpdatedBookmarks = updatedState.userDetails;
-      userUpdatedBookmarks = userUpdatedBookmarks.bookmark_ids.push(action.payload);
-      updatedState.userDetails = userUpdatedBookmarks;
-
-      state = { ...updatedState };
-      console.log("add after");
-      console.log(state);
+      if (!state.userDetails.bookmark_ids.includes(action.payload)) {
+        state.userDetails.bookmark_ids.push(action.payload);
+      }
     },
     removeCarBookmark: (state, action) => {
-      console.log("remove before");
-      console.log(state);
-      let updatedState = state;
-      let updatedCarsData = updatedState.buyCarDetails.buyCar;
-      updatedCarsData = updatedCarsData.map((el) => {
+      state.buyCarDetails.buyCar = state.buyCarDetails.buyCar.map((el) => {
         if (el.id === action.payload) {
           return { ...el, bookmarked: false };
         } else return el;
       });
-      updatedState.buyCarDetails.buyCar = updatedCarsData;
 
-      let userUpdatedBookmarks = updatedState.userDetails;
-      userUpdatedBookmarks = userUpdatedBookmarks.bookmark_ids.filter(id => id !== action.payload);
-      updatedState.userDetails = userUpdatedBookmarks;
-
-      state = updatedState;
-      console.log("removeafter");
-      console.log(state);
+      if (state.userDetails.bookmark_ids.includes(action.payload)) {
+        state.userDetails.bookmark_ids = state.userDetails.bookmark_ids.filter(el => el !== action.payload);
+      }
     },
     resetShowCarDetails: (state, action) => {
       state.buyCarDetails.buyCar = [];
