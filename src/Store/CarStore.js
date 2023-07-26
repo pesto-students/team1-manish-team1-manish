@@ -5,8 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import { globalInitialState } from "./InitialState";
 import axios from "axios";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
-
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 export const searchCarByFilters = createAsyncThunk(
   "carDetails/searchCarByFilters",
@@ -39,32 +44,37 @@ export const searchCarByFilters = createAsyncThunk(
             ? REACT_APP_DEV_CORS_URL
             : REACT_APP_PROD_CORS_URL,
       },
-    }).then((response) => {
-      return response.data;
     })
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
-      });;
+      });
   }
 );
 
 export const getUserDetails = createAsyncThunk(
   "userDetails/getUserDetails",
   async () => {
-    return axios((NODE_ENV === "development"
-      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/login/success`
-      : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/login/success`), {
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-      withCredentials: true,
-    }).then((response) => {
-      return response.data;
-    })
+    return axios(
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/login/success`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/login/success`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+        withCredentials: true,
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
@@ -76,44 +86,51 @@ export const getCarBrandsData = createAsyncThunk(
   "carBrands/getCarBrandsData",
   async () => {
     return axios(
-      (NODE_ENV === "development"
+      NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/brands`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands`), {
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-    }).then((response) => {
-      return response.data;
-    })
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/brands`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
-      });;
+      });
   }
 );
 
 export const getSellCarBrandsData = createAsyncThunk(
   "carBrands/getSellCarBrandsData",
   async () => {
-    return axios((NODE_ENV === "development"
-      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id`
-      : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id`), {
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-    }).then((response) => {
-      return response.data;
-    })
+    return axios(
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
-      });;
+      });
   }
 );
 
@@ -121,68 +138,77 @@ export const getCarTypeData = createAsyncThunk(
   "carTypes/getCarTypesData",
   async () => {
     return axios(
-      (NODE_ENV === "development"
+      NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/car-types`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/car-types`), {
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-    }).then((response) => {
-      return response.data;
-    })
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/car-types`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
-      });;
+      });
   }
 );
 
 export const getCarFuelTypeData = createAsyncThunk(
   "carFualTypes/getCarFualTypesData",
   async () => {
-    return axios((
+    return axios(
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/fuel-types`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/fuel-types`
-    ), {
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-    }).then((response) => {
-      return response.data;
-    })
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/fuel-types`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
-      });;
+      });
   }
 );
 
 export const getCarOwnershipData = createAsyncThunk(
   "carOwnership/getCarOwnershipData",
   async () => {
-    return axios((NODE_ENV === "development"
-      ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ownerships`
-      : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ownerships`), {
-      headers: {
-        "Access-Control-Allow-Origin":
-          NODE_ENV === "development"
-            ? REACT_APP_DEV_CORS_URL
-            : REACT_APP_PROD_CORS_URL,
-      },
-    }).then((response) => {
-      return response.data;
-    })
+    return axios(
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ownerships`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ownerships`,
+      {
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.log(error);
         throw error;
-      });;
+      });
   }
 );
 
@@ -199,17 +225,17 @@ const CarSlice = createSlice({
     unAuthorizeUser: (state) => {
       state.isAuthUser = false;
       state.userDetails = {
-        id: null,
-        name: null,
-        first_name: null,
-        last_name: null,
-        email: null,
-        phone_no: null,
-        password: null,
-        role_id: null,
-        auth_provider: null,
+        id: "",
+        name: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone_no: "",
+        password: "",
+        role_id: "",
+        auth_provider: "",
         bookmark_ids: [],
-        otp: null
+        otp: "",
       };
     },
     setUserDetails: (state, action) => {
@@ -297,7 +323,9 @@ const CarSlice = createSlice({
       });
 
       if (state.userDetails.bookmark_ids.includes(action.payload)) {
-        state.userDetails.bookmark_ids = state.userDetails.bookmark_ids.filter(el => el !== action.payload);
+        state.userDetails.bookmark_ids = state.userDetails.bookmark_ids.filter(
+          (el) => el !== action.payload
+        );
       }
     },
     resetShowCarDetails: (state, action) => {
@@ -325,17 +353,17 @@ const CarSlice = createSlice({
     [getUserDetails.rejected]: (state, actions) => {
       state.isAuthUser = false;
       state.userDetails = {
-        id: null,
-        name: null,
-        first_name: null,
-        last_name: null,
-        email: null,
+        id: "",
+        name: "",
+        first_name: "",
+        last_name: "",
+        email: "",
         phone_no: null,
-        password: null,
-        role_id: null,
-        auth_provider: null,
+        password: "",
+        role_id: "",
+        auth_provider: "",
         bookmark_ids: [],
-        otp: null
+        otp: null,
       };
     },
     [getCarBrandsData.pending]: (state, actions) => {

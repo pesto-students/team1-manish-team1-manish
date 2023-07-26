@@ -6,9 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UserDetailView.css";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+import { CircularProgress } from "@mui/material";
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 function UserDetailView() {
+  const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder] = useState([]);
   const [bookmark, setBookmark] = useState([]);
 
@@ -46,7 +54,9 @@ function UserDetailView() {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const logoutUser = async () => {
+    setIsLoading(true);
     await axios({
       method: "get",
       url:
@@ -65,41 +75,47 @@ function UserDetailView() {
         if (response.status == 200) {
           // setShowToast({ type: 1, message: 'Successfully Logged out!' })
           setTimeout(() => {
-            dispatch(unAuthorizeUser());
             navigate("/");
+            dispatch(unAuthorizeUser());
+            setIsLoading(false);
           }, 3000);
         }
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
 
-  const updateOrder = () => {
-    if (userId)
-      fetch(
-        (NODE_ENV === "development" ? REACT_APP_DEV_BACKEND_BASE_URL : REACT_APP_PROD_BACKEND_BASE_URL) +
-        `/auth/users/${userId}/orders`,
-        { credentials: "include" }
-      )
+  const updateOrder = async () => {
+    if (userId) {
+      const url =
+        (NODE_ENV === "development"
+          ? REACT_APP_DEV_BACKEND_BASE_URL
+          : REACT_APP_PROD_BACKEND_BASE_URL) + `/auth/users/${userId}/orders`;
+
+      await axios({
+        method: "get",
+        url: url,
+        withCredentials: true,
+      })
         .then((res) => {
-          if (res.status !== 200) throw Error("Error response");
-          return res.json();
-        })
-        .then((data) => {
-          console.log(data);
-          return setOrder(data);
+          if (res.status == 200) {
+            setOrder(res.data);
+          }
         })
         .catch((error) => {
           console.log(error);
         });
+    }
   };
 
   const updateBookmark = () => {
     userDetail?.bookmark_ids?.map((carId) => {
       fetch(
-        (NODE_ENV === "development" ? REACT_APP_DEV_BACKEND_BASE_URL : REACT_APP_PROD_BACKEND_BASE_URL) +
-        `/cars/ids/${carId}`,
+        (NODE_ENV === "development"
+          ? REACT_APP_DEV_BACKEND_BASE_URL
+          : REACT_APP_PROD_BACKEND_BASE_URL) + `/cars/ids/${carId}`,
         { credentials: "include" }
       )
         .then((response) => response.json())
@@ -111,12 +127,25 @@ function UserDetailView() {
     });
   };
 
-  useEffect(() => updateOrder(), [userId]);
+  useEffect(() => {
+    updateOrder();
+    return () => {};
+  }, [userId]);
 
-  useEffect(() => updateBookmark(), [userDetail]);
+  useEffect(() => {
+    updateBookmark();
+    return () => {};
+  }, [userDetail]);
 
   return (
     <div className="user-detail-view__wrapper">
+      {isLoading ? (
+        <div className="circular-loader">
+          <CircularProgress />
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="user-detail-view__container">
         <div className="user-detail-view__user-details">
           <span className="user-detail-view__user-avatar">
