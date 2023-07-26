@@ -11,7 +11,11 @@ import TextField from "@mui/material/TextField";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import "./LandingPage.css";
 import { useNavigate } from "react-router";
-import { carFuelType, carOwnerShip, carRegistrationState } from "../../utility/StaticDropdownContent";
+import {
+  carFuelType,
+  carOwnerShip,
+  carRegistrationState,
+} from "../../utility/StaticDropdownContent";
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,

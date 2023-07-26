@@ -158,7 +158,14 @@ const LandingPage = () => {
           />
           <div className="text-inside-img">
             <p className="img-text">Car to cash in a few hours!</p>
-            <button className="img-btn" onClick={() => flagPage ? dispatch(setSellCarFlag()) : dispatch(setBuyCarFlag())}>
+            <button
+              className="img-btn"
+              onClick={() =>
+                flagPage
+                  ? dispatch(setSellCarFlag())
+                  : dispatch(setBuyCarFlag())
+              }
+            >
               {flagPage ? "Sell Car" : "Buy Car"}
             </button>
           </div>
@@ -268,11 +275,11 @@ function DropDown(props) {
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-        {
-          background: "#eaf2ff",
-          border: "1px solid #d7e0f2",
-          color: "#7b86b3",
-        },
+          {
+            background: "#eaf2ff",
+            border: "1px solid #d7e0f2",
+            color: "#7b86b3",
+          },
       }}
       size="small"
     >
@@ -287,26 +294,26 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-            if (selectName === "Select Budget") {
-              return (
-                <MenuItem value={el.value} key={el + Math.random(1, 9)}>
-                  {el.displayPrice}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Brand") {
-              return (
-                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                  {el.brand}
-                </MenuItem>
-              );
-            } else if (selectName === "Select Vehicle Type") {
-              return (
-                <MenuItem value={el.type} key={el + Math.random(1, 9)}>
-                  {el.type}
-                </MenuItem>
-              );
-            }
-          })}
+              if (selectName === "Select Budget") {
+                return (
+                  <MenuItem value={el.value} key={el + Math.random(1, 9)}>
+                    {el.displayPrice}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Brand") {
+                return (
+                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                    {el.brand}
+                  </MenuItem>
+                );
+              } else if (selectName === "Select Vehicle Type") {
+                return (
+                  <MenuItem value={el.type} key={el + Math.random(1, 9)}>
+                    {el.type}
+                  </MenuItem>
+                );
+              }
+            })}
       </Select>
     </FormControl>
   );
