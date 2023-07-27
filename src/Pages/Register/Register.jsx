@@ -1,40 +1,132 @@
 import React, { useEffect, useState } from "react";
-import "./Register.css";
-import Button from "@mui/material/Button";
-import DarkTheme from "../../Themes/ButtonThemes";
 import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
-import { Icon } from "@iconify/react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { authorizeUser, setUserDetails } from "../../Store/CarStore";
+import Button from "@mui/material/Button";
+import { Icon } from "@iconify/react";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+import axios from "axios";
+import { setUserDetails } from "../../Store/CarStore";
+import DarkTheme from "../../Themes/ButtonThemes";
+import { emailValidation, phoneNoValidation } from "../../utility/FormValidation";
+import "./Register.css";
+import "../../styles.css";
+import ForgotPasswordOTP from "../ForgotPassword/ForgotPasswordOTP";
+
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const Register = () => {
-  const isAuthorized = useSelector((state) => state.isAuthUser);
+  const userDetails = useSelector((state) => {
+    return state.userDetails;
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [isIdPassRegisterSuccess, setIsIdPassRegisterSuccess] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
+  const [tnc, setTnc] = useState(false);
   const [passMissMatch, setPassMissMatch] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [validMobNo, setValidMobNo] = useState(false);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
   };
+
   const idPassRegister = async () => {
+    if (
+      firstName.length == 0 &&
+      lastName.length == 0 &&
+      phoneNo.length == 0 &&
+      email.length == 0 &&
+      password.length == 0 &&
+      cpassword.length == 0
+    ) {
+      setShowToast({ type: 2, message: "Fill all details !" });
+      return;
+    }
+    const isValidEmail = emailValidation(email);
+    const isMobNoValid = phoneNoValidation(phoneNo);
+    if (!isValidEmail && !isMobNoValid) {
+      setValidEmail(true);
+      setValidMobNo(true);
+      setTimeout(() => {
+        setValidEmail(false);
+        setValidMobNo(false);
+      }, 2500);
+      setShowToast({ type: 2, message: "Enter a valid email and phone number !" });
+      return;
+    }
+    if (!isValidEmail) {
+      setValidEmail(true);
+      setTimeout(() => {
+        setValidEmail(false);
+      }, 1500);
+      setShowToast({ type: 2, message: "Enter a valid email !" });
+      return;
+    }
+    if (!isMobNoValid) {
+      setValidMobNo(true);
+      setTimeout(() => {
+        setValidMobNo(false);
+      }, 1500);
+      setShowToast({ type: 2, message: "Enter a valid phone number !" });
+      return;
+    }
     if (password !== cpassword && cpassword.length > 0) {
       if (!passMissMatch) {
         setPassMissMatch(true);
-        setTimeout(() => setPassMissMatch(false), 2500);
+        setTimeout(() => setPassMissMatch(false), 1500);
       }
       return;
     }
+    if (!tnc) {
+      setShowToast({ type: 2, message: "Agree with the terms of use !" });
+      return;
+    }
+    setIsLoading(true);
+    await axios({
+      method: "post",
+      url:
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/verify/otp/send`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/verify/otp/send`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin":
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
+      },
+      data: { name: `${firstName} ${lastName}`, email: email },
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          setIsLoading(false);
+          setIsIdPassRegisterSuccess(true);
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log(error);
+        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+      });
+  };
+
+  const userRegisterCallback = async () => {
+    if (userDetails.id) return;
     await axios({
       method: "post",
       url:
@@ -59,17 +151,20 @@ const Register = () => {
     })
       .then((response) => {
         if (response.status == 201) {
-          setShowToast({ type: 1, message: "Authentication Successfull!" });
-          setTimeout(() => {
-            dispatch(setUserDetails(response.data));
-            navigate("/");
-          }, 3000);
+          dispatch(setUserDetails(response.data));
+          navigate("/");
         }
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+        setShowToast({
+          type: 2,
+          message: error.response.data?.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
+        setIsLoading(false);
       });
   };
   const googleLogin = () => {
@@ -103,7 +198,7 @@ const Register = () => {
       })
         .then((response) => {
           if (response.status == 201) {
-            setShowToast({ type: 1, message: 'Authentication Successfull!' })
+            setShowToast({ type: 1, message: "Authentication Successfull!" });
             setTimeout(() => {
               dispatch(setUserDetails(response.data));
               navigate("/");
@@ -113,16 +208,26 @@ const Register = () => {
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
           console.log(error);
-          setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          });
         });
       setIsLoading(false);
     }, 1000);
   };
   useEffect(() => {
-    if (isAuthorized) {
+    if (userDetails.id) {
       navigate("/");
     }
-  }, []);
+    // }, []);
+  }, [userDetails]);
+
+  if (isIdPassRegisterSuccess) {
+    return <ForgotPasswordOTP name={`${firstName} ${lastName}`} email={email} callbackFunction={userRegisterCallback} />;
+  }
   return (
     <>
       {isLoading ? (
@@ -179,12 +284,14 @@ const Register = () => {
                 placeholder=" Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className={validEmail ? "wrong-submit" : ""}
               />
               <input
                 type="tel"
                 placeholder=" Phone No."
                 value={phoneNo}
                 onChange={(e) => setPhoneNo(e.target.value)}
+                className={validMobNo ? "wrong-submit" : ""}
               />
             </div>
             <div className="input-container-3">
@@ -218,7 +325,7 @@ const Register = () => {
             )}
           </div>
           <div className="tnc-checkbox">
-            <input type="checkbox" />
+            <input value={tnc} onClick={() => setTnc(value => !value)} type="checkbox" />
             <label>I agree with the terms of use</label>
           </div>
           <ThemeProvider theme={DarkTheme}>

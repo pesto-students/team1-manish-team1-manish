@@ -7,12 +7,20 @@ import DarkTheme from "../../Themes/ButtonThemes";
 import { useSelector, useDispatch } from "react-redux";
 import "./Login.css";
 import axios from "axios";
-import { authorizeUser, setUserDetails } from "../../Store/CarStore";
+import { setUserDetails } from "../../Store/CarStore";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const Login = () => {
-  const isAuthorized = useSelector((state) => state.isAuthUser);
+  const userDetails = useSelector((state) => {
+    return state.userDetails;
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +37,7 @@ const Login = () => {
       setTimeout(() => setMissingLoginParams(false), 1000);
       return;
     }
+    setIsLoading(true);
     await axios({
       method: "post",
       url:
@@ -53,13 +62,20 @@ const Login = () => {
           setTimeout(() => {
             dispatch(setUserDetails(response.data));
             navigate("/");
+            setIsLoading(false);
           }, 3000);
         }
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
         console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
+        setIsLoading(false);
       });
   };
   const googleLogin = () => {
@@ -103,16 +119,21 @@ const Login = () => {
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
           console.log(error);
-          setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          });
         });
       setIsLoading(false);
     }, 1000);
   };
   useEffect(() => {
-    if (isAuthorized) {
+    if (userDetails.id) {
       navigate("/");
     }
-  }, []);
+  }, [userDetails]);
   return (
     <>
       {isLoading ? (

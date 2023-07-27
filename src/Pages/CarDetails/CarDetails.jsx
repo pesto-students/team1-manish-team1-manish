@@ -7,7 +7,13 @@ import { useRef } from "react";
 import axios from "axios";
 import { Alert, Snackbar } from "@mui/material";
 import { useSelector } from "react-redux";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const CarDetails = ({ carId }) => {
   const userDetails = useSelector((state) => state.userDetails);
@@ -27,7 +33,7 @@ const CarDetails = ({ carId }) => {
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
     if (!userDetails.id) {
-      setShowToast({ type: 2, message: "Login to add car to the wishlist !" })
+      setShowToast({ type: 2, message: "Login to add car to the wishlist !" });
       return;
     }
     if (isBookMarked) {
@@ -200,7 +206,7 @@ const CarDetails = ({ carId }) => {
     }
     if (userDetails.id && !isBookMarkSet) {
       setIsBookMarked(
-        userDetails.bookmark_ids.includes(`${carId}`) ? true : false
+        userDetails?.bookmark_ids?.includes(`${carId}`) ? true : false
       );
       setIsBookMarkSet(true);
     }
@@ -700,20 +706,23 @@ const CarDetails = ({ carId }) => {
       {carData ? (
         <>
           <div
-            className={`mobile-buy-footer ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
-              } transition-all`}
+            className={`mobile-buy-footer ${
+              scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
+            } transition-all`}
           >
             <div
-              className={`mobile-price ${scrollDirection === "down"
-                ? "hide-buy-footer"
-                : "show-buy-footer"
-                } transition-all`}
+              className={`mobile-price ${
+                scrollDirection === "down"
+                  ? "hide-buy-footer"
+                  : "show-buy-footer"
+              } transition-all`}
             >
               Rs. {carData.carOverview.Price}
             </div>
             <div
-              className={`car-interactive-button-mobile ${scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
-                } transition-all`}
+              className={`car-interactive-button-mobile ${
+                scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
+              } transition-all`}
             >
               <button className="darker-btn" onClick={bookmarkToggle}>
                 {isBookMarked ? (

@@ -73,6 +73,20 @@
   cursor: pointer;
 }
 
+.circular-loader {
+  position: fixed;
+  z-index: 99;
+  background: rgba(103, 110, 138, 0.3);
+  height: 100%;
+  width: 100%;
+}
+
+.circular-loader > span {
+  position: relative;
+  top: 49%;
+  left: 49%;
+}
+
 @media (max-width: 35em) {
   .user-detail-view__wrapper {
     display: flex;
