@@ -237,7 +237,8 @@ const CarDetails = ({ carId }) => {
       description: "Test Transaction",
       image: "./Assets/Logo.svg",
       order_id: orderDetails?.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      callback_url: "http://localhost:3000/cars/sucess-payment",
+      callback_url: "http://localhost:3000/cars/success-payment",
+      redirect: true,
       prefill: {
         //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
         name: userDetails.name, //your customer's name
@@ -305,7 +306,7 @@ const CarDetails = ({ carId }) => {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
     };
   }, [carData, isImageFading, scrollDirection, userDetails, isBookMarkSet]);
-  console.log(carData);
+
   return (
     <>
       <Snackbar
