@@ -164,42 +164,6 @@ const CarDetails = ({ carId }) => {
       });
   };
 
-  // const handleBuyCar = async () => {
-  //   const url =
-  //     NODE_ENV === "development"
-  //       ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ids/${carId}/buy`
-  //       : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ids/${carId}/buy`;
-  //   await axios({
-  //     method: "post",
-  //     url: url,
-  //     withCredentials: true,
-  //     headers: {
-  //       "Access-Control-Allow-Origin":
-  //         NODE_ENV === "development"
-  //           ? REACT_APP_DEV_CORS_URL
-  //           : REACT_APP_PROD_CORS_URL,
-  //     },
-  //     data: {
-  //       buyerId: userDetails.id,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (response.status == 200) {
-  //         setIsBought("BOUGHT");
-  //       }
-  //     })
-  //     // Catching and returning error message if the specified place is invalid.
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setShowToast({
-  //         type: 2,
-  //         message: error.response.data.message
-  //           ? error.response.data.message
-  //           : "Something went wrong !",
-  //       });
-  //     });
-  // };
-
   const createOrder = async () => {
     const url = `http://localhost:3000/cars/order_id/price/${carData.carOverview.Price}`;
 
@@ -226,40 +190,77 @@ const CarDetails = ({ carId }) => {
   };
 
   const handleBuyCar = async (event) => {
-    await createOrder();
-    console.log(orderDetails);
+    if (isBought === "BUY") {
+      await createOrder();
 
-    const options = {
-      key: process.env.REACT_APP_RAZORPAY_API_KEY, // Enter the Key ID generated from the Dashboard
-      amount: carData.carOverview.Price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      currency: "INR",
-      name: "Car Bazaar", //your business name
-      description: "Test Transaction",
-      image: "./Assets/Logo.svg",
-      order_id: orderDetails?.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      callback_url: "http://localhost:3000/cars/success-payment",
-      redirect: true,
-      prefill: {
-        //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-        name: userDetails.name, //your customer's name
-        email: userDetails.email,
-        contact: userDetails.phone_no, //Provide the customer's phone number for better conversion rates
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_API_KEY, // Enter the Key ID generated from the Dashboard
+        amount: carData.carOverview.Price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "Car Bazaar", //your business name
+        description: "Test Transaction",
+        image: "./Assets/Logo.svg",
+        order_id: orderDetails?.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        handler: async function (res) {
+          if (res.razorpay_payment_id) {
+            const url =
+              NODE_ENV === "development"
+                ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/ids/${carId}/buy`
+                : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/ids/${carId}/buy`;
 
-    try {
-      const rzp1 = new Razorpay(options);
-      rzp1.open();
-      event.preventDefault();
-      console.log(rzp1);
-    } catch (error) {
-      console.log(error);
+            await axios({
+              method: "post",
+              url: url,
+              withCredentials: true,
+              headers: {
+                "Access-Control-Allow-Origin":
+                  NODE_ENV === "development"
+                    ? REACT_APP_DEV_CORS_URL
+                    : REACT_APP_PROD_CORS_URL,
+              },
+              data: {
+                buyerId: userDetails.id,
+              },
+            })
+              .then((response) => {
+                if (response.status == 200) {
+                  setIsBought("BOUGHT");
+                }
+              })
+              // Catching and returning error message if the specified place is invalid.
+              .catch((error) => {
+                console.log(error);
+                setShowToast({
+                  type: 2,
+                  message: error.response.data.message
+                    ? error.response.data.message
+                    : "Something went wrong !",
+                });
+              });
+          }
+        },
+        prefill: {
+          //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+          name: userDetails.name, //your customer's name
+          email: userDetails.email,
+          contact: userDetails.phone_no, //Provide the customer's phone number for better conversion rates
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      try {
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+        event.preventDefault();
+        console.log(rzp1);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
