@@ -165,7 +165,10 @@ const CarDetails = ({ carId }) => {
   };
 
   const createOrder = async () => {
-    const url = `http://localhost:3000/cars/order_id/price/${carData.carOverview.Price}`;
+    const url =
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars/order_id/price/${carData.carOverview.Price}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars/order_id/price/${carData.carOverview.Price}`;
 
     await axios({
       url: url,
