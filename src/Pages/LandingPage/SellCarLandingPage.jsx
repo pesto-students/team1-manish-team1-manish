@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -215,7 +215,7 @@ export function SellCarLandingPage() {
     const url =
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
     await axios({
       method: "get",
       url: url,
