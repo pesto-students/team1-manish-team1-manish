@@ -113,7 +113,7 @@ const Login = () => {
             setTimeout(() => {
               dispatch(setUserDetails(response.data));
               navigate("/");
-            }, 3000);
+            }, 1000);
           }
         })
         // Catching and returning error message if the specified place is invalid.
@@ -125,8 +125,8 @@ const Login = () => {
               ? error.response.data.message
               : "Something went wrong !",
           });
-        });
-      setIsLoading(false);
+        })
+        .finally(() => setIsLoading(false));
     }, 1000);
   };
   useEffect(() => {

@@ -1,4 +1,5 @@
 export const globalInitialState = {
+  isLoading: false,
   isAuthUser: false,
   flag: true,
   bookmarkFlag: false,

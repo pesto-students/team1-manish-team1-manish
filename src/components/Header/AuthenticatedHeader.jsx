@@ -18,6 +18,16 @@ const AuthenticatedHeader = () => {
   const [toggleHeaderClass, setToggleHeaderClass] = useState("close");
 
   const logoutUser = async () => {
+
+    window.open(
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
+      "popup",
+      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
+      },top=${screen.height / 2 - 600 / 2 + window.screenY}`
+    );
+    return;
     await axios({
       method: "get",
       url:

@@ -12,34 +12,54 @@ import ShowCar from "./Pages/ShowCarPage/ShowCar";
 import { getUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
 import "./styles.css";
+import { CircularProgress } from "@mui/material";
 
 const App = () => {
   const userDetails = useSelector((state) => {
     return state.userDetails;
   });
+  const isLoading = useSelector((state) => {
+    return state.isLoading;
+  });
   const [silentLoginCounter, setSilentLoginCounter] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!userDetails.id && silentLoginCounter < 5) {
+    if (!userDetails.id && silentLoginCounter < 2) {
+      console.log(silentLoginCounter);
       dispatch(getUserDetails());
       setSilentLoginCounter(value => value + 1)
     }
     else if (userDetails.id) {
       setSilentLoginCounter(0);
     }
-  }, [userDetails, silentLoginCounter]);
+  }, [userDetails, silentLoginCounter, isLoading]);
   return (
     <div className="App">
-      {userDetails.id ? <AuthenticatedHeader /> : <Header />}
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/me" element={<Profile />} />
-        <Route path="/buy-car" element={<ShowCar />} />
-      </Routes>
-      <Footer />
+      {
+        (userDetails.id === null && silentLoginCounter < 2) ?
+          (<></>) :
+          (
+            <>
+              {isLoading ? (
+                <div className="circular-loader">
+                  <CircularProgress />
+                </div>
+              ) : (
+                <></>
+              )}
+              {userDetails.id ? <AuthenticatedHeader /> : <Header />}
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/me" element={<Profile />} />
+                <Route path="/buy-car" element={<ShowCar />} />
+              </Routes>
+              <Footer />
+            </>
+          )
+      }
     </div>
   );
 };
