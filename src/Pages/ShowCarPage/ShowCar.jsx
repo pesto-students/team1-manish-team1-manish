@@ -214,7 +214,7 @@ export default function ShowCar() {
       dispatch(resetShowCarDetails());
     };
   }, []);
-  if (selectedCar) return <CarDetails carId={selectedCar} />;
+  if (selectedCar) return <CarDetails carId={selectedCar} key={selectedCar} />;
   else
     return (
       <>

@@ -26,7 +26,7 @@ const CarDetails = ({ carId }) => {
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(null);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
-  const [isBought, setIsBought] = useState("BUY");
+  const [carSellStatus, setCarSellStatus] = useState("BUY");
   const [orderDetails, setOrderDetails] = useState(null);
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
@@ -193,7 +193,7 @@ const CarDetails = ({ carId }) => {
   };
 
   const handleBuyCar = async (event) => {
-    if (isBought === "BUY") {
+    if (carSellStatus === "BUY") {
       await createOrder();
 
       const options = {
@@ -227,7 +227,11 @@ const CarDetails = ({ carId }) => {
             })
               .then((response) => {
                 if (response.status == 200) {
-                  setIsBought("BOUGHT");
+                  setShowToast({
+                    type: 1,
+                    message: "Car Purchased Successfully",
+                  });
+                  setCarSellStatus("BOUGHT");
                 }
               })
               // Catching and returning error message if the specified place is invalid.
@@ -305,6 +309,16 @@ const CarDetails = ({ carId }) => {
       }
       lastScrollY = scrollY > 0 ? scrollY : 0;
     };
+
+    const updateBuyButton = () => {
+      if (carData?.carOverview?.BuyerId === userDetails?.id) {
+        setCarSellStatus("Bought");
+      } else if (carData?.carOverview?.BuyerId) {
+        setCarSellStatus("Sold Out");
+      }
+    };
+    updateBuyButton();
+
     window.addEventListener("scroll", updateScrollDirection); // add event listener
     return () => {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
@@ -381,7 +395,7 @@ const CarDetails = ({ carId }) => {
                     onClick={handleBuyCar}
                     disabled={carData.carOverview.SellerId === userDetails.id}
                   >
-                    <p>{isBought}</p>
+                    <p>{carSellStatus}</p>
                   </button>
                 </div>
               </div>
