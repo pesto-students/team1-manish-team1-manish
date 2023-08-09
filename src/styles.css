@@ -73,6 +73,20 @@ html {
   animation-iteration-count: 1, 2;
 }
 
+.circular-loader {
+  position: fixed;
+  z-index: 99;
+  background: rgba(86, 89, 101, 0.4);
+  height: 100%;
+  width: 100%;
+}
+
+.circular-loader>span {
+  position: relative;
+  top: 49%;
+  left: 49%;
+}
+
 @keyframes shake {
 
   0%,

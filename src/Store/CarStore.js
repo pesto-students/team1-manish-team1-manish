@@ -328,9 +328,15 @@ const CarSlice = createSlice({
         );
       }
     },
-    resetShowCarDetails: (state, action) => {
+    resetShowCarDetails: (state) => {
       state.buyCarDetails.buyCar = [];
     },
+    setLoadingTrue: (state) => {
+      state.isLoading = true;
+    },
+    setLoadingFalse: (state) => {
+      state.isLoading = false;
+    }
   },
   extraReducers: {
     [getSellCarBrandsData.pending]: (state, actions) => {
@@ -451,6 +457,8 @@ export const {
   setCarBookmark,
   removeCarBookmark,
   resetShowCarDetails,
+  setLoadingTrue,
+  setLoadingFalse
 } = CarSlice.actions;
 
 const CarStore = configureStore({
