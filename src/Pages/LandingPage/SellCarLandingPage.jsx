@@ -147,9 +147,14 @@ export function SellCarLandingPage() {
           });
         }
       })
-      .catch((res) => {
+      .catch((error) => {
         setIsLoading(false);
-        console.log(res);
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -178,8 +183,13 @@ export function SellCarLandingPage() {
           }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getCarYearData = async () => {
@@ -207,8 +217,13 @@ export function SellCarLandingPage() {
           }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getCarVarientData = async () => {
@@ -236,8 +251,13 @@ export function SellCarLandingPage() {
           }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getSelectedCarDetail = async () => {
@@ -262,8 +282,13 @@ export function SellCarLandingPage() {
           setSelectedCarData(res.data);
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -296,7 +321,14 @@ export function SellCarLandingPage() {
           const newObj = { ...image, specficObjectInArray };
           setImage(newObj);
         })
-        .catch((err) => console.log(err));
+        .catch((error) =>
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          })
+        );
     }
     setShowToast({ type: 1, message: "Image Uploaded Successfull!" });
   };

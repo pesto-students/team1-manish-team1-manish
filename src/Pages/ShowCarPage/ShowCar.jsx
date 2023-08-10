@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
 import RangeSlider from "../../components/BudgetSlider/BudgetSlider";
@@ -150,7 +152,6 @@ export default function ShowCar() {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data?.message
@@ -186,7 +187,6 @@ export default function ShowCar() {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data?.message
@@ -250,7 +250,11 @@ export default function ShowCar() {
               <div className="brand-header">
                 <p className="brand-title">Brand</p>
                 <button className="minimise-btn" onClick={toggleBrandFilter}>
-                  <img src="/minusIcon.svg" alt="Minus Icon" />
+                  {!isBrandFilterMinimised ? (
+                    <RemoveIcon fontSize="large" color="disabled" />
+                  ) : (
+                    <AddIcon fontSize="large" color="disabled" />
+                  )}
                 </button>
               </div>
               <div
@@ -279,10 +283,7 @@ export default function ShowCar() {
                             .includes(brandSearchBarFilter.toLocaleLowerCase())
                         ) {
                           return (
-                            <div
-                              className="brand-f1"
-                              key={el.brand + Math.random(0, 1)}
-                            >
+                            <div className="brand-f1" key={crypto.randomUUID()}>
                               <p className="b-filter-title">{el.brand}</p>
                               <input
                                 checked={el.checked}
@@ -327,7 +328,11 @@ export default function ShowCar() {
               <div className="brand-header">
                 <p className="brand-title">Budget</p>
                 <button className="minimise-btn" onClick={toggleBudgetFilter}>
-                  <img src="/minusIcon.svg" alt="Minus Icon" />
+                  {!isBudgetFilterMinimised ? (
+                    <RemoveIcon fontSize="large" color="disabled" />
+                  ) : (
+                    <AddIcon fontSize="large" color="disabled" />
+                  )}
                 </button>
               </div>
               <div
@@ -346,7 +351,11 @@ export default function ShowCar() {
               <div className="brand-header">
                 <p className="brand-title">Type</p>
                 <button className="minimise-btn" onClick={toggleTypeFilter}>
-                  <img src="/minusIcon.svg" alt="Minus Icon" />
+                  {!isTypeFilterMinimised ? (
+                    <RemoveIcon fontSize="large" color="disabled" />
+                  ) : (
+                    <AddIcon fontSize="large" color="disabled" />
+                  )}
                 </button>
               </div>
               <div
@@ -373,10 +382,7 @@ export default function ShowCar() {
                         .includes(typeSearchBarFilter.toLocaleLowerCase())
                     ) {
                       return (
-                        <div
-                          className="brand-f1"
-                          key={el.type + Math.random(0, 1)}
-                        >
+                        <div className="brand-f1" key={crypto.randomUUID()}>
                           <p className="b-filter-title">{el.type}</p>
                           <input
                             checked={el.checked}
@@ -421,7 +427,11 @@ export default function ShowCar() {
               <div className="brand-header">
                 <p className="brand-title">Fuel Type</p>
                 <button className="minimise-btn" onClick={toggleFuelTypeFilter}>
-                  <img src="/minusIcon.svg" alt="Minus Icon" />
+                  {!isFuelTypeFilterMinimised ? (
+                    <RemoveIcon fontSize="large" color="disabled" />
+                  ) : (
+                    <AddIcon fontSize="large" color="disabled" />
+                  )}
                 </button>
               </div>
               <div
@@ -432,7 +442,7 @@ export default function ShowCar() {
                 <input
                   onChange={debouncedUpdateFuelTypeSearchFilter}
                   type="text"
-                  placeholder="eg. SUV, Sedan"
+                  placeholder="eg. Petrol, Diesel"
                 />
               </div>
               <div
@@ -448,10 +458,7 @@ export default function ShowCar() {
                         .includes(fuelTypeSearchBarFilter.toLocaleLowerCase())
                     ) {
                       return (
-                        <div
-                          className="brand-f1"
-                          key={el.fueltype + Math.random(0, 1)}
-                        >
+                        <div className="brand-f1" key={crypto.randomUUID()}>
                           <p className="b-filter-title">{el.fueltype}</p>
                           <input
                             checked={el.checked}
@@ -499,7 +506,11 @@ export default function ShowCar() {
                   className="minimise-btn"
                   onClick={toggleOwnershipTypeFilter}
                 >
-                  <img src="/minusIcon.svg" alt="Minus Icon" />
+                  {!isOwnershipFilterMinimised ? (
+                    <RemoveIcon fontSize="large" color="disabled" />
+                  ) : (
+                    <AddIcon fontSize="large" color="disabled" />
+                  )}
                 </button>
               </div>
               <div
@@ -510,7 +521,7 @@ export default function ShowCar() {
                 <input
                   onChange={debouncedUpdateOwnershipSearchFilter}
                   type="text"
-                  placeholder="eg. SUV, Sedan"
+                  placeholder="eg. 1st Owner, 2st Owner"
                 />
               </div>
               <div
@@ -526,10 +537,7 @@ export default function ShowCar() {
                         .includes(ownershipSearchBarFilter.toLocaleLowerCase())
                     ) {
                       return (
-                        <div
-                          className="brand-f1"
-                          key={el.ownership + Math.random(0, 1)}
-                        >
+                        <div className="brand-f1" key={crypto.randomUUID()}>
                           <p className="b-filter-title">{el.ownership}</p>
                           <input
                             checked={el.checked}

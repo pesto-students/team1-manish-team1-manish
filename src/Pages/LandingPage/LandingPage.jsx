@@ -83,8 +83,13 @@ const LandingPage = () => {
           setBudgetEvent((res) => ({ ...res, ...{ isStateUpdate: false } }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getCarType = async () => {
@@ -115,7 +120,12 @@ const LandingPage = () => {
         }
       })
       .catch((res) => {
-        console.log(res);
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -305,6 +315,7 @@ function DropDown(props) {
 
   return (
     <FormControl
+      disabled={!eventToHandle.showData.length}
       sx={{
         minWidth: 120,
         width: 283,
@@ -321,7 +332,7 @@ function DropDown(props) {
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        value={eventToHandle.eventChange}
+        value={eventToHandle.eventChange || ""}
         label={selectName}
         onChange={handleChange}
       >
@@ -330,19 +341,19 @@ function DropDown(props) {
           : eventToHandle.showData.map((el) => {
               if (selectName === "Select Budget") {
                 return (
-                  <MenuItem value={el.value} key={el + Math.random(1, 9)}>
+                  <MenuItem value={el.value || ""} key={el + Math.random(1, 9)}>
                     {el.displayPrice}
                   </MenuItem>
                 );
               } else if (selectName === "Select Brand") {
                 return (
-                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                  <MenuItem value={el.brand || ""} key={el + Math.random(1, 9)}>
                     {el.brand}
                   </MenuItem>
                 );
               } else if (selectName === "Select Vehicle Type") {
                 return (
-                  <MenuItem value={el.type} key={el + Math.random(1, 9)}>
+                  <MenuItem value={el.type || ""} key={el + Math.random(1, 9)}>
                     {el.type}
                   </MenuItem>
                 );
