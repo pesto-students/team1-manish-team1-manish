@@ -73,7 +73,6 @@ function UserDetailView() {
     })
       .then((response) => {
         if (response.status == 200) {
-          // setShowToast({ type: 1, message: 'Successfully Logged out!' })
           setTimeout(() => {
             navigate("/");
             dispatch(unAuthorizeUser());
@@ -82,8 +81,13 @@ function UserDetailView() {
         }
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -105,7 +109,12 @@ function UserDetailView() {
           }
         })
         .catch((error) => {
-          console.log(error);
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          });
         });
     }
   };
@@ -182,7 +191,7 @@ function UserDetailView() {
                 <UserActivity
                   name={activity.name}
                   icon={activity.icon}
-                  key={idx}
+                  key={crypto.randomUUID()}
                   index={idx}
                   isActive={activeTab === idx}
                   setIsActive={setActiveTab}
@@ -204,7 +213,6 @@ function UserDetailView() {
               return el.order_status === "Bought";
             });
           } else if (activity.name.toLowerCase() === "shortlisted vehicles") {
-            console.log(bookmark);
             data = bookmark;
           } else if (activity.name.toLowerCase() === "my vehicles") {
             data = order.filter((el) => {
@@ -215,7 +223,7 @@ function UserDetailView() {
             <UserActivityCard
               name={activity.name}
               icon={activity.icon}
-              key={idx}
+              key={crypto.randomUUID()}
               data={data}
               isActive={activeTab === idx}
             />

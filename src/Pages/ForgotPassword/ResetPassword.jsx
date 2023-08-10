@@ -10,7 +10,13 @@ import {
 } from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
 import { useNavigate } from "react-router";
-const { NODE_ENV, REACT_APP_DEV_BACKEND_BASE_URL, REACT_APP_PROD_BACKEND_BASE_URL, REACT_APP_DEV_CORS_URL, REACT_APP_PROD_CORS_URL } = process.env;
+const {
+  NODE_ENV,
+  REACT_APP_DEV_BACKEND_BASE_URL,
+  REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL,
+} = process.env;
 
 const ConfirmPassword = ({ email }) => {
   const [isNewPasswordSet, setIsNewPasswordSet] = useState(false);
@@ -66,8 +72,12 @@ const ConfirmPassword = ({ email }) => {
       })
       .catch((error) => {
         setIsLoading(false);
-        console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -122,10 +132,11 @@ const ConfirmPassword = ({ email }) => {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
             <input
-              className={`forgot__password__input--confirm ${password !== cpassword && cpassword.length > 0
-                ? "wrong-password-border"
-                : ""
-                }`}
+              className={`forgot__password__input--confirm ${
+                password !== cpassword && cpassword.length > 0
+                  ? "wrong-password-border"
+                  : ""
+              }`}
               type="password"
               placeholder="Confirm New password again"
               value={cpassword}
@@ -134,8 +145,9 @@ const ConfirmPassword = ({ email }) => {
           </div>
           {password !== cpassword && cpassword.length > 0 ? (
             <div
-              className={`wrong-password-message ${passMissMatch ? "wrong-password-submit" : ""
-                }`}
+              className={`wrong-password-message ${
+                passMissMatch ? "wrong-password-submit" : ""
+              }`}
             >
               <span>Passwords does not match</span>
             </div>

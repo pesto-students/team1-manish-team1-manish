@@ -26,7 +26,7 @@ const CarDetails = ({ carId }) => {
   const [moreSpecificationToggle, setMoreSpecificationToggle] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(null);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
-  const [isBought, setIsBought] = useState("BUY");
+  const [carSellStatus, setCarSellStatus] = useState("BUY");
   const [orderDetails, setOrderDetails] = useState(null);
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
@@ -86,7 +86,6 @@ const CarDetails = ({ carId }) => {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data.message
@@ -122,7 +121,6 @@ const CarDetails = ({ carId }) => {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data.message
@@ -154,7 +152,6 @@ const CarDetails = ({ carId }) => {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data.message
@@ -186,14 +183,18 @@ const CarDetails = ({ carId }) => {
           setOrderDetails(res.data);
         }
       })
-      .catch((res) => {
-        console.log(res);
-        return res;
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
   const handleBuyCar = async (event) => {
-    if (isBought === "BUY") {
+    if (carSellStatus === "BUY") {
       await createOrder();
 
       const options = {
@@ -227,12 +228,15 @@ const CarDetails = ({ carId }) => {
             })
               .then((response) => {
                 if (response.status == 200) {
-                  setIsBought("BOUGHT");
+                  setShowToast({
+                    type: 1,
+                    message: "Car Purchased Successfully",
+                  });
+                  setCarSellStatus("BOUGHT");
                 }
               })
               // Catching and returning error message if the specified place is invalid.
               .catch((error) => {
-                console.log(error);
                 setShowToast({
                   type: 2,
                   message: error.response.data.message
@@ -260,9 +264,13 @@ const CarDetails = ({ carId }) => {
         const rzp1 = new Razorpay(options);
         rzp1.open();
         event.preventDefault();
-        console.log(rzp1);
       } catch (error) {
-        console.log(error);
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       }
     }
   };
@@ -305,6 +313,16 @@ const CarDetails = ({ carId }) => {
       }
       lastScrollY = scrollY > 0 ? scrollY : 0;
     };
+
+    const updateBuyButton = () => {
+      if (carData?.carOverview?.BuyerId === userDetails?.id) {
+        setCarSellStatus("Bought");
+      } else if (carData?.carOverview?.BuyerId) {
+        setCarSellStatus("Sold Out");
+      }
+    };
+    updateBuyButton();
+
     window.addEventListener("scroll", updateScrollDirection); // add event listener
     return () => {
       window.removeEventListener("scroll", updateScrollDirection); // clean up
@@ -381,7 +399,7 @@ const CarDetails = ({ carId }) => {
                     onClick={handleBuyCar}
                     disabled={carData.carOverview.SellerId === userDetails.id}
                   >
-                    <p>{isBought}</p>
+                    <p>{carSellStatus}</p>
                   </button>
                 </div>
               </div>
@@ -547,29 +565,45 @@ const CarDetails = ({ carId }) => {
             <div className="info-body">
               <h3 className="div-header">Features</h3>
               <div className="feature-content">
-                {Object.keys(carData.carFeatures).map((key, index) => {
+                {Object.keys(carData.carFeatures).map((keyID, index) => {
                   return index > 0 && index <= 6 ? (
                     <div className="content-key" key={crypto.randomUUID()}>
-                      {carData.carFeatures[key] ? (
-                        <Icon className="tick-icon" icon="charm:tick" />
+                      {carData.carFeatures[keyID] ? (
+                        <Icon
+                          className="tick-icon"
+                          icon="charm:tick"
+                          key={crypto.randomUUID()}
+                        />
                       ) : (
-                        <Icon className="cross-icon" icon="charm:cross" />
+                        <Icon
+                          className="cross-icon"
+                          icon="charm:cross"
+                          key={crypto.randomUUID()}
+                        />
                       )}{" "}
-                      {key}
+                      {keyID}
                     </div>
                   ) : (
                     <></>
                   );
                 })}
-                {Object.keys(carData.carFeatures).map((key, index) => {
+                {Object.keys(carData.carFeatures).map((keyID, index) => {
                   return index > 6 && moreFeatureToggle ? (
                     <div className="content-key" key={crypto.randomUUID()}>
-                      {carData.carFeatures[key] ? (
-                        <Icon className="tick-icon" icon="charm:tick" />
+                      {carData.carFeatures[keyID] ? (
+                        <Icon
+                          className="tick-icon"
+                          icon="charm:tick"
+                          key={crypto.randomUUID()}
+                        />
                       ) : (
-                        <Icon className="cross-icon" icon="charm:cross" />
+                        <Icon
+                          className="cross-icon"
+                          icon="charm:cross"
+                          key={crypto.randomUUID()}
+                        />
                       )}{" "}
-                      {key}
+                      {keyID}
                     </div>
                   ) : (
                     <></>

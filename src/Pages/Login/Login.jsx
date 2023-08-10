@@ -68,7 +68,6 @@ const Login = () => {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data.message
@@ -84,7 +83,8 @@ const Login = () => {
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/google`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/google`,
       "popup",
-      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${
+        screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -118,7 +118,6 @@ const Login = () => {
         })
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
-          console.log(error);
           setShowToast({
             type: 2,
             message: error.response.data.message

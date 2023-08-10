@@ -8,7 +8,10 @@ import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import axios from "axios";
 import { setUserDetails } from "../../Store/CarStore";
 import DarkTheme from "../../Themes/ButtonThemes";
-import { emailValidation, phoneNoValidation } from "../../utility/FormValidation";
+import {
+  emailValidation,
+  phoneNoValidation,
+} from "../../utility/FormValidation";
 import "./Register.css";
 import "../../styles.css";
 import ForgotPasswordOTP from "../ForgotPassword/ForgotPasswordOTP";
@@ -66,7 +69,10 @@ const Register = () => {
         setValidEmail(false);
         setValidMobNo(false);
       }, 2500);
-      setShowToast({ type: 2, message: "Enter a valid email and phone number !" });
+      setShowToast({
+        type: 2,
+        message: "Enter a valid email and phone number !",
+      });
       return;
     }
     if (!isValidEmail) {
@@ -120,8 +126,12 @@ const Register = () => {
       })
       .catch((error) => {
         setIsLoading(false);
-        console.log(error);
-        setShowToast({ type: 2, message: error.response.data.message ? error.response.data.message : 'Something went wrong !' });
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -157,7 +167,6 @@ const Register = () => {
       })
       // Catching and returning error message if the specified place is invalid.
       .catch((error) => {
-        console.log(error);
         setShowToast({
           type: 2,
           message: error.response.data?.message
@@ -173,7 +182,8 @@ const Register = () => {
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/google`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/google`,
       "popup",
-      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${
+        screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -207,7 +217,6 @@ const Register = () => {
         })
         // Catching and returning error message if the specified place is invalid.
         .catch((error) => {
-          console.log(error);
           setShowToast({
             type: 2,
             message: error.response.data.message
@@ -226,7 +235,13 @@ const Register = () => {
   }, [userDetails]);
 
   if (isIdPassRegisterSuccess) {
-    return <ForgotPasswordOTP name={`${firstName} ${lastName}`} email={email} callbackFunction={userRegisterCallback} />;
+    return (
+      <ForgotPasswordOTP
+        name={`${firstName} ${lastName}`}
+        email={email}
+        callbackFunction={userRegisterCallback}
+      />
+    );
   }
   return (
     <>
@@ -315,8 +330,9 @@ const Register = () => {
             </div>
             {password !== cpassword && cpassword.length > 0 ? (
               <div
-                className={`wrong-password-message ${passMissMatch ? "wrong-submit" : ""
-                  }`}
+                className={`wrong-password-message ${
+                  passMissMatch ? "wrong-submit" : ""
+                }`}
               >
                 <span>Passwords does not match</span>
               </div>
@@ -325,7 +341,11 @@ const Register = () => {
             )}
           </div>
           <div className="tnc-checkbox">
-            <input value={tnc} onClick={() => setTnc(value => !value)} type="checkbox" />
+            <input
+              value={tnc}
+              onClick={() => setTnc((value) => !value)}
+              type="checkbox"
+            />
             <label>I agree with the terms of use</label>
           </div>
           <ThemeProvider theme={DarkTheme}>

@@ -33,7 +33,7 @@
     "lint": "eslint .",
     "prepare": "husky install"
   },
-  "author": "Hritik Singh & Pranav Srisrimal",
+  "author": "Hritik Singh & Saurabh Kumar",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@iconify/react": "^4.1.1",

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -147,9 +147,14 @@ export function SellCarLandingPage() {
           });
         }
       })
-      .catch((res) => {
+      .catch((error) => {
         setIsLoading(false);
-        console.log(res);
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -178,8 +183,13 @@ export function SellCarLandingPage() {
           }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getCarYearData = async () => {
@@ -207,15 +217,20 @@ export function SellCarLandingPage() {
           }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getCarVarientData = async () => {
     const url =
       NODE_ENV === "development"
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api//make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/cars-api/make_id/${brandEvent.eventChange}/year/2022/name/${modelEvent.eventChange}/trim`;
     await axios({
       method: "get",
       url: url,
@@ -236,8 +251,13 @@ export function SellCarLandingPage() {
           }));
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
   const getSelectedCarDetail = async () => {
@@ -262,8 +282,13 @@ export function SellCarLandingPage() {
           setSelectedCarData(res.data);
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        setShowToast({
+          type: 2,
+          message: error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong !",
+        });
       });
   };
 
@@ -296,7 +321,14 @@ export function SellCarLandingPage() {
           const newObj = { ...image, specficObjectInArray };
           setImage(newObj);
         })
-        .catch((err) => console.log(err));
+        .catch((error) =>
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          })
+        );
     }
     setShowToast({ type: 1, message: "Image Uploaded Successfull!" });
   };
