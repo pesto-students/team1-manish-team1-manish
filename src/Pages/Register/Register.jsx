@@ -60,6 +60,7 @@ const Register = () => {
       setShowToast({ type: 2, message: "Fill all details !" });
       return;
     }
+
     const isValidEmail = emailValidation(email);
     const isMobNoValid = phoneNoValidation(phoneNo);
     if (!isValidEmail && !isMobNoValid) {
@@ -122,6 +123,7 @@ const Register = () => {
         if (response.status == 200) {
           setIsLoading(false);
           setIsIdPassRegisterSuccess(true);
+          setTnc(false);
         }
       })
       .catch((error) => {
@@ -240,6 +242,7 @@ const Register = () => {
         name={`${firstName} ${lastName}`}
         email={email}
         callbackFunction={userRegisterCallback}
+        returnParentPage={setIsIdPassRegisterSuccess}
       />
     );
   }
@@ -285,6 +288,7 @@ const Register = () => {
                 placeholder=" First Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                className={validEmail ? "wrong-submit" : ""}
               />
               <input
                 type="text"

@@ -55,9 +55,12 @@ const forgotPassword = () => {
     })
       .then((response) => {
         if (response.status == 200) {
-          setIsLoading(false);
           setShowToast({ type: 1, message: "OTP Sent successfully !" });
-          setTimeout(() => setIsEmailExist(true), 2500);
+          setTimeout(() => {
+            setIsEmailExist(true);
+            setIsLoading(false);
+            resetToast();
+          }, 2500);
         }
       })
       .catch((error) => {
@@ -75,7 +78,11 @@ const forgotPassword = () => {
   };
   if (IsEmailExist) {
     return (
-      <ForgotPasswordOTP email={email} callbackComponent={callbackComponent} />
+      <ForgotPasswordOTP
+        email={email}
+        callbackComponent={callbackComponent}
+        returnParentPage={setIsEmailExist}
+      />
     );
   }
   return (

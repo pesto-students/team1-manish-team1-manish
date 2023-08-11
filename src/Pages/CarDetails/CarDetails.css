@@ -1,6 +1,7 @@
 .car-details {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .car-preview {
@@ -329,6 +330,12 @@ div.car-photos {
 .darker-btn:disabled {
   background-color: #e6274b;
   cursor: not-allowed;
+}
+
+.car-details-back-btn {
+  position: absolute;
+  top: 1.5vh;
+  left: 3vw;
 }
 
 @media (max-width: 550px) {

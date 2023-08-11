@@ -7,6 +7,7 @@ import { useRef } from "react";
 import axios from "axios";
 import { Alert, Snackbar } from "@mui/material";
 import { useSelector } from "react-redux";
+import IconButtons from "../../components/Button/IconButton";
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -15,7 +16,7 @@ const {
   REACT_APP_PROD_CORS_URL,
 } = process.env;
 
-const CarDetails = ({ carId }) => {
+const CarDetails = ({ carId, resetCarId }) => {
   const userDetails = useSelector((state) => state.userDetails);
   const [carData, setCarData] = useState(null);
   const [isBookMarked, setIsBookMarked] = useState(false);
@@ -354,6 +355,13 @@ const CarDetails = ({ carId }) => {
         </Alert>
       </Snackbar>
       <div id="style-1" className="car-details">
+        <div className="car-details-back-btn">
+          <IconButtons
+            actionToDo={() => {
+              resetCarId(null);
+            }}
+          />
+        </div>
         <div className="car-preview">
           {!carData ? (
             <>

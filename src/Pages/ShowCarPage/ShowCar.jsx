@@ -214,7 +214,14 @@ export default function ShowCar() {
       dispatch(resetShowCarDetails());
     };
   }, []);
-  if (selectedCar) return <CarDetails carId={selectedCar} key={selectedCar} />;
+  if (selectedCar)
+    return (
+      <CarDetails
+        carId={selectedCar}
+        key={crypto.randomUUID()}
+        resetCarId={setSelectedCar}
+      />
+    );
   else
     return (
       <>
