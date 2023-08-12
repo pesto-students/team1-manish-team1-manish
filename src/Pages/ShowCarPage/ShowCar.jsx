@@ -52,6 +52,7 @@ export default function ShowCar() {
   const [toggleFilter, setToggleFilter] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
+
   const carBrands = useSelector((state) => state.carBrandData.carBrand);
   const carTypes = useSelector((state) => state.carTypeData.carType);
   const carOwnerships = useSelector(
@@ -214,6 +215,7 @@ export default function ShowCar() {
       dispatch(resetShowCarDetails());
     };
   }, []);
+
   if (selectedCar)
     return (
       <CarDetails
@@ -676,7 +678,13 @@ export default function ShowCar() {
                             />
                           </div>
                           <div className="car-card-specs">
-                            <span>{el.tags[0]}</span>
+                            <span>
+                              {el?.buyerid === userDetails?.id
+                                ? "BOUGHT"
+                                : el?.buyerid
+                                ? "SOLD OUT"
+                                : "BUY"}
+                            </span>
                             <p className="car-card-price">
                               {formatPrice(parseFloat(el.price))}
                             </p>
@@ -719,7 +727,13 @@ export default function ShowCar() {
                           <img src="/Assets/temp-car-img.svg" alt="Car Image" />
                         </div>
                         <div className="car-card-specs">
-                          <span>{el.tags[0]}</span>
+                          <span>
+                            {el?.buyerid === userDetails?.id
+                              ? "BOUGHT"
+                              : el?.buyerid
+                              ? "SOLD OUT"
+                              : "BUY"}
+                          </span>
                           <p className="car-card-price">
                             {formatPrice(parseFloat(el.price))}
                           </p>
