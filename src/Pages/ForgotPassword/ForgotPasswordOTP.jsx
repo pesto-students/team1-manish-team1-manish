@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import ConfirmPassword from "./ResetPassword";
 import axios from "axios";
 import {
   Alert,
@@ -9,6 +8,11 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import DarkTheme from "../../Themes/ButtonThemes";
+import "./ForgotPassword.css";
+import IconButtons from "../../components/Button/IconButton";
+import { useNavigate } from "react-router-dom";
+// import ConfirmPassword from "./ResetPassword";
+
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -22,6 +26,7 @@ const ForgotPasswordOTP = ({
   email,
   callbackComponent = null,
   callbackFunction = null,
+  returnParentPage,
 }) => {
   const num1 = useRef();
   const num2 = useRef();
@@ -85,6 +90,7 @@ const ForgotPasswordOTP = ({
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpValid, setIsOtpValid] = useState(false);
+  const navigate = useNavigate();
 
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
@@ -227,6 +233,13 @@ const ForgotPasswordOTP = ({
         </Alert>
       </Snackbar>
       <div className="forgot__password_container">
+        <div className="forgot__pass_back_btn">
+          <IconButtons
+            actionToDo={() => {
+              returnParentPage(false);
+            }}
+          />
+        </div>
         <div className="forgot__password">
           <h1 className="forgot__password__header">
             {callbackComponent !== null && callbackFunction === null

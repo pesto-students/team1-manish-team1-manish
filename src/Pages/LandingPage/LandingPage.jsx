@@ -55,7 +55,9 @@ const LandingPage = () => {
     isStateUpdate: false,
     eventChange: "",
   });
-  const flagPage = useSelector((state) => state.flag);
+  const [toggleLandingPage, setToggleLandingPage] = useState(true);
+
+  // const flagPage = useSelector((state) => state.flag);
 
   const getBrandData = async () => {
     const url =
@@ -204,17 +206,13 @@ const LandingPage = () => {
             <p className="img-text">Car to cash in a few hours!</p>
             <button
               className="img-btn"
-              onClick={() =>
-                flagPage
-                  ? dispatch(setSellCarFlag())
-                  : dispatch(setBuyCarFlag())
-              }
+              onClick={() => setToggleLandingPage((prevState) => !prevState)}
             >
-              {flagPage ? "Sell Car" : "Buy Car"}
+              {toggleLandingPage ? "Sell Car" : "Buy Car"}
             </button>
           </div>
         </div>
-        {flagPage ? (
+        {toggleLandingPage ? (
           <>
             <div className="landing-page-div2">
               <div className="landing-page-left-div">
