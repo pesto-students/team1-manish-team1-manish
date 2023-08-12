@@ -108,7 +108,7 @@ export function SellCarLandingPage() {
       nearestRtoOffice: nearRTOoffice,
       price: Math.ceil(Math.random() * (50000 - 5000) + 5000),
       type: selectedCarData[0]?.body,
-      tags: ["Best Sellar"],
+      tags: ["Best Seller"],
       images: image.array,
       carApiId: selectedCarData[0]?.id,
     };

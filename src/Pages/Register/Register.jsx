@@ -44,6 +44,7 @@ const Register = () => {
   const [validFirstName, setValidFirstName] = useState(false);
   const [validLastName, setValidLastName] = useState(false);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -129,6 +130,13 @@ const Register = () => {
       setShowToast({ type: 2, message: "Agree with the terms of use !" });
       return;
     }
+
+    const emailExist = await IsEmailExist();
+    if (emailExist) {
+      setShowToast({ type: 2, message: "User exist! Please Login" });
+      return;
+    }
+
     setIsLoading(true);
     await axios({
       method: "post",
@@ -259,11 +267,40 @@ const Register = () => {
       setIsLoading(false);
     }, 1000);
   };
+
+  const IsEmailExist = async () => {
+    return await axios({
+      method: "post",
+      url:
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/verify/email`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/verify/email`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin":
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
+      },
+      data: { email: email },
+    }).then((response) => {
+      if (response.status == 200) {
+        return true;
+      } else if (response.status == 202) {
+        return false;
+      }
+      setShowToast({
+        type: 2,
+        message: "Something went wrong! Please try again",
+      });
+      return false;
+    });
+  };
+
   useEffect(() => {
     if (userDetails.id) {
       navigate("/");
     }
-    // }, []);
   }, [userDetails]);
 
   if (isIdPassRegisterSuccess) {

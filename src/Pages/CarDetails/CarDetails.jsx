@@ -575,19 +575,11 @@ const CarDetails = ({ carId, resetCarId }) => {
               <div className="feature-content">
                 {Object.keys(carData.carFeatures).map((keyID, index) => {
                   return index > 0 && index <= 6 ? (
-                    <div className="content-key" key={crypto.randomUUID()}>
+                    <div className="content-key" key={index}>
                       {carData.carFeatures[keyID] ? (
-                        <Icon
-                          className="tick-icon"
-                          icon="charm:tick"
-                          key={crypto.randomUUID()}
-                        />
+                        <Icon className="tick-icon" icon="charm:tick" />
                       ) : (
-                        <Icon
-                          className="cross-icon"
-                          icon="charm:cross"
-                          key={crypto.randomUUID()}
-                        />
+                        <Icon className="cross-icon" icon="charm:cross" />
                       )}{" "}
                       {keyID}
                     </div>
@@ -597,19 +589,11 @@ const CarDetails = ({ carId, resetCarId }) => {
                 })}
                 {Object.keys(carData.carFeatures).map((keyID, index) => {
                   return index > 6 && moreFeatureToggle ? (
-                    <div className="content-key" key={crypto.randomUUID()}>
+                    <div className="content-key" key={index}>
                       {carData.carFeatures[keyID] ? (
-                        <Icon
-                          className="tick-icon"
-                          icon="charm:tick"
-                          key={crypto.randomUUID()}
-                        />
+                        <Icon className="tick-icon" icon="charm:tick" />
                       ) : (
-                        <Icon
-                          className="cross-icon"
-                          icon="charm:cross"
-                          key={crypto.randomUUID()}
-                        />
+                        <Icon className="cross-icon" icon="charm:cross" />
                       )}{" "}
                       {keyID}
                     </div>

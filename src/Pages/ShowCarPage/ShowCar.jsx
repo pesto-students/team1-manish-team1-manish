@@ -676,7 +676,7 @@ export default function ShowCar() {
                             />
                           </div>
                           <div className="car-card-specs">
-                            <span>Tags</span>
+                            <span>{el.tags[0]}</span>
                             <p className="car-card-price">
                               {formatPrice(parseFloat(el.price))}
                             </p>
@@ -719,7 +719,7 @@ export default function ShowCar() {
                           <img src="/Assets/temp-car-img.svg" alt="Car Image" />
                         </div>
                         <div className="car-card-specs">
-                          <span>Tags</span>
+                          <span>{el.tags[0]}</span>
                           <p className="car-card-price">
                             {formatPrice(parseFloat(el.price))}
                           </p>

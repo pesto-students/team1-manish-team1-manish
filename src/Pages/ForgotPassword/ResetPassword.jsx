@@ -66,8 +66,6 @@ const ConfirmPassword = ({ email }) => {
             setIsNewPasswordSet(true);
             navigate("/login");
           }, 2500);
-          // setIsNewPasswordSet(true);
-          // setTimeout(() => setIsNewPasswordSet(false), 2500);
         }
       })
       .catch((error) => {
