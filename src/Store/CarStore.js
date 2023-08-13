@@ -337,7 +337,14 @@ const CarSlice = createSlice({
     setLoadingFalse: (state) => {
       state.isLoading = false;
     },
+    setUploadImg: (state, actions) => {
+      state.imgToBeUpload.uploadImg = [...actions.payload];
+    },
+    removeUploadImg: (state, actions) => {
+      state.imgToBeUpload.uploadImg.splice(actions.payload, 1);
+    },
   },
+
   extraReducers: {
     [getSellCarBrandsData.pending]: (state, actions) => {
       state.sellCarBrandData.loading = true;
@@ -459,6 +466,8 @@ export const {
   resetShowCarDetails,
   setLoadingTrue,
   setLoadingFalse,
+  setUploadImg,
+  removeUploadImg,
 } = CarSlice.actions;
 
 const CarStore = configureStore({

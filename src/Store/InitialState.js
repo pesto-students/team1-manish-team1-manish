@@ -45,4 +45,7 @@ export const globalInitialState = {
     bookmark_ids: [],
     otp: "",
   },
+  imgToBeUpload: {
+    uploadImg: [],
+  },
 };

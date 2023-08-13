@@ -258,11 +258,22 @@
   flex-direction: column;
 }
 
-.upload-img-div:before {
+.img-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  height: 90%;
+}
+
+.upload-action-btn {
+  height: 10%;
+}
+/* .upload-img-div:before {
   position: absolute;
   bottom: 120px;
   content: " (or) Drag and Drop files here. ";
-}
+} */
 
 .upload-button {
   width: 10vw;
@@ -270,10 +281,10 @@
   cursor: pointer;
 }
 
-#file-upload {
+/* #file-upload {
   cursor: pointer;
   padding: 183px 60px 184px 140px;
-}
+} */
 
 .sell-car-landing-page-div2 {
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
@@ -344,6 +355,18 @@
   position: relative;
   top: 49%;
   left: 49%;
+}
+
+#file-upload {
+  display: none;
+}
+
+#file-input-label {
+  font-size: 1.3em;
+  padding: 10px 15px;
+  border: 1px solid black;
+  border-radius: 4%;
+  cursor: pointer;
 }
 
 @media (max-width: 480px) {

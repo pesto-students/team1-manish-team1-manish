@@ -683,7 +683,7 @@ export default function ShowCar() {
                                 ? "BOUGHT"
                                 : el?.buyerid
                                 ? "SOLD OUT"
-                                : "BUY"}
+                                : "AVAILABLE"}
                             </span>
                             <p className="car-card-price">
                               {formatPrice(parseFloat(el.price))}
@@ -732,7 +732,7 @@ export default function ShowCar() {
                               ? "BOUGHT"
                               : el?.buyerid
                               ? "SOLD OUT"
-                              : "BUY"}
+                              : "AVAILABLE"}
                           </span>
                           <p className="car-card-price">
                             {formatPrice(parseFloat(el.price))}
