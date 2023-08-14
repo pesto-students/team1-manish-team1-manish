@@ -10,7 +10,13 @@ import { useDispatch } from "react-redux";
 import { removeUploadImg } from "../../Store/CarStore";
 import LinearProgressBar from "../ProgressBar/ProgressBar";
 
-export default function RowCard({ imgUrl, imgTitle, index, uploadProgress }) {
+export default function RowCard({
+  imgUrl,
+  imgTitle,
+  index,
+  uploadProgress,
+  uploadImgFlag,
+}) {
   const dispatch = useDispatch();
 
   return (
@@ -37,32 +43,35 @@ export default function RowCard({ imgUrl, imgTitle, index, uploadProgress }) {
           )}
         </Typography>
       </CardContent>
-      <CardOverflow
-        variant="soft"
-        color="primary"
-        sx={{
-          px: 0.2,
-          writingMode: "vertical-rl",
-          textAlign: "center",
-          fontSize: "xs",
-          fontWeight: "xl",
-          letterSpacing: "1px",
-          textTransform: "uppercase",
-          borderLeft: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <IconButton
-          aria-label="arrow-back"
-          size="large"
-          onClick={() => {
-            // console.log("asds");
-            dispatch(removeUploadImg(index));
+      {!uploadImgFlag ? (
+        <CardOverflow
+          variant="soft"
+          color="primary"
+          sx={{
+            px: 0.2,
+            writingMode: "vertical-rl",
+            textAlign: "center",
+            fontSize: "xs",
+            fontWeight: "xl",
+            letterSpacing: "1px",
+            textTransform: "uppercase",
+            borderLeft: "1px solid",
+            borderColor: "divider",
           }}
         >
-          <CloseIcon />
-        </IconButton>
-      </CardOverflow>
+          <IconButton
+            aria-label="arrow-back"
+            size="large"
+            onClick={() => {
+              dispatch(removeUploadImg(index));
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </CardOverflow>
+      ) : (
+        ""
+      )}
     </Card>
   );
 }

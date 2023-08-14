@@ -86,7 +86,8 @@ export function SellCarLandingPage() {
   const [nearRTOoffice, setnearRTOoffice] = useState("");
   const [image, setImage] = useState({ array: [] });
   const [selectedCarData, setSelectedCarData] = useState([]);
-  const [uploadPercentage, setUploadPercentage] = useState(0);
+  const [uploadPercentage, setUploadPercentage] = useState([]);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const handleSellCarSubmit = async () => {
     const sellCarData = {
@@ -145,6 +146,7 @@ export function SellCarLandingPage() {
         if (res.status == 201) {
           setSelectedCarData(res.data);
           setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
+          dispatch(setUploadImg([]));
           setTimeout(() => {
             setIsLoading(false);
             navigate("/buy-car"), 2500;
@@ -314,15 +316,10 @@ export function SellCarLandingPage() {
       await axios
         .post(url, formData, {
           onUploadProgress: (ProgressEvent) => {
-            // const progress = parseInt(
-            //   Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
-            // );
-            setUploadPercentage(
-              parseInt(
-                Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
-              )
+            const progress = parseInt(
+              Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
             );
-            console.log(ProgressEvent);
+            setUploadPercentage((prevArray) => [...prevArray, progress]);
           },
         })
         .then((res) => {
@@ -332,6 +329,7 @@ export function SellCarLandingPage() {
           specficObjectInArray.push(imageUrl);
           const newObj = { ...image, specficObjectInArray };
           setImage(newObj);
+          setIsImageUploaded(true);
         })
         .catch((error) =>
           setShowToast({
@@ -341,8 +339,8 @@ export function SellCarLandingPage() {
               : "Something went wrong !",
           })
         );
-      setUploadPercentage(0);
     }
+    setUploadPercentage([]);
     setShowToast({ type: 1, message: "Image Uploaded Successfull!" });
   };
 
@@ -490,7 +488,8 @@ export function SellCarLandingPage() {
                         imgTitle={el.name}
                         key={crypto.randomUUID()}
                         index={idx}
-                        uploadProgress={uploadPercentage}
+                        uploadProgress={uploadPercentage[idx]}
+                        uploadImgFlag={isImageUploaded}
                       />
                     );
                   })
@@ -504,13 +503,18 @@ export function SellCarLandingPage() {
                 multiple
                 onChange={(event) => {
                   dispatch(setUploadImg(event.target.files));
+                  setIsImageUploaded(false);
                 }}
               />
 
               <label id="file-input-label" htmlFor="file-upload">
                 Select a File
               </label>
-              <button className="upload-button" onClick={handleUpload}>
+              <button
+                className="upload-button"
+                onClick={handleUpload}
+                disabled={imgToUpload.uploadImg.length > 0 ? false : true}
+              >
                 Upload
               </button>
             </div>
