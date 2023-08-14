@@ -1,6 +1,7 @@
 export const globalInitialState = {
   isLoading: false,
   isAuthUser: false,
+  isFilterSet: false,
   flag: true,
   bookmarkFlag: false,
   carTypeData: {

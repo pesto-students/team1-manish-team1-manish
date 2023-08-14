@@ -48,13 +48,17 @@ html {
   cursor: pointer;
 }
 
+.not-allowed {
+  cursor: not-allowed;
+}
+
 .home {
   display: flex;
   justify-content: center;
   height: 100%;
 }
 
-.home > h1 {
+.home>h1 {
   margin-top: 20px;
 }
 
@@ -82,13 +86,14 @@ html {
   width: 100%;
 }
 
-.circular-loader > span {
+.circular-loader>span {
   position: relative;
   top: 49%;
   left: 49%;
 }
 
 @keyframes shake {
+
   0%,
   20%,
   40%,

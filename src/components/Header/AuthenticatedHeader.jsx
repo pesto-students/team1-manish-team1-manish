@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setBuyCarFlag,
   setSellCarFlag,
-  unAuthorizeUser,
 } from "../../Store/CarStore";
 import UseMenu from "../UserProfileMenu/UserMenu";
 import "./Header.css";
-import axios from "axios";
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -18,7 +16,6 @@ const {
 const AuthenticatedHeader = () => {
   const flagPage = useSelector((state) => state.flag);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [toggleHeaderClass, setToggleHeaderClass] = useState("close");
 
   const logoutUser = async () => {
@@ -27,11 +24,9 @@ const AuthenticatedHeader = () => {
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
       "popup",
-      `popup = true,width=400,height=600,left=${
-        screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
-    return;
   };
   const toggleHeader = () => {
     if (toggleHeaderClass === "close") {

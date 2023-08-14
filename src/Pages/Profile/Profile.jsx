@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserDetailView from "../../components/UserDetailView/UserDetailView";
 import "./Profile.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
-function Profile() {
+const Profile = () => {
+  const userDetails = useSelector(state => state.userDetails);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userDetails.id) {
+      navigate('/');
+    }
+  }, [userDetails]);
   return (
     <div className="profile">
       <UserDetailView />

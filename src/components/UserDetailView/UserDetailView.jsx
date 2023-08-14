@@ -19,7 +19,7 @@ function UserDetailView() {
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder] = useState([]);
   const [bookmark, setBookmark] = useState([]);
-
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
   const userId = useSelector((state) => state.userDetails?.id);
 
   const activityData = Object.freeze([
@@ -138,12 +138,12 @@ function UserDetailView() {
 
   useEffect(() => {
     updateOrder();
-    return () => {};
+    return () => { };
   }, [userId]);
 
   useEffect(() => {
     updateBookmark();
-    return () => {};
+    return () => { };
   }, [userDetail]);
 
   return (

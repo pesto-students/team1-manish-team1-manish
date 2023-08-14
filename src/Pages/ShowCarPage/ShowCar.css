@@ -89,7 +89,7 @@
   cursor: pointer;
 }
 
-.minimise-btn > img {
+.minimise-btn>img {
   width: 76%;
 }
 
@@ -101,7 +101,7 @@
   align-items: center;
 }
 
-.search-brand > input {
+.search-brand>input {
   width: 12vw;
   border-radius: 6px;
   background: rgba(184, 210, 255, 0.16);
@@ -109,7 +109,7 @@
   padding: 0.5rem;
 }
 
-.search-brand > img {
+.search-brand>img {
   position: absolute;
   right: 10px;
   width: 8.5%;
@@ -165,7 +165,6 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  /* margin: 0 1rem; */
   align-items: center;
 }
 
@@ -181,24 +180,64 @@
 }
 
 .full-screen-search {
-  margin-left: 30rem;
+  margin-left: 25rem;
 }
 
 .half-screen-search {
-  margin-left: 15rem;
+  margin-left: 5.75rem;
 }
 
-.search-car > input {
+.search-car>input {
   width: 100%;
   border-radius: 6px;
   border: none;
   padding: 0.5rem;
 }
 
-.search-car > img {
+.search-car>img {
   position: absolute;
   right: 10px;
   width: 2.5%;
+}
+
+.clear-filter-btn {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  background: #fff;
+  border: none;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.clear-filter-btn>p {
+  color: #676e8a;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 29px;
+}
+
+.clear-filter-disabled-btn {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  background: #e6e6e6;
+  border: none;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  padding: 0.4rem;
+  cursor: not-allowed;
+}
+
+.clear-filter-disabled-btn>p {
+  color: #585a62;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 29px;
 }
 
 .filter-btn {
@@ -212,9 +251,8 @@
   cursor: pointer;
 }
 
-.filter-btn > p {
+.filter-btn>p {
   color: #676e8a;
-
   font-family: Poppins;
   font-style: normal;
   font-weight: 400;
@@ -232,7 +270,7 @@
   cursor: pointer;
 }
 
-.list-filter-btn > p {
+.list-filter-btn>p {
   color: #676e8a;
   font-family: Poppins;
   font-style: normal;
@@ -279,7 +317,7 @@
   margin: 0rem 0.7rem 0 0.7rem;
 }
 
-.active-filter-btn > p {
+.active-filter-btn>p {
   color: #676e8a;
   font-family: Poppins;
   font-style: normal;
@@ -338,7 +376,7 @@
   width: 100%;
 }
 
-.car-card-img > img {
+.car-card-img>img {
   width: 45%;
 }
 
@@ -349,7 +387,7 @@
   margin-bottom: 1.5rem;
 }
 
-.car-card-specs > span {
+.car-card-specs>span {
   border-radius: 4px;
   background: rgba(255, 92, 0, 0.32);
   color: #ff0f00;
@@ -372,15 +410,22 @@
 
 .buy-car-detail-loader {
   position: fixed;
+  margin-left: 22vw;
   z-index: 99;
   height: 100%;
   width: 100%;
 }
 
-.buy-car-detail-loader > span {
+.buy-car-detail-loader>span {
   position: relative;
   top: 24vh;
   left: 45vw;
+}
+
+.zero-cars-found>img {
+  margin-top: 18vh;
+  height: 100px;
+  width: 400px;
 }
 
 .minimise-filter {
