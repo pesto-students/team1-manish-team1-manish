@@ -1,0 +1,21 @@
+.profile-settings-input {
+    width: 300px;
+}
+
+.profile-save-btn {
+    align-self: normal;
+    margin-top: auto;
+    padding: 5px;
+    color: white;
+}
+
+.profile-save-btn:disabled {
+    background-color: #aeaeae;
+    cursor: not-allowed;
+}
+
+.profile-save-btn:active:disabled {
+    background-color: #aeaeae !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}

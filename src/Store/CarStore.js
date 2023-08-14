@@ -82,6 +82,36 @@ export const getUserDetails = createAsyncThunk(
   }
 );
 
+export const updateUserDetails = createAsyncThunk(
+  "userDetails/updateUserDetails",
+  async (args, thunkAPI) => {
+    const state = thunkAPI.getState();
+    return axios(
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${state.userDetails.id}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${state.userDetails.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+        withCredentials: true,
+        data: args
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+);
+
 export const getCarBrandsData = createAsyncThunk(
   "carBrands/getCarBrandsData",
   async () => {
@@ -417,12 +447,8 @@ const CarSlice = createSlice({
         first_name: "",
         last_name: "",
         email: "",
-        phone_no: null,
-        password: "",
-        role_id: "",
-        auth_provider: "",
-        bookmark_ids: [],
-        otp: null,
+        phone_no: "",
+        bookmark_ids: []
       };
     },
     [getCarBrandsData.pending]: (state, actions) => {
@@ -486,6 +512,16 @@ const CarSlice = createSlice({
     },
     [searchCarByFilters.rejected]: (state, actions) => {
       state.buyCarDetails.loading = false;
+    },
+    [updateUserDetails.pending]: (state, actions) => {
+      state.isLoading = true;
+    },
+    [updateUserDetails.fulfilled]: (state, actions) => {
+      state.isLoading = false;
+      state.userDetails = actions.payload;
+    },
+    [updateUserDetails.rejected]: (state, actions) => {
+      state.isLoading = false;
     },
   },
 });
