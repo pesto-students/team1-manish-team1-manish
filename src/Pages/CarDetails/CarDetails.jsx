@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./CarDetails.css";
@@ -276,6 +275,81 @@ const CarDetails = ({ carId, resetCarId }) => {
     }
   };
 
+  // useEffect(() => {
+  //   if (timeOutId.current) {
+  //     clearTimeout(timeOutId.current);
+  //     timeOutId.current = null;
+  //   }
+  //   if (userDetails.id && !isBookMarkSet) {
+  //     setIsBookMarked(
+  //       userDetails?.bookmark_ids?.includes(`${carId}`) ? true : false
+  //     );
+  //     setIsBookMarkSet(true);
+  //   }
+  //   if (!carData) {
+  //     //Backend API call for fetching carDetails
+  //     fetchCarDetails();
+  //   } else {
+  //     if (!timeOutId.current) {
+  //       timeOutId.current = setTimeout(() => {
+  //         if (isImageFading[0] > carData.carOverview.Images.length - 2) {
+  //           setIsImageFading([0, !isImageFading[1]]);
+  //         } else {
+  //           setIsImageFading((value) => [value[0] + 1, !value[1]]);
+  //         }
+  //       }, 6000);
+  //     }
+  //   }
+  //   let lastScrollY = window.scrollY;
+
+  //   const updateScrollDirection = () => {
+  //     const scrollY = window.scrollY;
+  //     const direction = scrollY > lastScrollY ? "down" : "up";
+  //     if (
+  //       direction !== scrollDirection &&
+  //       (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)
+  //     ) {
+  //       setScrollDirection(direction);
+  //     }
+  //     lastScrollY = scrollY > 0 ? scrollY : 0;
+  //   };
+
+  //   const updateBuyButton = () => {
+  //     if (carData?.carOverview?.BuyerId === userDetails.id) {
+  //       setCarSellStatus("Bought");
+  //     } else if (carData?.carOverview?.BuyerId) {
+  //       setCarSellStatus("Sold Out");
+  //     }
+  //   };
+  //   updateBuyButton();
+
+  //   window.addEventListener("scroll", updateScrollDirection); // add event listener
+  //   return () => {
+  //     window.removeEventListener("scroll", updateScrollDirection); // clean up
+  //   };
+  // }, [carData, isImageFading, scrollDirection, userDetails, isBookMarkSet]);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const updateScrollDirection = () => {
+      const scrollY = window.scrollY;
+      const direction = scrollY > lastScrollY ? "down" : "up";
+      if (
+        direction !== scrollDirection &&
+        (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)
+      ) {
+        setScrollDirection(direction);
+      }
+      lastScrollY = scrollY > 0 ? scrollY : 0;
+    };
+
+    window.addEventListener("scroll", updateScrollDirection); // add event listener
+    return () => {
+      window.removeEventListener("scroll", updateScrollDirection); // clean up
+    };
+  }, [scrollDirection]);
+
   useEffect(() => {
     if (timeOutId.current) {
       clearTimeout(timeOutId.current);
@@ -301,34 +375,13 @@ const CarDetails = ({ carId, resetCarId }) => {
         }, 6000);
       }
     }
-    let lastScrollY = window.scrollY;
 
-    const updateScrollDirection = () => {
-      const scrollY = window.scrollY;
-      const direction = scrollY > lastScrollY ? "down" : "up";
-      if (
-        direction !== scrollDirection &&
-        (scrollY - lastScrollY > 5 || scrollY - lastScrollY < -5)
-      ) {
-        setScrollDirection(direction);
-      }
-      lastScrollY = scrollY > 0 ? scrollY : 0;
-    };
-
-    const updateBuyButton = () => {
-      if (carData?.carOverview?.BuyerId === userDetails?.id) {
-        setCarSellStatus("Bought");
-      } else if (carData?.carOverview?.BuyerId) {
-        setCarSellStatus("Sold Out");
-      }
-    };
-    updateBuyButton();
-
-    window.addEventListener("scroll", updateScrollDirection); // add event listener
-    return () => {
-      window.removeEventListener("scroll", updateScrollDirection); // clean up
-    };
-  }, [carData, isImageFading, scrollDirection, userDetails, isBookMarkSet]);
+    if (carData?.carOverview?.BuyerId === userDetails.id) {
+      setCarSellStatus("Bought");
+    } else if (carData?.carOverview?.BuyerId) {
+      setCarSellStatus("Sold Out");
+    }
+  }, [carData, isImageFading, userDetails, isBookMarkSet]);
 
   return (
     <>
@@ -403,9 +456,9 @@ const CarDetails = ({ carId, resetCarId }) => {
                     )}
                   </button>
                   <button
-                    className="darker-btn"
+                    className={`darker-btn`}
                     onClick={handleBuyCar}
-                    disabled={carData.carOverview.SellerId === userDetails.id}
+                    disabled={(carData?.carOverview?.SellerId === userDetails.id || carData?.carOverview?.BuyerId !== null)}
                   >
                     <p>{carSellStatus}</p>
                   </button>
@@ -800,23 +853,20 @@ const CarDetails = ({ carId, resetCarId }) => {
       {carData ? (
         <>
           <div
-            className={`mobile-buy-footer ${
-              scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
-            } transition-all`}
+            className={`mobile-buy-footer ${scrollDirection === "down" ? "hide-buy-footer" : "show-buy-footer"
+              } transition-all`}
           >
             <div
-              className={`mobile-price ${
-                scrollDirection === "down"
-                  ? "hide-buy-footer"
-                  : "show-buy-footer"
-              } transition-all`}
+              className={`mobile-price ${scrollDirection === "down"
+                ? "hide-buy-footer"
+                : "show-buy-footer"
+                } transition-all`}
             >
               Rs. {carData.carOverview.Price}
             </div>
             <div
-              className={`car-interactive-button-mobile ${
-                scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
-              } transition-all`}
+              className={`car-interactive-button-mobile ${scrollDirection === "down" ? "hide-buy-div" : "show-buy-div"
+                } transition-all`}
             >
               <button className="darker-btn" onClick={bookmarkToggle}>
                 {isBookMarked ? (

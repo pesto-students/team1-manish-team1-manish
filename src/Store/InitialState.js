@@ -1,6 +1,7 @@
 export const globalInitialState = {
   isLoading: false,
   isAuthUser: false,
+  isFilterSet: false,
   flag: true,
   bookmarkFlag: false,
   carTypeData: {
@@ -39,10 +40,6 @@ export const globalInitialState = {
     last_name: "",
     email: "",
     phone_no: "",
-    password: "",
-    role_id: "",
-    auth_provider: "",
-    bookmark_ids: [],
-    otp: "",
+    bookmark_ids: []
   },
 };

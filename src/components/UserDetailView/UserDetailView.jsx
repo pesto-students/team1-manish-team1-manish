@@ -19,8 +19,8 @@ function UserDetailView() {
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder] = useState([]);
   const [bookmark, setBookmark] = useState([]);
-
-  const userId = useSelector((state) => state.userDetails?.id);
+  const [showToast, setShowToast] = useState({ type: 0, message: "" });
+  const userDetails = useSelector((state) => state.userDetails);
 
   const activityData = Object.freeze([
     {
@@ -45,13 +45,6 @@ function UserDetailView() {
   const userDetail = useSelector((state) => {
     return state.userDetails;
   });
-  const dummyUserDetail = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone_no: "",
-    name: "",
-  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -91,12 +84,12 @@ function UserDetailView() {
       });
   };
 
-  const updateOrder = async () => {
-    if (userId) {
+  const getOrder = async () => {
+    if (userDetails.id !== "") {
       const url =
         (NODE_ENV === "development"
           ? REACT_APP_DEV_BACKEND_BASE_URL
-          : REACT_APP_PROD_BACKEND_BASE_URL) + `/auth/users/${userId}/orders`;
+          : REACT_APP_PROD_BACKEND_BASE_URL) + `/auth/users/${userDetails.id}/orders`;
 
       await axios({
         method: "get",
@@ -119,31 +112,42 @@ function UserDetailView() {
     }
   };
 
-  const updateBookmark = () => {
-    userDetail?.bookmark_ids?.map((carId) => {
-      fetch(
+  const getBookmark = async () => {
+    if (userDetails.id !== "") {
+      const url =
         (NODE_ENV === "development"
           ? REACT_APP_DEV_BACKEND_BASE_URL
-          : REACT_APP_PROD_BACKEND_BASE_URL) + `/cars/ids/${carId}`,
-        { credentials: "include" }
-      )
-        .then((response) => response.json())
-        .then((d) => {
-          if (!!bookmark?.filter((car) => car.id === d.id)) {
-            setBookmark((prev) => [...prev, d]);
+          : REACT_APP_PROD_BACKEND_BASE_URL) + `/auth/users/${userDetails.id}/bookmarks`;
+
+      await axios({
+        method: "get",
+        url: url,
+        withCredentials: true,
+      })
+        .then((res) => {
+          if (res.status == 200) {
+            setBookmark(res.data);
           }
+        })
+        .catch((error) => {
+          setShowToast({
+            type: 2,
+            message: error.response.data.message
+              ? error.response.data.message
+              : "Something went wrong !",
+          });
         });
-    });
+    }
   };
 
   useEffect(() => {
-    updateOrder();
-    return () => {};
-  }, [userId]);
+    getOrder();
+    return () => { };
+  }, [userDetails]);
 
   useEffect(() => {
-    updateBookmark();
-    return () => {};
+    getBookmark();
+    return () => { };
   }, [userDetail]);
 
   return (
@@ -158,20 +162,20 @@ function UserDetailView() {
       <div className="user-detail-view__container">
         <div className="user-detail-view__user-details">
           <span className="user-detail-view__user-avatar">
-            {userDetail ? userDetail.first_name[0] : dummyUserDetail.first_name}
-            {userDetail ? userDetail.last_name[0] : dummyUserDetail.last_name}
+            {userDetail.first_name[0]?.toUpperCase()}
+            {userDetail.last_name[0]?.toUpperCase()}
           </span>
           <h3 className="user-detail-view__user-name">
-            {userDetail ? userDetail.name : dummyUserDetail.name}
+            {userDetail.name}
           </h3>
           <p className="user-detail-view__user-mobile">
-            <a href="tel:+919027310299">
-              {userDetail ? userDetail.phone_no : dummyUserDetail.phone_no}
+            <a href={`tel:+91${userDetail.phone_no}`}>
+              {userDetail.phone_no}
             </a>
           </p>
           <p className="user-detail-view__user-mail">
-            <a href="mailto:cjatin2822@gmail.com">
-              {userDetail ? userDetail.email : dummyUserDetail.email}
+            <a href={`mailto:${userDetail.email}`}>
+              {userDetail.email}
             </a>
           </p>
         </div>

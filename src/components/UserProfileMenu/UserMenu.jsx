@@ -213,7 +213,7 @@ const styles = `
     list-style: none;
     padding: 8px;
     border-radius: 0.45em;
-    cursor: default;
+    cursor: pointer;
     user-select: none;
   }
 
@@ -248,6 +248,10 @@ const styles = `
   .mode-dark .menu-item:hover:not(.disabled){
     background-color: ${grey[800]};
     color: ${grey[300]};
+  }
+
+  .MuiPopper-root {
+    z-index: 1;
   }
 
   .button {
