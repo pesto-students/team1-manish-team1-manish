@@ -513,7 +513,7 @@ export function SellCarLandingPage() {
               <button
                 className="upload-button"
                 onClick={handleUpload}
-                disabled={imgToUpload.uploadImg.length > 0 ? false : true}
+                disabled={!isImageUploaded ? false : true}
               >
                 Upload
               </button>

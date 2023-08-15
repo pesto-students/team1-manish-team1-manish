@@ -20,7 +20,11 @@ export default function RowCard({
   const dispatch = useDispatch();
 
   return (
-    <Card orientation="horizontal" variant="outlined" sx={{ width: "95%" }}>
+    <Card
+      orientation="horizontal"
+      variant="outlined"
+      sx={{ width: "inherit", borderRadius: 15 }}
+    >
       <CardOverflow>
         <AspectRatio ratio="1" sx={{ width: 90 }}>
           <img
@@ -33,7 +37,7 @@ export default function RowCard({
       </CardOverflow>
       <CardContent>
         <Typography fontWeight="md" textColor="success.plainColor" mb={0.5}>
-          {imgTitle.substring(0, 30) + "..."}
+          {imgTitle.length <= 30 ? imgTitle : imgTitle.substring(0, 30) + "..."}
         </Typography>
         <Typography level="body-sm">
           {uploadProgress ? (
