@@ -16,7 +16,7 @@ const {
 } = process.env;
 
 const CarDetails = ({ carId, resetCarId }) => {
-  const userDetails = useSelector((state) => state.userDetails);
+  const userDetails = useSelector((state) => state.userData.details);
   const [carData, setCarData] = useState(null);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarkSet, setIsBookMarkSet] = useState(false);
@@ -33,7 +33,7 @@ const CarDetails = ({ carId, resetCarId }) => {
   };
   let timeOutId = useRef(false);
   const bookmarkToggle = () => {
-    if (!userDetails.id) {
+    if (userDetails.id === "") {
       setShowToast({ type: 2, message: "Login to add car to the wishlist !" });
       return;
     }

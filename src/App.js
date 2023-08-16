@@ -15,8 +15,8 @@ import "./styles.css";
 import { CircularProgress } from "@mui/material";
 
 const App = () => {
-  const userDetails = useSelector((state) => {
-    return state.userDetails;
+  const userData = useSelector((state) => {
+    return state.userData;
   });
   const isLoading = useSelector((state) => {
     return state.isLoading;
@@ -24,16 +24,16 @@ const App = () => {
   const [silentLoginCounter, setSilentLoginCounter] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!userDetails.id && silentLoginCounter < 2) {
+    if (userData.details.id === "" && !userData.loading && silentLoginCounter < 2) {
       dispatch(getUserDetails());
       setSilentLoginCounter((value) => value + 1);
-    } else if (userDetails.id) {
+    } else if (userData.details.id !== "") {
       setSilentLoginCounter(0);
     }
-  }, [userDetails, silentLoginCounter, isLoading]);
+  }, [userData, silentLoginCounter, isLoading]);
   return (
     <div className="App">
-      {!userDetails.id && silentLoginCounter < 2 ? (
+      {(userData.details.id === "" || userData.loading) && silentLoginCounter < 2 ? (
         <></>
       ) : (
         <>
@@ -44,7 +44,7 @@ const App = () => {
           ) : (
             <></>
           )}
-          {userDetails.id ? <AuthenticatedHeader /> : <Header />}
+          {userData.details.id ? <AuthenticatedHeader /> : <Header />}
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />

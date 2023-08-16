@@ -36,7 +36,7 @@ const {
 
 export default function ShowCar() {
   const dispatch = useDispatch();
-  const userDetails = useSelector((state) => state.userDetails);
+  const userDetails = useSelector((state) => state.userData.details);
   const isFilterSet = useSelector((state) => state.isFilterSet);
   const [isBrandFilterMinimised, setIsBrandFilterMinimised] = useState(false);
   const [isBudgetFilterMinimised, setIsBudgetFilterMinimised] = useState(false);
@@ -123,7 +123,7 @@ export default function ShowCar() {
   };
 
   const addBookmark = async (id) => {
-    if (!userDetails.id) {
+    if (userDetails.id === "") {
       setShowToast({ type: 2, message: "Login to add this car to wishlist !" });
       return;
     }

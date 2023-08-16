@@ -35,7 +35,7 @@ export function SellCarLandingPage() {
   };
 
   const userDetail = useSelector((state) => {
-    return state.userDetails;
+    return state.userData.details;
   });
   const carBrands = useSelector((state) => {
     return state.sellCarBrandData.carBrand;
@@ -548,11 +548,11 @@ function DropDown(props) {
         minWidth: 120,
         width: 283,
         "& .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root":
-          {
-            background: "#eaf2ff",
-            border: "1px solid #d7e0f2",
-            color: "#7b86b3",
-          },
+        {
+          background: "#eaf2ff",
+          border: "1px solid #d7e0f2",
+          color: "#7b86b3",
+        },
       }}
       size="small"
     >
@@ -567,50 +567,50 @@ function DropDown(props) {
         {!eventToHandle.showData
           ? ""
           : eventToHandle.showData.map((el) => {
-              if (selectName === "Select Brand") {
-                return (
-                  <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
-                    {el.brand}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Model") {
-                return (
-                  <MenuItem value={el.name} key={el + Math.random(1, 9)}>
-                    {el.name}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Year") {
-                return (
-                  <MenuItem value={el.year} key={el + Math.random(1, 9)}>
-                    {el.year}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Variant") {
-                return (
-                  <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
-                    {el.trim}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Fuel Type") {
-                return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Ownership") {
-                return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
-                  </MenuItem>
-                );
-              } else if (selectName === "Select Reg. State") {
-                return (
-                  <MenuItem value={el} key={el + Math.random(1, 9)}>
-                    {el}
-                  </MenuItem>
-                );
-              }
-            })}
+            if (selectName === "Select Brand") {
+              return (
+                <MenuItem value={el.brand} key={el + Math.random(1, 9)}>
+                  {el.brand}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Model") {
+              return (
+                <MenuItem value={el.name} key={el + Math.random(1, 9)}>
+                  {el.name}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Year") {
+              return (
+                <MenuItem value={el.year} key={el + Math.random(1, 9)}>
+                  {el.year}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Variant") {
+              return (
+                <MenuItem value={el.trim} key={el + Math.random(1, 9)}>
+                  {el.trim}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Fuel Type") {
+              return (
+                <MenuItem value={el} key={el + Math.random(1, 9)}>
+                  {el}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Ownership") {
+              return (
+                <MenuItem value={el} key={el + Math.random(1, 9)}>
+                  {el}
+                </MenuItem>
+              );
+            } else if (selectName === "Select Reg. State") {
+              return (
+                <MenuItem value={el} key={el + Math.random(1, 9)}>
+                  {el}
+                </MenuItem>
+              );
+            }
+          })}
       </Select>
     </FormControl>
   );

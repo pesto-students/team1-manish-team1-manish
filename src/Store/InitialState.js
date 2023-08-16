@@ -33,13 +33,16 @@ export const globalInitialState = {
     buyCar: [],
     loading: false,
   },
-  userDetails: {
-    id: "",
-    name: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone_no: "",
-    bookmark_ids: []
-  },
+  userData: {
+    loading: false,
+    details: {
+      id: "",
+      name: "",
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_no: "",
+      bookmark_ids: []
+    }
+  }
 };

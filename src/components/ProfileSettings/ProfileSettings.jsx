@@ -6,7 +6,7 @@ import { updateUserDetails } from "../../Store/CarStore";
 
 const ProfileSettings = () => {
     const dispatch = useDispatch();
-    const userDetails = useSelector(state => state.userDetails);
+    const userDetails = useSelector(state => state.userData.details);
     const [firstName, setFirstName] = useState(userDetails.first_name);
     const [lastName, setLastName] = useState(userDetails.last_name);
     const [phoneNo, setPhoneNo] = useState(userDetails.phone_no);

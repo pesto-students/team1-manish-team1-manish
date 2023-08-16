@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setBuyCarFlag,
+  setLoadingFalse,
+  setLoadingTrue,
   setSellCarFlag,
 } from "../../Store/CarStore";
 import UseMenu from "../UserProfileMenu/UserMenu";
@@ -19,14 +21,41 @@ const AuthenticatedHeader = () => {
   const [toggleHeaderClass, setToggleHeaderClass] = useState("close");
 
   const logoutUser = async () => {
-    window.open(
-      NODE_ENV === "development"
-        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
-      "popup",
-      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
-      },top=${screen.height / 2 - 600 / 2 + window.screenY}`
-    );
+    // window.open(
+    //   NODE_ENV === "development"
+    //     ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+    //     : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
+    //   "popup",
+    //   `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
+    //   },top=${screen.height / 2 - 600 / 2 + window.screenY}`
+    // );
+    dispatch(setLoadingTrue());
+    await axios({
+      method: "get",
+      url:
+        NODE_ENV === "development"
+          ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+          : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin":
+          NODE_ENV === "development"
+            ? REACT_APP_DEV_CORS_URL
+            : REACT_APP_PROD_CORS_URL,
+      },
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          setTimeout(() => {
+            dispatch(unAuthorizeUser());
+            dispatch(setLoadingFalse());
+            navigate("/");
+          }, 3000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const toggleHeader = () => {
     if (toggleHeaderClass === "close") {

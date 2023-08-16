@@ -5,10 +5,10 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 const Profile = () => {
-  const userDetails = useSelector(state => state.userDetails);
+  const userDetails = useSelector(state => state.userData.details);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!userDetails.id) {
+    if (userDetails.id === "") {
       navigate('/');
     }
   }, [userDetails]);
