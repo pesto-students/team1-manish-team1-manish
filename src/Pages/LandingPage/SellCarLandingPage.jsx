@@ -5,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { getSellCarBrandsData } from "../../Store/CarStore";
+import { getSellCarBrandsData, setUploadImg } from "../../Store/CarStore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Alert, CircularProgress, Snackbar } from "@mui/material";
@@ -17,6 +17,7 @@ import {
   carRegistrationState,
 } from "../../utility/StaticDropdownContent";
 import { hasEmptyValues } from "../../utility/HelperFunctions";
+import RowCard from "../../components/RowCard/RowCard";
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -39,6 +40,9 @@ export function SellCarLandingPage() {
   });
   const carBrands = useSelector((state) => {
     return state.sellCarBrandData.carBrand;
+  });
+  const imgToUpload = useSelector((state) => {
+    return state.imgToBeUpload;
   });
 
   const [brandEvent, setBrandEvent] = useState({
@@ -80,9 +84,10 @@ export function SellCarLandingPage() {
   const [totalKMSDriven, setTotalKMSDriven] = useState(0);
   const [carPinCode, setCarPinCode] = useState("000000");
   const [nearRTOoffice, setnearRTOoffice] = useState("");
-  const [files, setFiles] = useState([]);
   const [image, setImage] = useState({ array: [] });
   const [selectedCarData, setSelectedCarData] = useState([]);
+  const [uploadPercentage, setUploadPercentage] = useState([]);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const handleSellCarSubmit = async () => {
     const sellCarData = {
@@ -141,6 +146,7 @@ export function SellCarLandingPage() {
         if (res.status == 201) {
           setSelectedCarData(res.data);
           setShowToast({ type: 1, message: "Car Details Added Sucessfully!" });
+          dispatch(setUploadImg([]));
           setTimeout(() => {
             setIsLoading(false);
             navigate("/buy-car"), 2500;
@@ -293,16 +299,16 @@ export function SellCarLandingPage() {
   };
 
   const handleUpload = async () => {
-    if (!files) {
+    if (!imgToUpload.uploadImg) {
       return;
     }
     if (!userDetail.id) {
       setShowToast({ type: 2, message: "Login to sell a car !" });
       return;
     }
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < imgToUpload.uploadImg.length; i++) {
       const formData = new FormData();
-      formData.append("file", files[i]);
+      formData.append("file", imgToUpload.uploadImg[i]);
       formData.append("upload_preset", "car-image");
       formData.append("cloud_name", "dlbeskesi");
       const url = `https://api.cloudinary.com/v1_1/dlbeskesi/image/upload`;
@@ -310,7 +316,10 @@ export function SellCarLandingPage() {
       await axios
         .post(url, formData, {
           onUploadProgress: (ProgressEvent) => {
-            console.log(ProgressEvent);
+            const progress = parseInt(
+              Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
+            );
+            setUploadPercentage((prevArray) => [...prevArray, progress]);
           },
         })
         .then((res) => {
@@ -320,6 +329,7 @@ export function SellCarLandingPage() {
           specficObjectInArray.push(imageUrl);
           const newObj = { ...image, specficObjectInArray };
           setImage(newObj);
+          setIsImageUploaded(true);
         })
         .catch((error) =>
           setShowToast({
@@ -330,6 +340,7 @@ export function SellCarLandingPage() {
           })
         );
     }
+    setUploadPercentage([]);
     setShowToast({ type: 1, message: "Image Uploaded Successfull!" });
   };
 
@@ -468,15 +479,45 @@ export function SellCarLandingPage() {
             </div>
           </div>
           <div className="upload-img-div">
-            <input
-              type="file"
-              id="file-upload"
-              multiple
-              onChange={(event) => setFiles(event.target.files)}
-            />
-            <button className="upload-button" onClick={handleUpload}>
-              Upload
-            </button>
+            <div className="img-div">
+              {imgToUpload.uploadImg
+                ? imgToUpload.uploadImg.map((el, idx) => {
+                    return (
+                      <RowCard
+                        imgUrl={URL.createObjectURL(el)}
+                        imgTitle={el.name}
+                        key={crypto.randomUUID()}
+                        index={idx}
+                        uploadProgress={uploadPercentage[idx]}
+                        uploadImgFlag={isImageUploaded}
+                      />
+                    );
+                  })
+                : ""}
+            </div>
+            <div className="upload-action-btn">
+              <input
+                type="file"
+                name="file-input"
+                id="file-upload"
+                multiple
+                onChange={(event) => {
+                  dispatch(setUploadImg(event.target.files));
+                  setIsImageUploaded(false);
+                }}
+              />
+
+              <label id="file-input-label" htmlFor="file-upload">
+                Select a File
+              </label>
+              <button
+                className="upload-button"
+                onClick={handleUpload}
+                disabled={!isImageUploaded ? false : true}
+              >
+                Upload
+              </button>
+            </div>
           </div>
         </div>
         <div className="submit-btn">
