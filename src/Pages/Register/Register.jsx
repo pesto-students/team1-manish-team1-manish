@@ -27,7 +27,7 @@ const {
 
 const Register = () => {
   const userDetails = useSelector((state) => {
-    return state.userDetails;
+    return state.userData.details;
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isIdPassRegisterSuccess, setIsIdPassRegisterSuccess] = useState(false);
@@ -222,8 +222,7 @@ const Register = () => {
         ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/google`
         : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/google`,
       "popup",
-      `popup = true,width=400,height=600,left=${
-        screen.width / 2 - 400 / 2 + window.screenX
+      `popup = true,width=400,height=600,left=${screen.width / 2 - 400 / 2 + window.screenX
       },top=${screen.height / 2 - 600 / 2 + window.screenY}`
     );
     const checkPopup = setInterval(async () => {
@@ -403,9 +402,8 @@ const Register = () => {
             </div>
             {password !== cpassword && cpassword.length >= 0 ? (
               <div
-                className={`wrong-password-message ${
-                  passMissMatch ? "wrong-submit" : ""
-                }`}
+                className={`wrong-password-message ${passMissMatch ? "wrong-submit" : ""
+                  }`}
               >
                 <span>Passwords does not match</span>
               </div>

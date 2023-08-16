@@ -20,7 +20,7 @@ function UserDetailView() {
   const [order, setOrder] = useState([]);
   const [bookmark, setBookmark] = useState([]);
   const [showToast, setShowToast] = useState({ type: 0, message: "" });
-  const userDetails = useSelector((state) => state.userDetails);
+  const userDetails = useSelector((state) => state.userData.details);
 
   const activityData = Object.freeze([
     {
@@ -43,7 +43,7 @@ function UserDetailView() {
 
   const [activeTab, setActiveTab] = useState(null);
   const userDetail = useSelector((state) => {
-    return state.userDetails;
+    return state.userData.details;
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();

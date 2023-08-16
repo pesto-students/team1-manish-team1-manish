@@ -88,8 +88,8 @@ export const updateUserDetails = createAsyncThunk(
     const state = thunkAPI.getState();
     return axios(
       NODE_ENV === "development"
-        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${state.userDetails.id}`
-        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${state.userDetails.id}`,
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${state.userData.details.id}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${state.userData.details.id}`,
       {
         method: "PUT",
         headers: {
@@ -254,7 +254,7 @@ const CarSlice = createSlice({
     },
     unAuthorizeUser: (state) => {
       state.isAuthUser = false;
-      state.userDetails = {
+      state.userData.details = {
         id: "",
         name: "",
         first_name: "",
@@ -269,7 +269,7 @@ const CarSlice = createSlice({
       };
     },
     setUserDetails: (state, action) => {
-      state.userDetails = action.payload;
+      state.userData.details = action.payload;
     },
     setCarModelData: (state, action) => {
       state.carModelData.carModel = action.payload;
@@ -390,8 +390,8 @@ const CarSlice = createSlice({
         } else return el;
       });
 
-      if (!state.userDetails.bookmark_ids.includes(action.payload)) {
-        state.userDetails.bookmark_ids.push(action.payload);
+      if (!state.userData.details.bookmark_ids.includes(action.payload)) {
+        state.userData.details.bookmark_ids.push(action.payload);
       }
     },
     removeCarBookmark: (state, action) => {
@@ -401,8 +401,8 @@ const CarSlice = createSlice({
         } else return el;
       });
 
-      if (state.userDetails.bookmark_ids.includes(action.payload)) {
-        state.userDetails.bookmark_ids = state.userDetails.bookmark_ids.filter(
+      if (state.userData.details.bookmark_ids.includes(action.payload)) {
+        state.userData.details.bookmark_ids = state.userData.details.bookmark_ids.filter(
           (el) => el !== action.payload
         );
       }
@@ -460,13 +460,16 @@ const CarSlice = createSlice({
     [getSellCarBrandsData.rejected]: (state, actions) => {
       state.sellCarBrandData.loading = true;
     },
+    [getUserDetails.pending]: (state, actions) => {
+      state.userData.loading = true;
+    },
     [getUserDetails.fulfilled]: (state, actions) => {
-      state.isAuthUser = true;
-      state.userDetails = actions.payload;
+      state.userData.loading = false;
+      state.userData.details = actions.payload;
     },
     [getUserDetails.rejected]: (state, actions) => {
-      state.isAuthUser = false;
-      state.userDetails = {
+      state.userData.loading = false;
+      state.userData.details = {
         id: "",
         name: "",
         first_name: "",
@@ -543,7 +546,7 @@ const CarSlice = createSlice({
     },
     [updateUserDetails.fulfilled]: (state, actions) => {
       state.isLoading = false;
-      state.userDetails = actions.payload;
+      state.userData.details = actions.payload;
     },
     [updateUserDetails.rejected]: (state, actions) => {
       state.isLoading = false;
