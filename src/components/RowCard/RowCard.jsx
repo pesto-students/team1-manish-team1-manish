@@ -23,7 +23,7 @@ export default function RowCard({
     <Card
       orientation="horizontal"
       variant="outlined"
-      sx={{ width: "inherit", borderRadius: 15 }}
+      sx={{ width: "93%", borderRadius: 15 }}
     >
       <CardOverflow>
         <AspectRatio ratio="1" sx={{ width: 90 }}>

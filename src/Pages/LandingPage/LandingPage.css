@@ -259,16 +259,21 @@
 }
 
 .img-div {
-  width: 96.5%;
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 80%;
+  height: 53.7vh;
   flex-direction: column;
+  overflow: auto;
+}
+
+.img-div::-webkit-scrollbar {
+  display: none;
 }
 
 .upload-action-btn {
-  height: 20%;
+  height: 13.4vh;
   width: 100%;
   display: flex;
   justify-content: space-evenly;
