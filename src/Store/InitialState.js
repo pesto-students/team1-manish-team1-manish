@@ -42,4 +42,7 @@ export const globalInitialState = {
     phone_no: "",
     bookmark_ids: []
   },
+  imgToBeUpload: {
+    uploadImg: [],
+  },
 };
