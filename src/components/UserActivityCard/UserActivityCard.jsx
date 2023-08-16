@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SettingsIcon from "@mui/icons-material/Settings";
 import GarageIcon from "@mui/icons-material/Garage";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import OrderDetail from "../OrderDetail/OrderDetail";
 import "./UserActivityCard.css";
+import ProfileSettings from "../ProfileSettings/ProfileSettings";
 
 function UserActivityCard(props) {
   const { name, icon, isActive, data } = props;
@@ -22,6 +23,7 @@ function UserActivityCard(props) {
   };
 
   const activtySelected = data?.map((car, idx) => {
+    console.log(data);
     return (
       <OrderDetail
         model={car.model}
@@ -39,7 +41,15 @@ function UserActivityCard(props) {
         <span className="user-activity-card__icon">{activityIcon(icon)}</span>{" "}
         {name}
       </h3>
-      <div className="user-activity-card__content">{activtySelected}</div>
+      {
+        icon === "gear" ? (
+          <div className="user-activity-card__content">
+            <ProfileSettings />
+          </div>
+        ) : (
+          <div className="user-activity-card__content">{activtySelected}</div>
+        )
+      }
     </div>
   ) : (
     <></>

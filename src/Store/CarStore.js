@@ -82,6 +82,36 @@ export const getUserDetails = createAsyncThunk(
   }
 );
 
+export const updateUserDetails = createAsyncThunk(
+  "userDetails/updateUserDetails",
+  async (args, thunkAPI) => {
+    const state = thunkAPI.getState();
+    return axios(
+      NODE_ENV === "development"
+        ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/users/${state.userDetails.id}`
+        : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/users/${state.userDetails.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Access-Control-Allow-Origin":
+            NODE_ENV === "development"
+              ? REACT_APP_DEV_CORS_URL
+              : REACT_APP_PROD_CORS_URL,
+        },
+        withCredentials: true,
+        data: args,
+      }
+    )
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+);
+
 export const getCarBrandsData = createAsyncThunk(
   "carBrands/getCarBrandsData",
   async () => {
@@ -256,6 +286,17 @@ const CarSlice = createSlice({
           return { brand: el.brand, checked: !el.checked };
         } else return el;
       });
+      if (
+        state.carBrandData.carBrand.filter((el) => el.checked === true)
+          .length ||
+        state.carTypeData.carType.filter((el) => el.checked === true).length ||
+        state.carFuelTypeData.carFuelType.filter((el) => el.checked === true)
+          .length ||
+        state.carOwnershipData.carOwnership.filter((el) => el.checked === true)
+          .length
+      ) {
+        state.isFilterSet = true;
+      } else state.isFilterSet = false;
     },
     typeToggleCheck: (state, action) => {
       state.carTypeData.carType = state.carTypeData.carType.map((el) => {
@@ -263,6 +304,17 @@ const CarSlice = createSlice({
           return { type: el.type, checked: !el.checked };
         } else return el;
       });
+      if (
+        state.carBrandData.carBrand.filter((el) => el.checked === true)
+          .length ||
+        state.carTypeData.carType.filter((el) => el.checked === true).length ||
+        state.carFuelTypeData.carFuelType.filter((el) => el.checked === true)
+          .length ||
+        state.carOwnershipData.carOwnership.filter((el) => el.checked === true)
+          .length
+      ) {
+        state.isFilterSet = true;
+      } else state.isFilterSet = false;
     },
     fuelTypeToggleCheck: (state, action) => {
       state.carFuelTypeData.carFuelType = state.carFuelTypeData.carFuelType.map(
@@ -272,6 +324,17 @@ const CarSlice = createSlice({
           } else return el;
         }
       );
+      if (
+        state.carBrandData.carBrand.filter((el) => el.checked === true)
+          .length ||
+        state.carTypeData.carType.filter((el) => el.checked === true).length ||
+        state.carFuelTypeData.carFuelType.filter((el) => el.checked === true)
+          .length ||
+        state.carOwnershipData.carOwnership.filter((el) => el.checked === true)
+          .length
+      ) {
+        state.isFilterSet = true;
+      } else state.isFilterSet = false;
     },
     ownershipToggleCheck: (state, action) => {
       state.carOwnershipData.carOwnership =
@@ -280,6 +343,17 @@ const CarSlice = createSlice({
             return { ownership: el.ownership, checked: !el.checked };
           } else return el;
         });
+      if (
+        state.carBrandData.carBrand.filter((el) => el.checked === true)
+          .length ||
+        state.carTypeData.carType.filter((el) => el.checked === true).length ||
+        state.carFuelTypeData.carFuelType.filter((el) => el.checked === true)
+          .length ||
+        state.carOwnershipData.carOwnership.filter((el) => el.checked === true)
+          .length
+      ) {
+        state.isFilterSet = true;
+      } else state.isFilterSet = false;
     },
     setFilterCarBrand: (state, action) => {
       let updatedFilterCarBrand = state.carBrandData.carBrand;
@@ -291,18 +365,23 @@ const CarSlice = createSlice({
         }
       });
       state.carBrandData.carBrand = updatedFilterCarBrand;
+      state.isFilterSet = true;
     },
     setFilterCarType: (state, action) => {
-      let updatedFilterCarBrand = state.carTypeData.carType;
-      updatedFilterCarBrand = updatedFilterCarBrand.map((el) => {
+      let updatedFilterCarType = state.carTypeData.carType;
+      updatedFilterCarType = updatedFilterCarType.map((el) => {
         if (el.type === action.payload) {
           return { type: el.type, checked: true };
         } else return el;
       });
-      state.carTypeData.carType = updatedFilterCarBrand;
+      state.carTypeData.carType = updatedFilterCarType;
+      state.isFilterSet = true;
     },
     setFilterCarBudget: (state, action) => {
       state.carBudgetRange = action.payload;
+      if (state.carBudgetRange !== [20, 80]) {
+        state.isFilterSet = true;
+      } else state.isFilterSet = false;
     },
     setCarBookmark: (state, action) => {
       state.buyCarDetails.buyCar = state.buyCarDetails.buyCar.map((el) => {
@@ -328,9 +407,6 @@ const CarSlice = createSlice({
         );
       }
     },
-    resetShowCarDetails: (state) => {
-      state.buyCarDetails.buyCar = [];
-    },
     setLoadingTrue: (state) => {
       state.isLoading = true;
     },
@@ -342,6 +418,31 @@ const CarSlice = createSlice({
     },
     removeUploadImg: (state, actions) => {
       state.imgToBeUpload.uploadImg.splice(actions.payload, 1);
+    },
+    resetFilters: (state) => {
+      state.isFilterSet = false;
+      state.carTypeData.carType = state.carTypeData.carType.map((el) => {
+        return { type: el.type, checked: false };
+      });
+
+      state.carBrandData.carBrand = state.carBrandData.carBrand.map((el) => {
+        return { brand: el.brand, checked: false };
+      });
+
+      state.carOwnershipData.carOwnership =
+        state.carOwnershipData.carOwnership.map((el) => {
+          return { ownership: el.ownership, checked: false };
+        });
+
+      state.carFuelTypeData.carFuelType = state.carFuelTypeData.carFuelType.map(
+        (el) => {
+          return { fueltype: el.fueltype, checked: false };
+        }
+      );
+
+      state.carBudgetRange = [20, 80];
+
+      state.buyCarDetails.buyCar = [];
     },
   },
 
@@ -371,12 +472,8 @@ const CarSlice = createSlice({
         first_name: "",
         last_name: "",
         email: "",
-        phone_no: null,
-        password: "",
-        role_id: "",
-        auth_provider: "",
+        phone_no: "",
         bookmark_ids: [],
-        otp: null,
       };
     },
     [getCarBrandsData.pending]: (state, actions) => {
@@ -439,7 +536,17 @@ const CarSlice = createSlice({
       state.buyCarDetails.buyCar = actions.payload;
     },
     [searchCarByFilters.rejected]: (state, actions) => {
-      state.buyCarDetails.loading = true;
+      state.buyCarDetails.loading = false;
+    },
+    [updateUserDetails.pending]: (state, actions) => {
+      state.isLoading = true;
+    },
+    [updateUserDetails.fulfilled]: (state, actions) => {
+      state.isLoading = false;
+      state.userDetails = actions.payload;
+    },
+    [updateUserDetails.rejected]: (state, actions) => {
+      state.isLoading = false;
     },
   },
 });
@@ -463,11 +570,11 @@ export const {
   setFilterCarBudget,
   setCarBookmark,
   removeCarBookmark,
-  resetShowCarDetails,
   setLoadingTrue,
   setLoadingFalse,
   setUploadImg,
   removeUploadImg,
+  resetFilters,
 } = CarSlice.actions;
 
 const CarStore = configureStore({

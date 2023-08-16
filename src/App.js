@@ -33,7 +33,7 @@ const App = () => {
   }, [userDetails, silentLoginCounter, isLoading]);
   return (
     <div className="App">
-      {userDetails.id === null && silentLoginCounter < 2 ? (
+      {!userDetails.id && silentLoginCounter < 2 ? (
         <></>
       ) : (
         <>

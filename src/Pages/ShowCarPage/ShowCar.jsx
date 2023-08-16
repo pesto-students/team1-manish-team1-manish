@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Icon } from "@iconify/react";
@@ -16,9 +17,9 @@ import {
   fuelTypeToggleCheck,
   typeToggleCheck,
   searchCarByFilters,
-  resetShowCarDetails,
   setCarBookmark,
   removeCarBookmark,
+  resetFilters,
 } from "../../Store/CarStore";
 import "./ShowCar.css";
 import CarDetails from "../CarDetails/CarDetails";
@@ -36,6 +37,7 @@ const {
 export default function ShowCar() {
   const dispatch = useDispatch();
   const userDetails = useSelector((state) => state.userDetails);
+  const isFilterSet = useSelector((state) => state.isFilterSet);
   const [isBrandFilterMinimised, setIsBrandFilterMinimised] = useState(false);
   const [isBudgetFilterMinimised, setIsBudgetFilterMinimised] = useState(false);
   const [isTypeFilterMinimised, setIsTypeFilterMinimised] = useState(false);
@@ -61,7 +63,7 @@ export default function ShowCar() {
   const carFuelTypes = useSelector(
     (state) => state.carFuelTypeData.carFuelType
   );
-  const buyCarDetail = useSelector((state) => state.buyCarDetails.buyCar);
+  const buyCarDetail = useSelector((state) => state.buyCarDetails);
 
   const resetToast = () => {
     setShowToast({ type: 0, message: "" });
@@ -212,7 +214,7 @@ export default function ShowCar() {
       dispatch(searchCarByFilters());
 
     return () => {
-      dispatch(resetShowCarDetails());
+      dispatch(resetFilters());
     };
   }, []);
 
@@ -598,6 +600,21 @@ export default function ShowCar() {
                 />
               </div>
               <button
+                className={
+                  !isFilterSet
+                    ? "clear-filter-disabled-btn"
+                    : "clear-filter-btn"
+                }
+                onClick={() => {
+                  dispatch(resetFilters());
+                  dispatch(searchCarByFilters());
+                }}
+                disabled={!isFilterSet}
+              >
+                <FilterAltOffOutlinedIcon sx={{ color: "#676E8A" }} />
+                <p>Clear</p>
+              </button>
+              <button
                 className="filter-btn"
                 onClick={() => setToggleFilter((prevState) => !prevState)}
               >
@@ -606,7 +623,9 @@ export default function ShowCar() {
               </button>
             </div>
             <div className="show-car-header">
-              <p className="no-car-found">{buyCarDetail.length} Cars Found</p>
+              <p className="no-car-found">
+                {buyCarDetail.buyCar.length} Cars Found
+              </p>
               <div className="applied-filters">
                 <button className="active-filter-btn">
                   <p>Rs. 5,00,000 - 15,00,000</p>
@@ -627,12 +646,12 @@ export default function ShowCar() {
               </div>
             </div>
             <div className="show-car-ondemand">
-              {!buyCarDetail ? (
+              {buyCarDetail.loading ? (
                 <div className="buy-car-detail-loader">
                   <CircularProgress />
                 </div>
-              ) : (
-                buyCarDetail.map((el) => {
+              ) : buyCarDetail.buyCar.length ? (
+                buyCarDetail.buyCar.map((el) => {
                   if (showCarDetailSearchBarFilter.length) {
                     if (
                       `${el.brand} ${el.model}`
@@ -741,6 +760,12 @@ export default function ShowCar() {
                       </div>
                     );
                 })
+              ) : (
+                <>
+                  <div className="zero-cars-found">
+                    <img src="/Assets/no_cars_search.png" />
+                  </div>
+                </>
               )}
             </div>
           </div>

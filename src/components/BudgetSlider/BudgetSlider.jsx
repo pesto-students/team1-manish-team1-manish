@@ -12,11 +12,10 @@ function valuetext(value) {
 export default function RangeSlider() {
   const dispatch = useDispatch();
   const budgetRange = useSelector(state => state.carBudgetRange);
-  const [value, setValue] = React.useState(budgetRange ? budgetRange : [20, 80]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    debouncedUpdateBudgetFilter(newValue)
+    dispatch(setFilterCarBudget(newValue));
+    debouncedUpdateBudgetFilter(newValue);
   };
 
   const fetchCars = (value) => {
@@ -25,7 +24,7 @@ export default function RangeSlider() {
   }
   const debouncedUpdateBudgetFilter = React.useCallback(debounce(fetchCars, 500), []);
   React.useEffect(() => {
-  }, [budgetRange, value]);
+  }, [budgetRange]);
 
   return (
     <Box
@@ -37,12 +36,12 @@ export default function RangeSlider() {
     >
       <Slider
         getAriaLabel={() => "Budget Range"}
-        value={value}
+        value={budgetRange}
         onChange={handleChange}
         valueLabelDisplay="off"
         getAriaValueText={valuetext}
       />
-      <div className="slider-info">{value[0]}k - {value[1]}k</div>
+      <div className="slider-info">{budgetRange[0]}k - {budgetRange[1]}k</div>
     </Box>
   );
 }
