@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserActivity from "../UserActivity/UserActivity";
 import UserActivityCard from "../UserActivityCard/UserActivityCard";
-import { unAuthorizeUser } from "../../Store/CarStore";
+import { setLoadingFalse, setLoadingTrue, unAuthorizeUser } from "../../Store/CarStore";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -49,9 +49,9 @@ function UserDetailView() {
   const navigate = useNavigate();
 
   const logoutUser = async () => {
-    setIsLoading(true);
+    dispatch(setLoadingTrue());
     await axios({
-      method: "get",
+      method: "post",
       url:
         NODE_ENV === "development"
           ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
@@ -67,20 +67,14 @@ function UserDetailView() {
       .then((response) => {
         if (response.status == 200) {
           setTimeout(() => {
-            navigate("/");
             dispatch(unAuthorizeUser());
-            setIsLoading(false);
+            dispatch(setLoadingFalse());
+            navigate("/");
           }, 3000);
         }
       })
       .catch((error) => {
-        setIsLoading(false);
-        setShowToast({
-          type: 2,
-          message: error.response.data.message
-            ? error.response.data.message
-            : "Something went wrong !",
-        });
+        console.log(error);
       });
   };
 
@@ -152,13 +146,6 @@ function UserDetailView() {
 
   return (
     <div className="user-detail-view__wrapper">
-      {isLoading ? (
-        <div className="circular-loader">
-          <CircularProgress />
-        </div>
-      ) : (
-        <></>
-      )}
       <div className="user-detail-view__container">
         <div className="user-detail-view__user-details">
           <span className="user-detail-view__user-avatar">
