@@ -104,50 +104,50 @@ export default function UseMenu() {
   const createHandleMenuClick = (menuItem) => {
     return async () => {
       if (menuItem === "Logout") {
-        const popup = window.open(
-          NODE_ENV === "development"
-            ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
-            : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
-          "popup",
-          `popup = true,width=40,height=60`
-        );
-        const checkPopup = setInterval(async () => {
-          if (!popup.closed) {
-            if (!isLoading) dispatch(setLoadingTrue());
-            return;
-          }
-          clearInterval(checkPopup);
-          navigate("/");
-          dispatch(unAuthorizeUser());
-          dispatch(setLoadingFalse());
-        }, 1000);
-        // dispatch(setLoadingTrue());
-        // await axios({
-        //   method: "get",
-        //   url:
-        //     NODE_ENV === "development"
-        //       ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
-        //       : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
-        //   withCredentials: true,
-        //   headers: {
-        //     "Access-Control-Allow-Origin":
-        //       NODE_ENV === "development"
-        //         ? REACT_APP_DEV_CORS_URL
-        //         : REACT_APP_PROD_CORS_URL,
-        //   },
-        // })
-        //   .then((response) => {
-        //     if (response.status == 200) {
-        //       setTimeout(() => {
-        //         dispatch(unAuthorizeUser());
-        //         dispatch(setLoadingFalse());
-        //         navigate("/");
-        //       }, 3000);
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+        // const popup = window.open(
+        //   NODE_ENV === "development"
+        //     ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+        //     : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
+        //   "popup",
+        //   `popup = true,width=40,height=60`
+        // );
+        // const checkPopup = setInterval(async () => {
+        //   if (!popup.closed) {
+        //     if (!isLoading) dispatch(setLoadingTrue());
+        //     return;
+        //   }
+        //   clearInterval(checkPopup);
+        //   navigate("/");
+        //   dispatch(unAuthorizeUser());
+        //   dispatch(setLoadingFalse());
+        // }, 1000);
+        dispatch(setLoadingTrue());
+        await axios({
+          method: "post",
+          url:
+            NODE_ENV === "development"
+              ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
+              : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
+          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin":
+              NODE_ENV === "development"
+                ? REACT_APP_DEV_CORS_URL
+                : REACT_APP_PROD_CORS_URL,
+          },
+        })
+          .then((response) => {
+            if (response.status == 200) {
+              setTimeout(() => {
+                dispatch(unAuthorizeUser());
+                dispatch(setLoadingFalse());
+                navigate("/");
+              }, 3000);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
       setOpen(false);
       buttonElement?.focus();
