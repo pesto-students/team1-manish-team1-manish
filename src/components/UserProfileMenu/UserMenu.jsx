@@ -104,23 +104,6 @@ export default function UseMenu() {
   const createHandleMenuClick = (menuItem) => {
     return async () => {
       if (menuItem === "Logout") {
-        // const popup = window.open(
-        //   NODE_ENV === "development"
-        //     ? `${REACT_APP_DEV_BACKEND_BASE_URL}/auth/logout`
-        //     : `${REACT_APP_PROD_BACKEND_BASE_URL}/auth/logout`,
-        //   "popup",
-        //   `popup = true,width=40,height=60`
-        // );
-        // const checkPopup = setInterval(async () => {
-        //   if (!popup.closed) {
-        //     if (!isLoading) dispatch(setLoadingTrue());
-        //     return;
-        //   }
-        //   clearInterval(checkPopup);
-        //   navigate("/");
-        //   dispatch(unAuthorizeUser());
-        //   dispatch(setLoadingFalse());
-        // }, 1000);
         dispatch(setLoadingTrue());
         await axios({
           method: "post",
