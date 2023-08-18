@@ -13,6 +13,8 @@ import { getUserDetails } from "./Store/CarStore";
 import Profile from "./Pages/Profile/Profile";
 import "./styles.css";
 import { CircularProgress } from "@mui/material";
+import AboutUsPage from "./components/AboutUS/AboutUS";
+import ContactUsPage from "./components/ContactUS/ContactUS";
 
 const App = () => {
   const userData = useSelector((state) => {
@@ -24,7 +26,11 @@ const App = () => {
   const [silentLoginCounter, setSilentLoginCounter] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (userData.details.id === "" && !userData.loading && silentLoginCounter < 2) {
+    if (
+      userData.details.id === "" &&
+      !userData.loading &&
+      silentLoginCounter < 2
+    ) {
       dispatch(getUserDetails());
       setSilentLoginCounter((value) => value + 1);
     } else if (userData.details.id !== "") {
@@ -33,7 +39,8 @@ const App = () => {
   }, [userData, silentLoginCounter, isLoading]);
   return (
     <div className="App">
-      {(userData.details.id === "" || userData.loading) && silentLoginCounter < 2 ? (
+      {(userData.details.id === "" || userData.loading) &&
+      silentLoginCounter < 2 ? (
         <></>
       ) : (
         <>
@@ -52,6 +59,8 @@ const App = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/me" element={<Profile />} />
             <Route path="/buy-car" element={<ShowCar />} />
+            <Route path="/about-page" element={<AboutUsPage />} />
+            <Route path="/contact-page" element={<ContactUsPage />} />
           </Routes>
           <Footer />
         </>
