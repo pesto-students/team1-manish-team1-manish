@@ -1,5 +1,5 @@
 .profile-settings-input {
-    width: 300px;
+    align-self: stretch;
 }
 
 .profile-save-btn {
