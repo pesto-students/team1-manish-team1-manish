@@ -679,6 +679,7 @@ export default function TextFieldSizes(props) {
     >
       <div>
         <TextField
+          sx={{ width: 283 }}
           label={textName}
           id="outlined-size-small"
           defaultValue=""
