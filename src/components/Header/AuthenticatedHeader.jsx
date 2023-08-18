@@ -15,6 +15,8 @@ const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
   REACT_APP_PROD_BACKEND_BASE_URL,
+  REACT_APP_DEV_CORS_URL,
+  REACT_APP_PROD_CORS_URL
 } = process.env;
 
 const AuthenticatedHeader = () => {
@@ -146,7 +148,7 @@ const AuthenticatedHeader = () => {
               </p>
             </Link>
             <p
-              className="hamburger-signup-btn dark-font"
+              className="hamburger-signup-btn dark-font pointer"
               onClick={() => {
                 toggleHeader();
                 logoutUser();
