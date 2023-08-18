@@ -19,7 +19,9 @@ const Footer = () => {
             <button className="dark-font">
               <Link to="/">Home</Link>
             </button>
-            <button className="dark-font">Buy Car</button>
+            <button className="dark-font">
+              <Link to="/buy-car">Buy Car</Link>
+            </button>
             <button className="dark-font">About</button>
             <button className="dark-font">Contact</button>
           </div>
