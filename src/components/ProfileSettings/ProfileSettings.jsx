@@ -9,7 +9,7 @@ const ProfileSettings = () => {
     const userDetails = useSelector(state => state.userData.details);
     const [firstName, setFirstName] = useState(userDetails.first_name);
     const [lastName, setLastName] = useState(userDetails.last_name);
-    const [phoneNo, setPhoneNo] = useState(userDetails.phone_no);
+    const [phoneNo, setPhoneNo] = useState(userDetails.phone_no ?? '');
     const [email, setEmail] = useState(userDetails.email);
     const [showToast, setShowToast] = useState({ type: 0, message: "" });
     const resetToast = () => {
