@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,6 +27,7 @@ const {
 } = process.env;
 
 const LandingPage = () => {
+  const ref = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -206,7 +207,10 @@ const LandingPage = () => {
             <p className="img-text">Car to cash in a few hours!</p>
             <button
               className="img-btn"
-              onClick={() => setToggleLandingPage((prevState) => !prevState)}
+              onClick={() => {
+                setToggleLandingPage((prevState) => !prevState);
+                ref.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {toggleLandingPage ? "Sell Car" : "Buy Car"}
             </button>
@@ -214,7 +218,7 @@ const LandingPage = () => {
         </div>
         {toggleLandingPage ? (
           <>
-            <div className="landing-page-div2">
+            <div ref={ref} className="landing-page-div2">
               <div className="landing-page-left-div">
                 <p className="landing-page-heading">Looking For a Car ?</p>
                 <div className="dream-car-search">
@@ -292,7 +296,9 @@ const LandingPage = () => {
             </div>
           </>
         ) : (
-          <SellCarLandingPage />
+          <div ref={ref}>
+            <SellCarLandingPage />
+          </div>
         )}
       </div>
     </>
