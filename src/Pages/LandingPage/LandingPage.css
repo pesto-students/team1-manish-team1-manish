@@ -379,9 +379,3 @@
   background: #676e8a;
   color: white;
 }
-
-@media (max-width: 480px) {
-  .App {
-    height: fit-content !important;
-  }
-}
