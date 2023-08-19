@@ -11,6 +11,7 @@ import {
 import DarkTheme from "../../Themes/ButtonThemes";
 import axios from "axios";
 import ConfirmPassword from "./ResetPassword";
+import { emailValidation } from "../../utility/FormValidation";
 const {
   NODE_ENV,
   REACT_APP_DEV_BACKEND_BASE_URL,
@@ -33,6 +34,10 @@ const forgotPassword = () => {
       setIsEmailExist(false);
       setMissingForgotEmail(true);
       setTimeout(() => setMissingForgotEmail(false), 1000);
+      return;
+    }
+    if (!emailValidation(email)) {
+      setShowToast({ type: 2, message: "Email is not valid!" });
       return;
     }
     setIsLoading(true);
