@@ -36,10 +36,15 @@ export default function RowCard({
         </AspectRatio>
       </CardOverflow>
       <CardContent>
-        <Typography fontWeight="md" textColor="success.plainColor" mb={0.5}>
+        <Typography
+          fontWeight="md"
+          textColor="success.plainColor"
+          mb={0.5}
+          component={"span"}
+        >
           {imgTitle.length <= 30 ? imgTitle : imgTitle.substring(0, 30) + "..."}
         </Typography>
-        <Typography level="body-sm">
+        <Typography level="body-sm" component={"span"}>
           {uploadProgress ? (
             <LinearProgressBar progressBar={uploadProgress} />
           ) : (

@@ -22,8 +22,12 @@ const Footer = () => {
             <button className="dark-font">
               <Link to="/buy-car">Buy Car</Link>
             </button>
-            <button className="dark-font">About</button>
-            <button className="dark-font">Contact</button>
+            <button className="dark-font">
+              <Link to="/about-page">About</Link>
+            </button>
+            <button className="dark-font">
+              <Link to="/contact-page">Contact</Link>
+            </button>
           </div>
         </div>
         <div className="copyright-text">
