@@ -20,7 +20,7 @@ const ProfileSettings = () => {
         if (!firstName.length || !lastName.length || phoneNo.length !== 10) {
             return;
         }
-        if (userDetails.first_name !== firstName || userDetails.last_name !== lastName && userDetails.phone_no !== phoneNo) {
+        if (userDetails.first_name !== firstName || userDetails.last_name !== lastName || userDetails.phone_no !== phoneNo) {
             dispatch(updateUserDetails({ firstName, lastName, phoneNo }));
         }
     }
