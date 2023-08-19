@@ -23,14 +23,13 @@ function UserActivityCard(props) {
   };
 
   const activtySelected = data?.map((car, idx) => {
-    console.log(data);
     return (
       <OrderDetail
         model={car.model}
         brand={car.brand}
         year={car.year}
         orderStatus={car.order_status}
-        key={idx}
+        key={crypto.randomUUID()}
       />
     );
   });
