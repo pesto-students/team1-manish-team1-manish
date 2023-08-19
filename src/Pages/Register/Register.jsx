@@ -131,13 +131,13 @@ const Register = () => {
       return;
     }
 
+    setIsLoading(true);
     const emailExist = await IsEmailExist();
     if (emailExist) {
       setShowToast({ type: 2, message: "User exist! Please Login" });
       return;
     }
 
-    setIsLoading(true);
     await axios({
       method: "post",
       url:
