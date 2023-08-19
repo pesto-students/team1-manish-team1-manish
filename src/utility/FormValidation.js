@@ -8,7 +8,10 @@ export const emailValidation = (emailId) => {
 };
 
 export const phoneNoValidation = (mobNo) => {
-  return mobNo.length == 10 ? true : false;
+  const phoneNumberRegex =
+    /^(?:\d{10}|\d{3}-\d{3}-\d{4}|(\d{3}) \d{3}-\d{4}|\d{3}.\d{3}.\d{4})$/;
+
+  return phoneNumberRegex.test(mobNo);
 };
 
 export const inputValidation = (inputText) => {
