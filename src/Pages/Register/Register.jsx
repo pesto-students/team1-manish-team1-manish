@@ -135,6 +135,7 @@ const Register = () => {
     const emailExist = await IsEmailExist();
     if (emailExist) {
       setShowToast({ type: 2, message: "User exist! Please Login" });
+      setIsLoading(false);
       return;
     }
 
