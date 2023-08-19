@@ -1,0 +1,120 @@
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 10px 0;
+}
+
+.form-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #f4f4f4;
+  border-radius: 5px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container > div {
+  display: flex;
+}
+
+.input-container > div > input {
+  height: 40px;
+  width: 170px;
+  margin: 10px;
+  border: 1px solid #c7cbd3;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.tnc-checkbox > input {
+  border: #00b5f0;
+  margin: 0 5px;
+}
+
+.signup-btn {
+  width: 186.44px;
+  height: 38px;
+  border-radius: 8px !important;
+}
+
+.o2 {
+  display: flex;
+  gap: 20px;
+  padding: 5px;
+
+  .iconify {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+  }
+}
+
+.signup-already > p > a {
+  color: #00b5f0;
+}
+
+.wrong-password-border {
+  border: 1px solid rgba(211, 49, 24, 0.873) !important;
+}
+
+.wrong-password-message {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.wrong-password-message > span {
+  color: rgba(211, 49, 24, 0.873);
+  font-size: smaller;
+}
+
+.circular-loader {
+  position: fixed;
+  z-index: 99;
+  background: rgba(103, 110, 138, 0.3);
+  height: 100%;
+  width: 100%;
+}
+
+.circular-loader > span {
+  position: relative;
+  top: 49%;
+  left: 49%;
+}
+
+@media (max-width: 480px) {
+  .input-container > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input-container > div > input {
+    height: 40px;
+    width: 320px;
+  }
+
+  .App {
+    background-color: white;
+    height: 100%;
+  }
+
+  .form-container {
+    background-color: transparent;
+    border: none;
+  }
+}
+
+@media (max-height: 639px) {
+  .App {
+    height: fit-content;
+  }
+}

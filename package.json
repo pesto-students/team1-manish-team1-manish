@@ -2,13 +2,24 @@
   "name": "car-bazaar",
   "version": "1.0.0",
   "description": "car-bazaar is a car marketplace for buying and selling cars.",
+  "proxy": "http://localhost:3000",
   "keywords": [
     "react",
     "starter"
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/joy": "^5.0.0-beta.1",
+    "@mui/material": "^5.13.5",
     "@reduxjs/toolkit": "^1.9.5",
+    "axios": "^1.4.0",
+    "http-proxy-middleware": "^2.0.6",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.1.0",
@@ -23,9 +34,10 @@
     "lint": "eslint .",
     "prepare": "husky install"
   },
-  "author": "Hritik Singh & Pranav Srisrimal",
+  "author": "Hritik Singh & Saurabh Kumar",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@iconify/react": "^4.1.1",
     "eslint": "^8.43.0",
     "eslint-plugin-react": "^7.32.2",
     "husky": "^8.0.3"

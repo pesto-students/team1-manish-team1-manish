@@ -1,0 +1,120 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 10px 0;
+}
+
+.login-form-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #f4f4f4;
+  border-radius: 5px;
+}
+
+.login-remember-forget {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.login-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-input-container>input {
+  height: 40px;
+  width: 320px;
+  margin: 10px;
+  border: 1px solid #c7cbd3;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.login-remember-me>input {
+  border: #00b5f0;
+  margin: 0 5px;
+}
+
+.login-o2 {
+  display: flex;
+  gap: 20px;
+  padding: 5px;
+
+  .iconify {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+  }
+}
+
+.login-forgot-password>a {
+  color: rgba(103, 110, 138, 1);
+}
+
+.signup-already>p>a {
+  color: #00b5f0;
+}
+
+.circular-loader {
+  position: fixed;
+  z-index: 99;
+  background: rgba(103, 110, 138, 0.3);
+  height: 100%;
+  width: 100%;
+}
+
+.circular-loader>span {
+  position: relative;
+  top: 49%;
+  left: 49%;
+}
+
+/* .wrong-login-submit {
+  animation-name: shake, glow-red;
+  animation-duration: 0.7s, 0.35s;
+  animation-iteration-count: 1, 2;
+}
+
+@keyframes shake {
+
+  0%,
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(8px);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes glow-red {
+  50% {
+    border-color: indianred;
+  }
+} */
+
+@media (max-width: 480px) {
+  .App {
+    background-color: white;
+    height: 100%;
+  }
+
+  .login-form-container {
+    background-color: transparent;
+    border: none;
+  }
+}

@@ -1,0 +1,34 @@
+.order-details {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-details__car {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: space-evenly;
+}
+
+.order-details__order-status {
+  font-size: 0.75rem;
+  border-radius: 0.35rem;
+  background-color: #ff9f37;
+  color: #373737;
+  padding: 0.25rem 0.5rem;
+  font-weight: 800;
+}
+
+@media (max-width: 35em) {
+  .order-details {
+    gap: 0rem;
+    font-size: 0.9rem;
+  }
+
+  .order-details__car {
+    gap: 0.2rem;
+  }
+}
